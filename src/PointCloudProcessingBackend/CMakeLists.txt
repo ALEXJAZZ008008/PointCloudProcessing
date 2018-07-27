@@ -1,13 +1,13 @@
-PROJECT(PointCloudProcessing VERSION 0.0 LANGUAGES CXX)
+PROJECT(PointCloudProcessingBackend VERSION 0.0 LANGUAGES CXX)
 
-add_library(PointCloudProcessing ${CMAKE_CURRENT_LIST_DIR})
+add_library(PointCloudProcessingBackend ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(PointCloudProcessing) 
+target_link_libraries(PointCloudProcessingBackend) 
 
-target_sources(PointCloudProcessing 
+target_sources(PointCloudProcessingBackend 
 	PRIVATE
-	"${CMAKE_CURRENT_LIST_DIR}/PointCloudProcessing.cpp"
-    # "${CMAKE_CURRENT_LIST_DIR}/PointCloudProcessing.h"
+	"${CMAKE_CURRENT_LIST_DIR}/PointCloudProcessingBackend.cpp"
+    # "${CMAKE_CURRENT_LIST_DIR}/PointCloudProcessingBackend.h"
     ) 
 
-install(TARGETS PointCloudProcessing DESTINATION lib)
+install(TARGETS PointCloudProcessingBackend DESTINATION lib)

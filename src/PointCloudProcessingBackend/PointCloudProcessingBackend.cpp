@@ -1,6 +1,6 @@
-#include "src/include/PointCloudProcessing.h"
+#include "src/include/PointCloudProcessingBackend.h"
 
-int KinectBackend::calculate_point_cloud()
+int PointCloudProcessingBackend::calculate_point_cloud()
 {
     vector<float>::iterator vector_iterator = m_kinect_object_ptr->get_point_cloud().begin();
 
@@ -22,7 +22,7 @@ int KinectBackend::calculate_point_cloud()
     return 1;
 }
 
-int write_point_cloud_to_file()
+int PointCloudProcessingBackend::write_point_cloud_to_file()
 {
     ofstream point_cloud_stream;
 
@@ -85,11 +85,11 @@ int write_point_cloud_to_file()
     return 1;
 }
 
-int average_point_cloud_buffer(vector<float> & point_cloud, vector<vector<float>> &point_cloud_buffer, array<unsigned short, 2> &resolution)
+int PointCloudProcessingBackend::average_point_cloud_buffer(vector<float> & point_cloud, vector<vector<float>> &point_cloud_buffer, array<unsigned short, 2> &resolution)
 {
     vector<vector<float>>::iterator point_cloud_buffer_iterator = point_cloud_buffer.begin();
 
-    for(int i = 0; i < point_cloud_buffer.size(); ++i)
+    for(unsigned long i = 0; i < point_cloud_buffer.size(); ++i)
     {
         vector<float>::iterator point_cloud_buffer_point_cloud_iterator = point_cloud_buffer_iterator->begin();
 
