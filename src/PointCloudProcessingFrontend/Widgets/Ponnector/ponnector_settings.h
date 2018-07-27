@@ -1,51 +1,51 @@
-#ifndef KONNECTOR_SETTINGS_H
-#define KONNECTOR_SETTINGS_H
+#ifndef PONNECTOR_SETTINGS_H
+#define PONNECTOR_SETTINGS_H
 
 #include <QDialog>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QFileDialog>
 
-#include "ui_konnector_settings.h"
+#include "ui_ponnector_settings.h"
 
 using namespace std;
 
 namespace Ui
 {
-class Konnector_Settings;
+class Ponnector_Settings;
 }
 
-class Konnector_Settings : public QDialog
+class Ponnector_Settings : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Konnector_Settings(QWidget *parent = nullptr);
-    ~Konnector_Settings();
+    explicit Ponnector_Settings(QWidget *parent = nullptr);
+    ~Ponnector_Settings();
 
-    Konnector_Settings(Konnector_Settings &);
-    Konnector_Settings & operator = (Konnector_Settings &);
-    Konnector_Settings(Konnector_Settings &&);
-    Konnector_Settings & operator = (Konnector_Settings &&);
+    Ponnector_Settings(Ponnector_Settings &);
+    Ponnector_Settings & operator = (Ponnector_Settings &);
+    Ponnector_Settings(Ponnector_Settings &&);
+    Ponnector_Settings & operator = (Ponnector_Settings &&);
 
-    inline Ui::Konnector_Settings * get_ui_ptr()
+    inline Ui::Ponnector_Settings * get_ui_ptr()
     {
         return m_ui_ptr;
     }
 
-    inline int set_ui_ptr(Ui::Konnector_Settings *ui_ptr)
+    inline int set_ui_ptr(Ui::Ponnector_Settings *ui_ptr)
     {
         m_ui_ptr = ui_ptr;
 
         return 1;
     }
 
-    int konnector_settings_main();
+    int ponnector_settings_main();
 
-    int konnector_settings_kill(bool);
+    int ponnector_settings_kill(bool);
 
 private:
-    Ui::Konnector_Settings *m_ui_ptr;
+    Ui::Ponnector_Settings *m_ui_ptr;
 
     //! Called by destructor
     //! and any other methods aiming to destruct the class
@@ -57,4 +57,4 @@ private slots:
     void on_pushButton_clicked();
 };
 
-#endif // KONNECTOR_SETTINGS_H
+#endif // PONNECTOR_SETTINGS_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Konnector_Settings</class>
- <widget class="QDialog" name="Konnector_Settings">
+ <class>Ponnector_Settings</class>
+ <widget class="QDialog" name="Ponnector_Settings">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -111,7 +111,8 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset theme="document-open"/>
+           <iconset theme="document-open">
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>
@@ -148,7 +149,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Konnector_Settings</receiver>
+   <receiver>Ponnector_Settings</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -164,7 +165,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Konnector_Settings</receiver>
+   <receiver>Ponnector_Settings</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

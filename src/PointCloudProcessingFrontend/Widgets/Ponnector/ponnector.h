@@ -1,5 +1,5 @@
-#ifndef KONNECTOR_H
-#define KONNECTOR_H
+#ifndef PONNECTOR_H
+#define PONNECTOR_H
 
 #include <QDialog>
 #include <QMessageBox>
@@ -12,10 +12,8 @@
 #include <memory>
 #include <chrono>
 
-#include "ui_konnector.h"
-#include "src/include/KinectInterface.h"
-#include "src/KinectFrontend/Widgets/Logger/logger.h"
-#include "konnector_settings.h"
+#include "ui_ponnector.h"
+#include "ponnector_settings.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -23,12 +21,12 @@ using namespace std::chrono;
 //! Used by Qt GUI
 namespace Ui
 {
-class Konnector;
+class Ponnector;
 }
 
 //!
-//! \class Konnector
-//! \brief The Konnector class.
+//! \class Ponnector
+//! \brief The Ponnector class.
 //! This is a Qt frontend for the KinectBackend class
 //! This class calls the KinectBackend class,
 //! collects its outputs and displays them to the user
@@ -37,43 +35,31 @@ class Konnector;
 //! \todo The output path should be taken from output_path QString
 //! \todo The outputs should be the selected by the options widget.
 //!
-class Konnector : public QDialog
+class Ponnector : public QDialog
 {
     Q_OBJECT
 
 public:
     //! Constructor
-    explicit Konnector(QDialog *parent = nullptr);
+    explicit Ponnector(QDialog *parent = nullptr);
 
     //! Destructor
-    ~Konnector();
+    ~Ponnector();
 
     //! Copy and move constructos and assignment opperators,
-    Konnector(Konnector &);
-    Konnector & operator = (Konnector &);
-    Konnector(Konnector &&);
-    Konnector & operator = (Konnector &&);
+    Ponnector(Ponnector &);
+    Ponnector & operator = (Ponnector &);
+    Ponnector(Ponnector &&);
+    Ponnector & operator = (Ponnector &&);
 
-    inline Ui::Konnector * get_ui_ptr()
+    inline Ui::Ponnector * get_ui_ptr()
     {
         return m_ui_ptr;
     }
 
-    inline int set_ui_ptr(Ui::Konnector *ui_ptr)
+    inline int set_ui_ptr(Ui::Ponnector *ui_ptr)
     {
         m_ui_ptr = ui_ptr;
-
-        return 1;
-    }
-
-    inline Logger * get_logger_ptr()
-    {
-        return m_logger_ptr;
-    }
-
-    inline int set_logger_ptr(Logger *logger_ptr)
-    {
-        m_logger_ptr = logger_ptr;
 
         return 1;
     }
@@ -86,18 +72,6 @@ public:
     inline int set_update_ptr(QTimer *update_ptr)
     {
         m_update_ptr = update_ptr;
-
-        return 1;
-    }
-
-    inline shared_ptr<KinectInterface> & get_kinect_interface_ptr()
-    {
-        return m_kinect_interface_ptr;
-    }
-
-    inline int set_kinect_interface_ptr(shared_ptr<KinectInterface> &kinect_interface_ptr)
-    {
-        m_kinect_interface_ptr = kinect_interface_ptr;
 
         return 1;
     }
@@ -174,22 +148,17 @@ public:
         return 1;
     }
 
-    int konnector_main();
+    int ponnector_main();
 
-    int konnector_kill(bool);
+    int ponnector_kill(bool);
 
 private:
 
     //! Pointer to the UI namespace
-    Ui::Konnector *m_ui_ptr;
-
-    //! A window to display the log
-    Logger *m_logger_ptr;
+    Ui::Ponnector *m_ui_ptr;
 
     //! Pointer to the update timer
     QTimer *m_update_ptr;
-
-    shared_ptr<KinectInterface> m_kinect_interface_ptr;
 
     high_resolution_clock::time_point m_acquisition_start_time;
 

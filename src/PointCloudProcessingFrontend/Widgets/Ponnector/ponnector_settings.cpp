@@ -1,8 +1,8 @@
-#include "konnector_settings.h"
+#include "ponnector_settings.h"
 
-Konnector_Settings::Konnector_Settings(QWidget *parent):
+Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     QDialog(parent),
-    m_ui_ptr(new Ui::Konnector_Settings)
+    m_ui_ptr(new Ui::Ponnector_Settings)
 {
     m_ui_ptr->setupUi(this);
 
@@ -83,50 +83,50 @@ Konnector_Settings::Konnector_Settings(QWidget *parent):
     }
 }
 
-Konnector_Settings::~Konnector_Settings()
+Ponnector_Settings::~Ponnector_Settings()
 {
     destructor(true);
 }
 
-Konnector_Settings::Konnector_Settings(Konnector_Settings &konector_settings_ref):
-    m_ui_ptr(konector_settings_ref.get_ui_ptr())
+Ponnector_Settings::Ponnector_Settings(Ponnector_Settings &ponector_settings_ref):
+    m_ui_ptr(ponector_settings_ref.get_ui_ptr())
 {
 
 }
 
-Konnector_Settings & Konnector_Settings::operator = (Konnector_Settings &konector_settings_ref)
+Ponnector_Settings & Ponnector_Settings::operator = (Ponnector_Settings &ponector_settings_ref)
 {
-    m_ui_ptr = konector_settings_ref.get_ui_ptr();
+    m_ui_ptr = ponector_settings_ref.get_ui_ptr();
 
     return *this;
 }
 
-Konnector_Settings::Konnector_Settings(Konnector_Settings &&konector_settings_ref_ref):
-    m_ui_ptr(konector_settings_ref_ref.get_ui_ptr())
+Ponnector_Settings::Ponnector_Settings(Ponnector_Settings &&ponector_settings_ref_ref):
+    m_ui_ptr(ponector_settings_ref_ref.get_ui_ptr())
 {
 
 }
 
-Konnector_Settings & Konnector_Settings::operator = (Konnector_Settings &&konector_settings_ref_ref)
+Ponnector_Settings & Ponnector_Settings::operator = (Ponnector_Settings &&ponector_settings_ref_ref)
 {
-    m_ui_ptr = konector_settings_ref_ref.get_ui_ptr();
+    m_ui_ptr = ponector_settings_ref_ref.get_ui_ptr();
 
     return *this;
 }
 
-int Konnector_Settings::konnector_settings_main()
+int Ponnector_Settings::ponnector_settings_main()
 {
     return 1;
 }
 
-int Konnector_Settings::konnector_settings_kill(bool hard)
+int Ponnector_Settings::ponnector_settings_kill(bool hard)
 {
     destructor(hard);
 
     return 1;
 }
 
-int Konnector_Settings::destructor(bool hard)
+int Ponnector_Settings::destructor(bool hard)
 {
     if(hard)
     {
@@ -143,7 +143,7 @@ int Konnector_Settings::destructor(bool hard)
     return 1;
 }
 
-void Konnector_Settings::on_buttonBox_accepted()
+void Ponnector_Settings::on_buttonBox_accepted()
 {
     QSettings settings;
 
@@ -159,7 +159,7 @@ void Konnector_Settings::on_buttonBox_accepted()
     settings.setValue("defaults/output_path", m_ui_ptr->_le_default_output->text());
 }
 
-void Konnector_Settings::on_pushButton_clicked()
+void Ponnector_Settings::on_pushButton_clicked()
 {
     QString _output_path = QFileDialog::getExistingDirectory (this,
                                                               tr("Select the output path."),
