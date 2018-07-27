@@ -1,0 +1,15 @@
+﻿cmake_minimum_required(VERSION 2.8.2)
+
+project(kinectlibraries-download NONE)
+
+include(ExternalProject)
+
+ExternalProject_Add(kinectlibraries
+  GIT_REPOSITORY    https://github.com/ALEXJAZZ008008/KinectLibraries.git
+  GIT_TAG           master
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/kinectlibraries-src"
+  BINARY_DIR        "${CMAKE_BINARY_DIR}/kinectlibraries-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      "")
