@@ -1,26 +1,26 @@
 # Copyright 2018
 # University of Hull
-
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set (CMAKE_CXX_STANDARD 11)
+
+# Set additional project information
 
 PROJECT(PointCloudProcessing VERSION 0.0 LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 11)
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set(COPYRIGHT "Copyright (c) 2018. All rights reserved.")
 
 ############################  Options: Build What?  ############################
+option(PCL_DOWNLOAD "Download PCL" OFF)
+option(PCL_LOCAL "Use local PCL" ON)
 
-option(DOWNLOAD_PCL "Downlaod the PCL libraries" OFF)
-
-option(LOCAL_PCL "Use Local PCL libraries" OFF)
+option(EIGEN_DOWNLOAD "Download Eigen" OFF)
+option(EIGEN_LOCAL "Use local Eigen" ON)
 
 option(BUILD_DOC "Build documentation" ON)
+option(ENABLE_TESTING "Enable tests" ON)
 
 ############################  Options: Build How?  #############################
-
 include(commons)
-
 option_with_print(BUILD_SHARED_LIBS "Build internally built libraries as shared, not static" OFF)
 option_with_default(CMAKE_BUILD_TYPE "Build type (Release or Debug)" Debug)
 option_with_default(CMAKE_INSTALL_LIBDIR "Directory to which libraries installed" lib)
@@ -41,8 +41,8 @@ endif()
 # We need the PCL libraries, either locally installed
 # or we will download them from git.
 
-if(NOT LOCAL_PCL)
-    if(NOT DOWNLOAD_PCL)
+if(NOT PCL_LOCAL)
+    if(NOT PCL_DOWNLOAD)
 
         message(STATUS "${PROJECT_NAME} depends on PCL. You must either have it installed locally or download them.")
 
@@ -56,9 +56,9 @@ endif()
 
 # Then check if we should download.
 
-if(DOWNLOAD_PCL)
+if(PCL_DOWNLOAD)
 
-    set(LOCAL_PCL "OFF")
+    set(PCL_LOCAL "OFF")
 
     configure_file(${CMAKE_MODULE_PATH}/pcl.txt.in pcl-download/CMakeLists.txt)
 
@@ -144,7 +144,6 @@ if(CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
         else(DOXYGEN_FOUND)
 
             message("Doxygen need to be installed to generate the doxygen documentation")
-
         endif()
     endif()
 endif()
@@ -161,5 +160,4 @@ if(PCL_FOUND)
     include(src/CMakeLists.txt)
 
 endif()
-
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL "A flag showing that CMake has configured at least once.")
