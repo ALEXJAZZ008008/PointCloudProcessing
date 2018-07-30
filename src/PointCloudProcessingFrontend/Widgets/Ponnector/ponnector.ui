@@ -133,9 +133,9 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QPushButton" name="_psh_connect">
+      <widget class="QPushButton" name="_psh_connec">
        <property name="text">
-        <string>Connect</string>
+        <string>Load</string>
        </property>
        <property name="default">
         <bool>true</bool>

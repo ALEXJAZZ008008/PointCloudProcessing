@@ -12,12 +12,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 ############################  Options: Build What?  ############################
 
 option(DOWNLOAD_PCL "Downlaod the PCL libraries" OFF)
-option(DOWNLOAD_KinectLibraries "Downlaod the Kinect Libraries" OFF)
-option(DOWNLOAD_Cereal "Downlaod the Cereal library" OFF)
 
 option(LOCAL_PCL "Use Local PCL libraries" OFF)
-option(LOCAL_KINECTLIBRARIES "Use Local KinectLibraries" OFF)
-option(LOCAL_CEREAL "Use Local Cereal library" OFF)
 
 option(BUILD_DOC "Build documentation" ON)
 
@@ -58,32 +54,6 @@ else()
 
 endif()
 
-if(NOT LOCAL_KINECTLIBRARIES)
-    if(NOT DOWNLOAD_KinectLibraries)
-
-        message(STATUS "${PROJECT_NAME} depends on kinectlibraries. You must either have it installed locally or download it.")
-
-    endif()
-else()
-
-    set(KinectLibraries_ROOT "" CACHE PATH "Root path of kinectlibraries.")
-    find_package(kinectlibraries)
-
-endif()
-
-if(NOT LOCAL_CEREAL)
-    if(NOT DOWNLOAD_Cereal)
-
-        message(STATUS "${PROJECT_NAME} depends on cereal. You must either have it installed locally or download it.")
-
-    endif()
-else()
-
-    set(Cereal_ROOT "" CACHE PATH "Root path of cereal.")
-    find_package(cereal)
-
-endif()
-
 # Then check if we should download.
 
 if(DOWNLOAD_PCL)
@@ -120,80 +90,6 @@ if(DOWNLOAD_PCL)
 
     set(PCL_LIBRARY "${PCL_LIB_DIR}/${prefix}pcl${suffix}")
     set(PCL_FOUND ON)
-
-endif()
-
-if(DOWNLOAD_KinectLibraries)
-
-    set(LOCAL_KINECTLIBRARIES "OFF")
-
-    configure_file(${CMAKE_MODULE_PATH}/kinectlibraries.txt.in kinectlibraries-download/CMakeLists.txt)
-
-    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/kinectlibraries-download" )
-    execute_process(COMMAND "${CMAKE_COMMAND}" --build . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/kinectlibraries-download")
-
-    add_subdirectory("${CMAKE_BINARY_DIR}/kinectlibraries-src" "${CMAKE_BINARY_DIR}/kinectlibraries-build")
-
-    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/kinectlibraries-src/include)
-
-    set(KinectLibraries_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
-
-    if(WIN32)
-
-        set(prefix "")
-        set(suffix ".lib")
-
-    elseif(APPLE)
-
-        set(prefix "lib")
-        set(suffix ".a")
-
-    else()
-
-        set(prefix "lib")
-        set(suffix ".a")
-
-    endif()
-
-    set(KinectLibraries_LIBRARIES "${Cereal_LIB_DIR}/${prefix}kinectlibraries${suffix}")
-    set(KinectLibraries_FOUND ON)
-
-endif()
-
-if(DOWNLOAD_Cereal)
-
-    set(LOCAL_CEREAL "OFF")
-
-    configure_file(${CMAKE_MODULE_PATH}/cereal.txt.in cereal-download/CMakeLists.txt)
-
-    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/cereal-download" )
-    execute_process(COMMAND "${CMAKE_COMMAND}" --build . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/cereal-download")
-
-    add_subdirectory("${CMAKE_BINARY_DIR}/cereal-src" "${CMAKE_BINARY_DIR}/cereal-build")
-
-    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/cereal-src/include)
-
-    set(Cereal_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
-
-    if(WIN32)
-
-        set(prefix "")
-        set(suffix ".lib")
-
-    elseif(APPLE)
-
-        set(prefix "lib")
-        set(suffix ".a")
-
-    else()
-
-        set(prefix "lib")
-        set(suffix ".a")
-
-    endif()
-
-    set(Cereal_LIBRARY "${Cereal_LIB_DIR}/${prefix}cereal${suffix}")
-    set(Cereal_FOUND ON)
 
 endif()
 
@@ -260,7 +156,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(src/include)
 
-if(PCL_FOUND AND KinectLibraries_FOUND AND Cereal_FOUND)
+if(PCL_FOUND)
 
     include(src/CMakeLists.txt)
 

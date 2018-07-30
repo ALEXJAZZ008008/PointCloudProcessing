@@ -1,5 +1,5 @@
 #include <QApplication>
-#include "konnector.h"
+#include "ponnector.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     a.setApplicationName("Konnector");
     a.setApplicationVersion(QObject::tr("0.0.1"));
 
-    Konnector konnector;
-    konnector.konnector_main();
+    Ponnector ponnector;
+    ponnector.ponnector_main();
 
     return a.exec();
 }
