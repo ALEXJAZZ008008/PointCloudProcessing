@@ -55,6 +55,7 @@ private slots:
     void on_buttonBox_accepted();
 
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
 };
 
 #endif // PONNECTOR_SETTINGS_H

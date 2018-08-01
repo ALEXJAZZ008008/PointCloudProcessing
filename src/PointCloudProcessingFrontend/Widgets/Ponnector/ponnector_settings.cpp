@@ -10,22 +10,22 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
 
     restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
 
-    if(settings.contains("output/set_depth_image"))
+    if(settings.contains("defaults/output_path"))
     {
-        m_ui_ptr->_chk_ouput_depth->setChecked(settings.value("output/set_depth_image").toBool());
+        m_ui_ptr->_le_default_output->setText(settings.value("defaults/output_path").toString());
     }
     else
     {
-        m_ui_ptr->_chk_ouput_depth->setChecked(false);
+        m_ui_ptr->_le_default_output->setText(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     }
 
-    if(settings.contains("output/set_rgb_image"))
+    if(settings.contains("defaults/output_path"))
     {
-        m_ui_ptr->_chk_output_rgb->setChecked(settings.value("output/set_rgb_image").toBool());
+        m_ui_ptr->_le_default_input->setText(settings.value("defaults/input_path").toString());
     }
     else
     {
-        m_ui_ptr->_chk_output_rgb->setChecked(false);
+        m_ui_ptr->_le_default_input->setText(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     }
 
     if(settings.contains("output/set_pc_txt"))
@@ -44,42 +44,6 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     else
     {
         m_ui_ptr->_chk_output_pc_bin->setChecked(false);
-    }
-
-    if(settings.contains("input/resolution_small"))
-    {
-        m_ui_ptr->rd_small->setChecked(settings.value("input/resolution_small").toBool());
-    }
-    else
-    {
-        m_ui_ptr->rd_small->setChecked(false);
-    }
-
-    if(settings.contains("input/resolution_med"))
-    {
-        m_ui_ptr->rd_med->setChecked(settings.value("input/resolution_med").toBool());
-    }
-    else
-    {
-        m_ui_ptr->rd_med->setChecked(true);
-    }
-
-    if(settings.contains("input/resolution_high"))
-    {
-        m_ui_ptr->rd_high->setChecked(settings.value("input/resolution_high").toBool());
-    }
-    else
-    {
-        m_ui_ptr->rd_high->setChecked(false);
-    }
-
-    if(settings.contains("defaults/output_path"))
-    {
-        m_ui_ptr->_le_default_output->setText(settings.value("defaults/output_path").toString());
-    }
-    else
-    {
-        m_ui_ptr->_le_default_output->setText(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     }
 }
 
@@ -147,24 +111,29 @@ void Ponnector_Settings::on_buttonBox_accepted()
 {
     QSettings settings;
 
-    settings.setValue("output/set_depth_image", m_ui_ptr->_chk_ouput_depth->isChecked());
-    settings.setValue("output/set_rgb_image", m_ui_ptr->_chk_output_rgb->isChecked());
+    settings.setValue("defaults/output_path", m_ui_ptr->_le_default_output->text());
+    settings.setValue("defaults/input_path", m_ui_ptr->_le_default_input->text());
+
     settings.setValue("output/set_pc_txt", m_ui_ptr->_chk_output_pc_txt->isChecked());
     settings.setValue("output/set_pc_bin", m_ui_ptr->_chk_output_pc_bin->isChecked());
-
-    settings.setValue("input/resolution_small", m_ui_ptr->rd_small->isChecked());
-    settings.setValue("input/resolution_med", m_ui_ptr->rd_med->isChecked());
-    settings.setValue("input/resolution_high", m_ui_ptr->rd_high->isChecked());
-
-    settings.setValue("defaults/output_path", m_ui_ptr->_le_default_output->text());
 }
 
 void Ponnector_Settings::on_pushButton_clicked()
 {
-    QString _output_path = QFileDialog::getExistingDirectory (this,
+    QString output_path = QFileDialog::getExistingDirectory (this,
                                                               tr("Select the output path."),
                                                               m_ui_ptr->_le_default_output->text(),
                                                               QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-    m_ui_ptr->_le_default_output->setText(_output_path);
+    m_ui_ptr->_le_default_output->setText(output_path);
+}
+
+void Ponnector_Settings::on_pushButton_2_clicked()
+{
+    QString input_path = QFileDialog::getExistingDirectory (this,
+                                                             tr("Select the input path."),
+                                                             m_ui_ptr->_le_default_input->text(),
+                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+    m_ui_ptr->_le_default_input->setText(input_path);
 }
