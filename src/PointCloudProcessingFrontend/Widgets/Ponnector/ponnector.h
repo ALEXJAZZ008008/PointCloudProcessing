@@ -129,14 +129,26 @@ public:
         return 1;
     }
 
-    inline bool get_loaded()
+    inline bool get_header_loaded()
     {
-        return m_loaded;
+        return m_header_loaded;
     }
 
-    inline int set_loaded(bool loaded)
+    inline int set_header_loaded(bool header_loaded)
     {
-        m_loaded = loaded;
+        m_header_loaded = header_loaded;
+
+        return 1;
+    }
+
+    inline bool get_pcl_loaded()
+    {
+        return m_pcl_loaded;
+    }
+
+    inline int set_pcl_loaded(bool pcl_loaded)
+    {
+        m_pcl_loaded = pcl_loaded;
 
         return 1;
     }
@@ -164,7 +176,9 @@ private:
 
     unsigned char m_write_offset;
 
-    bool m_loaded;
+    bool m_header_loaded;
+
+    bool m_pcl_loaded;
 
     //! Called by destructor
     //! and any other methods aiming to destruct the class
@@ -188,7 +202,9 @@ private slots:
     //! - Not Loaded
     void updateGUI_state();
 
-    void on__psh_load_clicked();
+    void on__psh_pcl_clicked();
+
+    void on__psh_header_clicked();
 
     void on__psh_register_clicked();
 
@@ -197,6 +213,7 @@ private slots:
     void on__psh_show_log_clicked();
 
     void on__psh_settings_clicked();
+
 };
 
 #endif // KINECTFRONTEND_H

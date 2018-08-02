@@ -1,16 +1,19 @@
 #ifndef POINTCLOUDPROCESSINGBACKEND_H
 #define POINTCLOUDPROCESSINGBACKEND_H
 
-#include<memory>
-#include<map>
-#include<vector>
-#include<string>
-#include<sstream>
-#include<fstream>
+#include <memory>
+#include <chrono>
+#include <map>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
 
-#include"src/include/PointCloudProcessingObject.h"
+#include "src/include/PointCloudProcessingObject.h"
 
 using namespace std;
+using namespace std::chrono;
 
 //!
 //! \class PointCloudProcessingBackend
@@ -34,6 +37,13 @@ public:
         kpclp_header_status
     };
 
+    enum data_enum
+    {
+        u,
+        i,
+        f
+    };
+
     //! Constructor
     explicit PointCloudProcessingBackend();
 
@@ -54,6 +64,18 @@ public:
     inline int set_header_map(map<string, header_enum> &header_map)
     {
         m_header_map = header_map;
+
+        return 1;
+    }
+
+    inline map<string, data_enum> & get_data_map()
+    {
+        return m_data_map;
+    }
+
+    inline int set_data_map(map<string, data_enum> &data_map)
+    {
+        m_data_map = data_map;
 
         return 1;
     }
@@ -116,7 +138,11 @@ public:
     //! Disconnect or destruct remotely
     int kinect_input_output_kill(bool);
 
-    int load_files(vector<string> &);
+    int load_headers(vector<string> &);
+
+    int load_data();
+
+    int write_data_to_file();
 
     int calculate_point_cloud();
 
@@ -127,6 +153,8 @@ public:
 private:
 
     map<string, header_enum> m_header_map;
+
+    map<string, data_enum> m_data_map;
 
     vector<shared_ptr<PointCloudProcessingObject>> m_objects;
 

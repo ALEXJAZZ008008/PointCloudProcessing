@@ -1,9 +1,9 @@
 #ifndef POINTCLOUDPROCESSINGOBJECT_H
 #define POINTCLOUDPROCESSINGOBJECT_H
 
-#include<chrono>
-#include<vector>
-#include<string>
+#include <chrono>
+#include <vector>
+#include <string>
 
 using namespace std;
 using namespace std::chrono;
@@ -29,6 +29,11 @@ public:
     PointCloudProcessingObject(PointCloudProcessingObject &&);
     PointCloudProcessingObject & operator = (PointCloudProcessingObject &&);
 
+    inline bool operator <(PointCloudProcessingObject &point_cloud_processing_object)
+    {
+        return this->get_real_timestamp() < point_cloud_processing_object.get_real_timestamp();
+    }
+
     inline vector<double> & get_data()
     {
         return m_data;
@@ -37,6 +42,18 @@ public:
     inline int set_data(vector<double> &data)
     {
         m_data = data;
+
+        return 1;
+    }
+
+    inline vector<vector<double>> & get_point_cloud()
+    {
+        return m_point_cloud;
+    }
+
+    inline int set_point_cloud(vector<vector<double>> &point_cloud)
+    {
+        m_point_cloud = point_cloud;
 
         return 1;
     }
@@ -61,6 +78,18 @@ public:
     inline int set_data_path(string &data_path)
     {
         m_data_path = data_path;
+
+        return 1;
+    }
+
+    inline string & get_data_type()
+    {
+        return m_data_type;
+    }
+
+    inline int set_data_type(string &data_type)
+    {
+        m_data_type = data_type;
 
         return 1;
     }
@@ -109,10 +138,14 @@ private:
 
     vector<double> m_data;
 
+    vector<vector<double>> m_point_cloud;
+
     //! Holds the resolution that the kinect is set to
     vector<unsigned int> m_resolution;
 
     string m_data_path;
+
+    string m_data_type;
 
     milliseconds::rep m_real_timestamp;
 

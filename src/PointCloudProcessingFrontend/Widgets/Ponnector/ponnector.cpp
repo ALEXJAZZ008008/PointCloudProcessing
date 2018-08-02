@@ -9,7 +9,8 @@ Ponnector::Ponnector(QDialog *parent):
     m_output_frequency(30.0f),
     m_output_speed(1000.0f / m_output_frequency),
     m_write_offset(0),
-    m_loaded(false)
+    m_header_loaded(false),
+    m_pcl_loaded(false)
 {
 
 }
@@ -27,7 +28,8 @@ Ponnector::Ponnector(Ponnector &ponnector_ref):
     m_output_frequency(ponnector_ref.get_output_frequency()),
     m_output_speed(ponnector_ref.get_output_speed()),
     m_write_offset(ponnector_ref.get_write_offset()),
-    m_loaded(ponnector_ref.get_loaded())
+    m_header_loaded(ponnector_ref.get_header_loaded()),
+    m_pcl_loaded(ponnector_ref.get_pcl_loaded())
 {
 
 }
@@ -41,7 +43,8 @@ Ponnector & Ponnector::operator = (Ponnector &ponnector_ref)
     m_output_frequency = ponnector_ref.get_output_frequency();
     m_output_speed = ponnector_ref.get_output_speed();
     m_write_offset = ponnector_ref.get_write_offset();
-    m_loaded = ponnector_ref.get_loaded();
+    m_header_loaded = ponnector_ref.get_header_loaded();
+    m_pcl_loaded = ponnector_ref.get_pcl_loaded();
 
     return *this;
 }
@@ -54,7 +57,8 @@ Ponnector::Ponnector(Ponnector &&ponnector_ref_ref):
     m_output_frequency(ponnector_ref_ref.get_output_frequency()),
     m_output_speed(ponnector_ref_ref.get_output_speed()),
     m_write_offset(ponnector_ref_ref.get_write_offset()),
-    m_loaded(ponnector_ref_ref.get_loaded())
+    m_header_loaded(ponnector_ref_ref.get_header_loaded()),
+    m_pcl_loaded(ponnector_ref_ref.get_pcl_loaded())
 {
 
 }
@@ -68,7 +72,8 @@ Ponnector & Ponnector::operator = (Ponnector &&ponnector_ref_ref)
     m_output_frequency = ponnector_ref_ref.get_output_frequency();
     m_output_speed = ponnector_ref_ref.get_output_speed();
     m_write_offset = ponnector_ref_ref.get_write_offset();
-    m_loaded = ponnector_ref_ref.get_loaded();
+    m_header_loaded = ponnector_ref_ref.get_header_loaded();
+    m_pcl_loaded = ponnector_ref_ref.get_pcl_loaded();
 
     return *this;
 }
@@ -188,7 +193,7 @@ int Ponnector::update_output()
 
 void Ponnector::updateGUI_state()
 {
-    m_ui_ptr->_psh_register->setEnabled(m_loaded);
+    m_ui_ptr->_psh_register->setEnabled(m_pcl_loaded);
 }
 
 void Ponnector::update()
@@ -208,7 +213,7 @@ void Ponnector::update()
     }
 }
 
-void Ponnector::on__psh_load_clicked()
+void Ponnector::on__psh_header_clicked()
 {
     QStringList q_file_paths = QFileDialog::getOpenFileNames(
                 this,
@@ -223,9 +228,11 @@ void Ponnector::on__psh_load_clicked()
         std_file_paths[static_cast<unsigned long>(i)] = q_file_paths[i].toStdString();
     }
 
-    if(m_point_cloud_processing_backend_ptr->load_files(std_file_paths))
+    if(m_point_cloud_processing_backend_ptr->load_headers(std_file_paths))
     {
-        m_loaded = true;
+        m_header_loaded = true;
+
+        m_pcl_loaded = false;
 
         m_logger_ptr->show();
     }
@@ -233,9 +240,33 @@ void Ponnector::on__psh_load_clicked()
     updateGUI_state();
 }
 
+void Ponnector::on__psh_pcl_clicked()
+{
+    if(m_header_loaded)
+    {
+        if(m_point_cloud_processing_backend_ptr->load_data())
+        {
+            m_point_cloud_processing_backend_ptr->write_data_to_file();
+
+            if(m_point_cloud_processing_backend_ptr->calculate_point_cloud())
+            {
+                m_pcl_loaded = true;
+
+                m_point_cloud_processing_backend_ptr->write_point_cloud_to_file();
+            }
+        }
+    }
+    else
+    {
+
+    }
+
+    updateGUI_state();
+}
+
 void Ponnector::on__psh_register_clicked()
 {
-    if(m_loaded)
+    if(m_pcl_loaded)
     {
 
     }
