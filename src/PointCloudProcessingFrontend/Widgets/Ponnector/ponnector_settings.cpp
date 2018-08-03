@@ -121,9 +121,9 @@ void Ponnector_Settings::on_buttonBox_accepted()
 void Ponnector_Settings::on_pushButton_clicked()
 {
     QString output_path = QFileDialog::getExistingDirectory (this,
-                                                              tr("Select the output path."),
-                                                              m_ui_ptr->_le_default_output->text(),
-                                                              QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+                                                             tr("Select the output path."),
+                                                             m_ui_ptr->_le_default_output->text(),
+                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
     m_ui_ptr->_le_default_output->setText(output_path);
 }
@@ -131,9 +131,9 @@ void Ponnector_Settings::on_pushButton_clicked()
 void Ponnector_Settings::on_pushButton_2_clicked()
 {
     QString input_path = QFileDialog::getExistingDirectory (this,
-                                                             tr("Select the input path."),
-                                                             m_ui_ptr->_le_default_input->text(),
-                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+                                                            tr("Select the input path."),
+                                                            m_ui_ptr->_le_default_input->text(),
+                                                            QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
     m_ui_ptr->_le_default_input->setText(input_path);
 }

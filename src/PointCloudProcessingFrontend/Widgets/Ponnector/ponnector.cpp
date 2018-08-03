@@ -184,7 +184,7 @@ int Ponnector::update_settings()
 
 int Ponnector::update_output()
 {
-    m_logger_ptr->print(m_point_cloud_processing_backend_ptr->get_log().c_str());
+    m_logger_ptr->print(m_point_cloud_processing_backend_ptr->get_log());
 
     m_point_cloud_processing_backend_ptr->get_log() = "";
 
@@ -215,6 +215,8 @@ void Ponnector::update()
 
 void Ponnector::on__psh_header_clicked()
 {
+    m_logger_ptr->show();
+
     QStringList q_file_paths = QFileDialog::getOpenFileNames(
                 this,
                 "Select one or more files to open",
@@ -233,8 +235,6 @@ void Ponnector::on__psh_header_clicked()
         m_header_loaded = true;
 
         m_pcl_loaded = false;
-
-        m_logger_ptr->show();
     }
 
     updateGUI_state();
@@ -242,12 +242,12 @@ void Ponnector::on__psh_header_clicked()
 
 void Ponnector::on__psh_pcl_clicked()
 {
+    m_logger_ptr->show();
+
     if(m_header_loaded)
     {
         if(m_point_cloud_processing_backend_ptr->load_data())
         {
-            m_point_cloud_processing_backend_ptr->write_data_to_file();
-
             if(m_point_cloud_processing_backend_ptr->calculate_point_cloud())
             {
                 m_pcl_loaded = true;
