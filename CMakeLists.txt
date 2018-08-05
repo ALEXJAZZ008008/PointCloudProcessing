@@ -13,9 +13,6 @@ set(COPYRIGHT "Copyright (c) 2018. All rights reserved.")
 option(PCL_DOWNLOAD "Download PCL" OFF)
 option(PCL_LOCAL "Use local PCL" ON)
 
-option(EIGEN_DOWNLOAD "Download Eigen" OFF)
-option(EIGEN_LOCAL "Use local Eigen" ON)
-
 option(BUILD_DOC "Build documentation" ON)
 option(ENABLE_TESTING "Enable tests" ON)
 
@@ -155,9 +152,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(src/include)
 
-#if(PCL_FOUND)
+if(PCL_FOUND)
 
     include(src/CMakeLists.txt)
 
-#endif()
+endif()
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL "A flag showing that CMake has configured at least once.")
