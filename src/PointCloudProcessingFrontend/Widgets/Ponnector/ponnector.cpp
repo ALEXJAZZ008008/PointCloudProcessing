@@ -268,7 +268,10 @@ void Ponnector::on__psh_register_clicked()
 {
     if(m_pcl_loaded)
     {
+        if(m_point_cloud_processing_backend_ptr->ricp())
+        {
 
+        }
     }
 
     updateGUI_state();

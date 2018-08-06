@@ -4,9 +4,12 @@
 #include <chrono>
 #include <vector>
 #include <string>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
 using namespace std;
 using namespace std::chrono;
+using namespace pcl;
 
 //!
 //! \class PointCloudProcessingObject
@@ -36,27 +39,43 @@ public:
     }
 
     //! Gets the data array
-    inline vector<double> & get_data()
+    inline vector<float> & get_data()
     {
         return m_data;
     }
 
     //! Sets the data array
-    inline int set_data(vector<double> &data)
+    inline int set_data(vector<float> &data)
     {
         m_data = data;
 
         return 1;
     }
 
+    //! \warning Legacy
     //! Gets the point cloud array
-    inline vector<vector<double>> & get_point_cloud()
+//    inline vector<vector<double>> & get_point_cloud()
+//    {
+//        return m_point_cloud;
+//    }
+
+    //! \warning Legacy
+    //! Sets the point cloud array
+//    inline int set_point_cloud(vector<vector<double>> &point_cloud)
+//    {
+//        m_point_cloud = point_cloud;
+
+//        return 1;
+//    }
+
+    //! Gets the point cloud array
+    inline PointCloud<PointXYZ> & get_point_cloud()
     {
         return m_point_cloud;
     }
 
     //! Sets the point cloud array
-    inline int set_point_cloud(vector<vector<double>> &point_cloud)
+    inline int set_point_cloud(PointCloud<PointXYZ> &point_cloud)
     {
         m_point_cloud = point_cloud;
 
@@ -156,10 +175,14 @@ public:
 private:
 
     //! Holds the data
-    vector<double> m_data;
+    vector<float> m_data;
+
+    //! \warning Legacy
+    //! Holds the point cloud
+//    vector<vector<double>> m_point_cloud;
 
     //! Holds the point cloud
-    vector<vector<double>> m_point_cloud;
+    PointCloud<PointXYZ> m_point_cloud;
 
     //! Holds the resolution that the kinect is set to
     vector<unsigned int> m_resolution;

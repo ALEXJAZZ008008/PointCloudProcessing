@@ -9,11 +9,18 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/search/impl/kdtree.hpp>
+#include <pcl/kdtree/impl/kdtree_flann.hpp>
+#include <pcl/registration/icp.h>
 
 #include "src/include/PointCloudProcessingObject.h"
 
 using namespace std;
 using namespace std::chrono;
+using namespace pcl;
+using namespace pcl::io;
 
 //!
 //! \class PointCloudProcessingBackend
@@ -169,8 +176,11 @@ public:
     //! Writes the point clouds which were calculated from the data loaded from the paths in the headers
     int write_point_cloud_to_file();
 
+    //! \warning Legacy
     //! Averages all point clouds
-    int average_point_cloud_buffer(vector<float> &, vector<vector<float>> &, vector<unsigned short> &);
+//    int average_point_cloud_buffer(vector<float> &, vector<vector<float>> &, vector<unsigned short> &);
+
+    int ricp();
 
 private:
 

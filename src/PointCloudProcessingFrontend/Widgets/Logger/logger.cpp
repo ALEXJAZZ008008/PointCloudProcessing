@@ -55,8 +55,6 @@ int Logger::print(string &string)
 {
     m_ui_ptr->_lbl_output_msg->insertPlainText(string.c_str());
 
-    m_ui_ptr->_lbl_output_msg->moveCursor(QTextCursor::End);
-
     return 1;
 }
 

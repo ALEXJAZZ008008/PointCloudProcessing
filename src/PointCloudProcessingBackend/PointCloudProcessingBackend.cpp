@@ -185,10 +185,10 @@ int PointCloudProcessingBackend::load_data()
 {
     for(unsigned long i = 0; i < m_objects.size(); ++i)
     {
-        m_objects[i].get()->get_data() = vector<double>(0, 0.0);
+        m_objects[i].get()->get_data() = vector<float>(0, 0.0f);
 
         m_objects[i].get()->get_data() =
-                vector<double>(m_objects[i].get()->get_resolution()[0] * m_objects[i].get()->get_resolution()[1] * m_objects[i].get()->get_resolution()[2], 0.0);
+                vector<float>(m_objects[i].get()->get_resolution()[0] * m_objects[i].get()->get_resolution()[1] * m_objects[i].get()->get_resolution()[2], 0.0f);
 
         ifstream data_stream(m_objects[i].get()->get_data_path(), ios::in | ios::binary);
 
@@ -215,7 +215,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -235,7 +235,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -255,27 +255,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
-                    }
-
-                    break;
-
-                case 64:
-
-                    for(unsigned long j = 0; j < m_objects[i].get()->get_data().size(); ++j)
-                    {
-                        unsigned long long temp = 0;
-
-                        data_stream.read(reinterpret_cast<char *>(&temp), sizeof(unsigned long long));
-
-                        if(data_stream.fail())
-                        {
-                            m_log += "Cannot read from " + m_objects[i].get()->get_data_path() + "!!\n";
-
-                            return 0;
-                        }
-
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -302,7 +282,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -322,7 +302,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -342,27 +322,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
-                    }
-
-                    break;
-
-                case 64:
-
-                    for(unsigned long j = 0; j < m_objects[i].get()->get_data().size(); ++j)
-                    {
-                        long long temp = 0;
-
-                        data_stream.read(reinterpret_cast<char *>(&temp), sizeof(long long));
-
-                        if(data_stream.fail())
-                        {
-                            m_log += "Cannot read from " + m_objects[i].get()->get_data_path() + "!!\n";
-
-                            return 0;
-                        }
-
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -389,27 +349,7 @@ int PointCloudProcessingBackend::load_data()
                             return 0;
                         }
 
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
-                    }
-
-                    break;
-
-                case 64:
-
-                    for(unsigned long j = 0; j < m_objects[i].get()->get_data().size(); ++j)
-                    {
-                        double temp = 0.0;
-
-                        data_stream.read(reinterpret_cast<char *>(&temp), sizeof(double));
-
-                        if(data_stream.fail())
-                        {
-                            m_log += "Cannot read from " + m_objects[i].get()->get_data_path() + "!!\n";
-
-                            return 0;
-                        }
-
-                        m_objects[i].get()->get_data()[j] = static_cast<double>(temp);
+                        m_objects[i].get()->get_data()[j] = static_cast<float>(temp);
                     }
 
                     break;
@@ -463,26 +403,56 @@ int PointCloudProcessingBackend::write_data_to_file()
     return 1;
 }
 
+//! \warning Legacy
+//int PointCloudProcessingBackend::calculate_point_cloud()
+//{
+//    for(unsigned long i = 0; i < m_objects.size(); ++i)
+//    {
+//        m_objects[i].get()->get_point_cloud() = vector<vector<double>>(0, vector<double>(0, 0.0l));
+
+//        m_objects[i].get()->get_point_cloud() =
+//                vector<vector<double>>((m_objects[i].get()->get_resolution()[0] * m_objects[i].get()->get_resolution()[1]) * 3, vector<double>(3, 0.0l));
+
+//        for(unsigned int j = 0; j < m_objects[i]->get_resolution()[1]; ++j)
+//        {
+//            for(unsigned int k = 0; k < m_objects[i]->get_resolution()[0]; ++k)
+//            {
+//                m_objects[i].get()->get_point_cloud()[(m_objects[i]->get_resolution()[0] * j) + k][0] =
+//                        (k - (m_objects[i]->get_resolution()[1] / 2.0)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021;
+
+//                m_objects[i].get()->get_point_cloud()[(m_objects[i]->get_resolution()[0] * j) + k][1] =
+//                        (j - (m_objects[i]->get_resolution()[0] / 2.0)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021;
+
+//                m_objects[i].get()->get_point_cloud()[(m_objects[i]->get_resolution()[0] * j) + k][2] = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
+//            }
+//        }
+
+//        m_log += "-> pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+//    }
+
+//    return 1;
+//}
+
 int PointCloudProcessingBackend::calculate_point_cloud()
 {
     for(unsigned long i = 0; i < m_objects.size(); ++i)
     {
-        m_objects[i].get()->get_point_cloud() = vector<vector<double>>(0, vector<double>(0, 0.0l));
-
-        m_objects[i].get()->get_point_cloud() =
-                vector<vector<double>>((m_objects[i].get()->get_resolution()[0] * m_objects[i].get()->get_resolution()[1]) * 3, vector<double>(3, 0.0l));
+        m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
+        m_objects[i].get()->get_point_cloud().height   = m_objects[i]->get_resolution()[1];
+        m_objects[i].get()->get_point_cloud().is_dense = false;
+        m_objects[i].get()->get_point_cloud().points.resize (m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
 
         for(unsigned int j = 0; j < m_objects[i]->get_resolution()[1]; ++j)
         {
             for(unsigned int k = 0; k < m_objects[i]->get_resolution()[0]; ++k)
             {
-                m_objects[i].get()->get_point_cloud()[(m_objects[i]->get_resolution()[0] * j) + k][0] =
-                        (k - (m_objects[i]->get_resolution()[1] / 2.0)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021;
+                m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x =
+                        (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
 
-                m_objects[i].get()->get_point_cloud()[(m_objects[i]->get_resolution()[0] * j) + k][1] =
-                        (j - (m_objects[i]->get_resolution()[0] / 2.0)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021;
+                m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y =
+                        (j - (m_objects[i]->get_resolution()[0] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
 
-                m_objects[i].get()->get_point_cloud()[(m_objects[i]->get_resolution()[0] * j) + k][2] = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
+                m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
             }
         }
 
@@ -492,45 +462,60 @@ int PointCloudProcessingBackend::calculate_point_cloud()
     return 1;
 }
 
+//! \warning Legacy
+//int PointCloudProcessingBackend::write_point_cloud_to_file()
+//{
+//    for(unsigned long i = 0; i < m_objects.size(); ++i)
+//    {
+//        ofstream point_cloud_bin_stream(m_output_path + "/point_cloud_bin_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", ios::out | ios::binary);
+
+//        for(unsigned long j = 0; j < m_objects[i].get()->get_point_cloud().size(); ++j)
+//        {
+//            point_cloud_bin_stream.write(reinterpret_cast<char *>(&m_objects[i].get()->get_point_cloud()[j][0]), sizeof(double));
+//            point_cloud_bin_stream.write(reinterpret_cast<char *>(&m_objects[i].get()->get_point_cloud()[j][1]), sizeof(double));
+//            point_cloud_bin_stream.write(reinterpret_cast<char *>(&m_objects[i].get()->get_point_cloud()[j][2]), sizeof(double));
+//        }
+
+//        point_cloud_bin_stream.flush();
+//        point_cloud_bin_stream.close();
+
+//        ofstream point_cloud_txt_stream(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", ios::out);
+
+//        point_cloud_txt_stream << "# .PCD v.7 - Point Cloud Data file format" << endl;
+//        point_cloud_txt_stream << "VERSION .7" << endl;
+//        point_cloud_txt_stream << "FIELDS x y z" << endl;
+//        point_cloud_txt_stream << "SIZE 8 8 8" << endl;
+//        point_cloud_txt_stream << "TYPE F F F" << endl;
+//        point_cloud_txt_stream << "COUNT 1 1 1" << endl;
+//        point_cloud_txt_stream << "WIDTH " << to_string(m_objects[i].get()->get_point_cloud().size()) << endl;
+//        point_cloud_txt_stream << "HEIGHT 1" << endl;
+//        point_cloud_txt_stream << "VIEWPOINT 0 0 0 1 0 0 0" << endl;
+//        point_cloud_txt_stream << "POINTS " << to_string(m_objects[i].get()->get_point_cloud().size()) << endl;
+//        point_cloud_txt_stream << "DATA ascii" << endl;
+
+//        for(unsigned long j = 0; j < m_objects[i].get()->get_point_cloud().size(); ++j)
+//        {
+//            point_cloud_txt_stream << to_string(m_objects[i].get()->get_point_cloud()[j][0]) << " ";
+//            point_cloud_txt_stream << to_string(m_objects[i].get()->get_point_cloud()[j][1]) << " ";
+//            point_cloud_txt_stream << to_string(m_objects[i].get()->get_point_cloud()[j][2]) << endl;
+//        }
+
+//        point_cloud_txt_stream.flush();
+//        point_cloud_txt_stream.close();
+
+//        m_log += "<- pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+//    }
+
+//    return 1;
+//}
+
 int PointCloudProcessingBackend::write_point_cloud_to_file()
 {
     for(unsigned long i = 0; i < m_objects.size(); ++i)
     {
-        ofstream point_cloud_bin_stream(m_output_path + "/point_cloud_bin_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", ios::out | ios::binary);
+        savePCDFileBinary(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", m_objects[i].get()->get_point_cloud());
 
-        for(unsigned long j = 0; j < m_objects[i].get()->get_point_cloud().size(); ++j)
-        {
-            point_cloud_bin_stream.write(reinterpret_cast<char *>(&m_objects[i].get()->get_point_cloud()[j][0]), sizeof(double));
-            point_cloud_bin_stream.write(reinterpret_cast<char *>(&m_objects[i].get()->get_point_cloud()[j][1]), sizeof(double));
-            point_cloud_bin_stream.write(reinterpret_cast<char *>(&m_objects[i].get()->get_point_cloud()[j][2]), sizeof(double));
-        }
-
-        point_cloud_bin_stream.flush();
-        point_cloud_bin_stream.close();
-
-        ofstream point_cloud_txt_stream(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", ios::out);
-
-        point_cloud_txt_stream << "# .PCD v.7 - Point Cloud Data file format" << endl;
-        point_cloud_txt_stream << "VERSION .7" << endl;
-        point_cloud_txt_stream << "FIELDS x y z" << endl;
-        point_cloud_txt_stream << "SIZE 8 8 8" << endl;
-        point_cloud_txt_stream << "TYPE F F F" << endl;
-        point_cloud_txt_stream << "COUNT 1 1 1" << endl;
-        point_cloud_txt_stream << "WIDTH " << to_string(m_objects[i].get()->get_point_cloud().size()) << endl;
-        point_cloud_txt_stream << "HEIGHT 1" << endl;
-        point_cloud_txt_stream << "VIEWPOINT 0 0 0 1 0 0 0" << endl;
-        point_cloud_txt_stream << "POINTS " << to_string(m_objects[i].get()->get_point_cloud().size()) << endl;
-        point_cloud_txt_stream << "DATA ascii" << endl;
-
-        for(unsigned long j = 0; j < m_objects[i].get()->get_point_cloud().size(); ++j)
-        {
-            point_cloud_txt_stream << to_string(m_objects[i].get()->get_point_cloud()[j][0]) << " ";
-            point_cloud_txt_stream << to_string(m_objects[i].get()->get_point_cloud()[j][1]) << " ";
-            point_cloud_txt_stream << to_string(m_objects[i].get()->get_point_cloud()[j][2]) << endl;
-        }
-
-        point_cloud_txt_stream.flush();
-        point_cloud_txt_stream.close();
+        savePCDFileASCII(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", m_objects[i].get()->get_point_cloud());
 
         m_log += "<- pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
     }
@@ -538,52 +523,82 @@ int PointCloudProcessingBackend::write_point_cloud_to_file()
     return 1;
 }
 
-int PointCloudProcessingBackend::average_point_cloud_buffer(vector<float> &point_cloud, vector<vector<float>> &point_cloud_buffer, vector<unsigned short> &resolution)
+//! \warning Legacy
+//int PointCloudProcessingBackend::average_point_cloud_buffer(vector<float> &point_cloud, vector<vector<float>> &point_cloud_buffer, vector<unsigned short> &resolution)
+//{
+//    vector<vector<float>>::iterator point_cloud_buffer_iterator = point_cloud_buffer.begin();
+
+//    for(unsigned long i = 0; i < point_cloud_buffer.size(); ++i)
+//    {
+//        vector<float>::iterator point_cloud_buffer_point_cloud_iterator = point_cloud_buffer_iterator->begin();
+
+//        vector<float>::iterator point_cloud_iterator = point_cloud.begin();
+
+//        for(unsigned short j = 0; j < resolution[1]; ++j)
+//        {
+//            for(unsigned short k = 0; k < resolution[0]; ++k)
+//            {
+//                *point_cloud_iterator += *point_cloud_buffer_point_cloud_iterator;
+//                ++point_cloud_iterator;
+//                ++point_cloud_buffer_point_cloud_iterator;
+
+//                *point_cloud_iterator += *point_cloud_buffer_point_cloud_iterator;
+//                ++point_cloud_iterator;
+//                ++point_cloud_buffer_point_cloud_iterator;
+
+//                *point_cloud_iterator += *point_cloud_buffer_point_cloud_iterator;
+//                ++point_cloud_iterator;
+//                ++point_cloud_buffer_point_cloud_iterator;
+//            }
+//        }
+
+//        ++point_cloud_buffer_iterator;
+//    }
+
+//    vector<float>::iterator point_cloud_iterator = point_cloud.begin();
+
+//    for(unsigned short j = 0; j < resolution[1]; ++j)
+//    {
+//        for(unsigned short k = 0; k < resolution[0]; ++k)
+//        {
+//            *point_cloud_iterator = (*point_cloud_iterator / point_cloud_buffer.size()) * -1.0f;
+//            ++point_cloud_iterator;
+
+//            *point_cloud_iterator = *point_cloud_iterator / point_cloud_buffer.size();
+//            ++point_cloud_iterator;
+
+//            *point_cloud_iterator = *point_cloud_iterator / point_cloud_buffer.size();
+//            ++point_cloud_iterator;
+//        }
+//    }
+
+//    return 1;
+//}
+
+int PointCloudProcessingBackend::ricp()
 {
-    vector<vector<float>>::iterator point_cloud_buffer_iterator = point_cloud_buffer.begin();
+    IterativeClosestPoint<PointXYZ, PointXYZ> icp;
 
-    for(unsigned long i = 0; i < point_cloud_buffer.size(); ++i)
+    for(unsigned long i = 0; i < m_objects.size() - 1; ++i)
     {
-        vector<float>::iterator point_cloud_buffer_point_cloud_iterator = point_cloud_buffer_iterator->begin();
+        PointCloud<PointXYZ>::Ptr source(new PointCloud<PointXYZ>(m_objects[i].get()->get_point_cloud()));
+        PointCloud<PointXYZ>::Ptr target(new PointCloud<PointXYZ>(m_objects[i + 1].get()->get_point_cloud()));
 
-        vector<float>::iterator point_cloud_iterator = point_cloud.begin();
+        icp.setInputSource(source);
+        icp.setInputTarget(target);
 
-        for(unsigned short j = 0; j < resolution[1]; ++j)
-        {
-            for(unsigned short k = 0; k < resolution[0]; ++k)
-            {
-                *point_cloud_iterator += *point_cloud_buffer_point_cloud_iterator;
-                ++point_cloud_iterator;
-                ++point_cloud_buffer_point_cloud_iterator;
+        PointCloud<PointXYZ> Final;
 
-                *point_cloud_iterator += *point_cloud_buffer_point_cloud_iterator;
-                ++point_cloud_iterator;
-                ++point_cloud_buffer_point_cloud_iterator;
+        icp.align(Final);
 
-                *point_cloud_iterator += *point_cloud_buffer_point_cloud_iterator;
-                ++point_cloud_iterator;
-                ++point_cloud_buffer_point_cloud_iterator;
-            }
-        }
+        stringstream ss;
 
-        ++point_cloud_buffer_iterator;
-    }
+        ss << icp.getFinalTransformation();
 
-    vector<float>::iterator point_cloud_iterator = point_cloud.begin();
-
-    for(unsigned short j = 0; j < resolution[1]; ++j)
-    {
-        for(unsigned short k = 0; k < resolution[0]; ++k)
-        {
-            *point_cloud_iterator = (*point_cloud_iterator / point_cloud_buffer.size()) * -1.0f;
-            ++point_cloud_iterator;
-
-            *point_cloud_iterator = *point_cloud_iterator / point_cloud_buffer.size();
-            ++point_cloud_iterator;
-
-            *point_cloud_iterator = *point_cloud_iterator / point_cloud_buffer.size();
-            ++point_cloud_iterator;
-        }
+        m_log += "-> ricp " + to_string(i) + " " + to_string(i + 1) + "/n" +
+                "Has converged: " + to_string(icp.hasConverged()) + "/n" +
+                "Score: " + to_string(icp.getFitnessScore()) + "/n" +
+                "Transformation: " + ss.str() + "/n";
     }
 
     return 1;
