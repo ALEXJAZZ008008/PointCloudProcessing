@@ -595,10 +595,10 @@ int PointCloudProcessingBackend::ricp()
 
         ss << icp.getFinalTransformation();
 
-        m_log += "-> ricp " + to_string(i) + " " + to_string(i + 1) + "/n" +
-                "Has converged: " + to_string(icp.hasConverged()) + "/n" +
-                "Score: " + to_string(icp.getFitnessScore()) + "/n" +
-                "Transformation: " + ss.str() + "/n";
+        m_log += "-> ricp " + to_string(i) + " " + to_string(i + 1) + "\n" +
+                "Has converged: " + to_string(icp.hasConverged()) + "\n" +
+                "Score: " + to_string(icp.getFitnessScore()) + "\n" +
+                "Transformation: " + ss.str() + "\n";
     }
 
     return 1;

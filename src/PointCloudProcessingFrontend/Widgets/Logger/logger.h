@@ -13,21 +13,21 @@ namespace Ui
 class Logger;
 }
 
-class Logger : public QWidget
+class PCLPLogger : public QWidget
 {
 public:
 
     //! Constructor
-    explicit Logger(QWidget *parent = nullptr);
+    explicit PCLPLogger(QWidget *parent = nullptr);
 
     //! Destructor
-    ~Logger();
+    ~PCLPLogger();
 
     //! Copy and move constructos and assignment opperators,
-    Logger(Logger &);
-    Logger & operator = (Logger &);
-    Logger(Logger &&);
-    Logger & operator = (Logger &&);
+    PCLPLogger(PCLPLogger &);
+    PCLPLogger & operator = (PCLPLogger &);
+    PCLPLogger(PCLPLogger &&);
+    PCLPLogger & operator = (PCLPLogger &&);
 
     //! Gets the ui ptr
     inline Ui::Logger * get_ui_ptr()

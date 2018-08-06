@@ -3,7 +3,7 @@
 Ponnector::Ponnector(QDialog *parent):
     QDialog(parent),
     m_ui_ptr(new Ui::Ponnector),
-    m_logger_ptr(new Logger(this)),
+    m_logger_ptr(new PCLPLogger(this)),
     m_update_ptr(new QTimer(this)),
     m_point_cloud_processing_backend_ptr(new PointCloudProcessingBackend()),
     m_output_frequency(30.0f),

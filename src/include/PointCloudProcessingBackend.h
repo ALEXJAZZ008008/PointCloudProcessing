@@ -13,6 +13,7 @@
 #include <pcl/point_types.h>
 #include <pcl/search/impl/kdtree.hpp>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
+#include <flann/flann.h>
 #include <pcl/registration/icp.h>
 
 #include "src/include/PointCloudProcessingObject.h"
