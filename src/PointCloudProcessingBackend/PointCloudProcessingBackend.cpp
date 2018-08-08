@@ -577,6 +577,8 @@ int PointCloudProcessingBackend::write_point_cloud_to_file()
 
 int PointCloudProcessingBackend::ricp()
 {
+    string output = "";
+
     IterativeClosestPoint<PointXYZ, PointXYZ> icp;
 
     for(unsigned long i = 0; i < m_objects.size() - 1; ++i)
@@ -591,15 +593,46 @@ int PointCloudProcessingBackend::ricp()
 
         icp.align(Final);
 
-        stringstream ss;
+        string transform = to_string(icp.getFinalTransformation().coeff(0, 0)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(0, 1)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(0, 2)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(0, 3)) + "\n" +
+                to_string(icp.getFinalTransformation().coeff(1, 0)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(1, 1)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(1, 2)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(1, 3)) + "\n" +
+                to_string(icp.getFinalTransformation().coeff(2, 0)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(2, 1)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(2, 2)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(2, 3)) + "\n" +
+                to_string(icp.getFinalTransformation().coeff(3, 0)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(3, 1)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(3, 2)) + "\t" +
+                to_string(icp.getFinalTransformation().coeff(3, 3));
 
-        ss << icp.getFinalTransformation();
+        output += transform + "\n\n";
 
         m_log += "-> ricp " + to_string(i) + " " + to_string(i + 1) + "\n" +
                 "Has converged: " + to_string(icp.hasConverged()) + "\n" +
                 "Score: " + to_string(icp.getFitnessScore()) + "\n" +
-                "Transformation: " + ss.str() + "\n";
+                "Transformation:\n" + transform + "\n";
     }
+
+    ofstream ricp_bin_stream(m_output_path + "/ricp_bin_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", ios::out | ios::binary);
+
+    ricp_bin_stream.write(reinterpret_cast<char *>(&output), sizeof(output));
+
+    ricp_bin_stream.flush();
+    ricp_bin_stream.close();
+
+    ofstream ricp_txt_stream(m_output_path + "/ricp_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", ios::out);
+
+    ricp_txt_stream << output << endl;
+
+    ricp_txt_stream.flush();
+    ricp_txt_stream.close();
+
+    m_log += "<- ricp: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
     return 1;
 }

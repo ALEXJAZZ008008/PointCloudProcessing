@@ -1,64 +1,64 @@
 #include "logger.h"
 #include "ui_logger.h"
 
-PCLPLogger::PCLPLogger(QWidget *parent) :
+PCPLLogger::PCPLLogger(QWidget *parent) :
     QWidget(parent),
     m_ui_ptr(new Ui::Logger())
 {
     m_ui_ptr->setupUi(this);
 }
 
-PCLPLogger::~PCLPLogger()
+PCPLLogger::~PCPLLogger()
 {
 
 }
 
-PCLPLogger::PCLPLogger(PCLPLogger &logger_ref):
+PCPLLogger::PCPLLogger(PCPLLogger &logger_ref):
     m_ui_ptr(logger_ref.get_ui_ptr())
 {
 
 }
 
-PCLPLogger & PCLPLogger::operator = (PCLPLogger &logger_ref)
+PCPLLogger & PCPLLogger::operator = (PCPLLogger &logger_ref)
 {
     m_ui_ptr = logger_ref.get_ui_ptr();
 
     return *this;
 }
 
-PCLPLogger::PCLPLogger(PCLPLogger &&logger_ref_ref):
+PCPLLogger::PCPLLogger(PCPLLogger &&logger_ref_ref):
     m_ui_ptr(logger_ref_ref.get_ui_ptr())
 {
 
 }
 
-PCLPLogger & PCLPLogger::operator = (PCLPLogger &&logger_ref_ref)
+PCPLLogger & PCPLLogger::operator = (PCPLLogger &&logger_ref_ref)
 {
     m_ui_ptr = logger_ref_ref.get_ui_ptr();
 
     return *this;
 }
 
-int PCLPLogger::logger_main()
+int PCPLLogger::logger_main()
 {
     return 1;
 }
 
-int PCLPLogger::logger_kill(bool hard)
+int PCPLLogger::logger_kill(bool hard)
 {
     destructor(hard);
 
     return 1;
 }
 
-int PCLPLogger::print(string &string)
+int PCPLLogger::print(string &string)
 {
     m_ui_ptr->_lbl_output_msg->insertPlainText(string.c_str());
 
     return 1;
 }
 
-int PCLPLogger::destructor(bool hard)
+int PCPLLogger::destructor(bool hard)
 {
     if(hard)
     {
