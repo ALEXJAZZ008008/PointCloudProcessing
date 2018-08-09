@@ -15,6 +15,11 @@
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <flann/flann.h>
 #include <pcl/registration/icp.h>
+#include <pcl/registration/ndt.h>
+#include <pcl/filters/filter.h>
+#include <pcl/filters/approximate_voxel_grid.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <boost/thread/thread.hpp>
 
 #include "src/include/PointCloudProcessingObject.h"
 
@@ -22,6 +27,7 @@ using namespace std;
 using namespace std::chrono;
 using namespace pcl;
 using namespace pcl::io;
+using namespace pcl::visualization;
 
 //!
 //! \class PointCloudProcessingBackend
@@ -177,11 +183,15 @@ public:
     //! Writes the point clouds which were calculated from the data loaded from the paths in the headers
     int write_point_cloud_to_file();
 
+    int load_pcd(vector<string> &);
+
     //! \warning Legacy
     //! Averages all point clouds
 //    int average_point_cloud_buffer(vector<float> &, vector<vector<float>> &, vector<unsigned short> &);
 
     int ricp();
+
+    int rndt();
 
 private:
 

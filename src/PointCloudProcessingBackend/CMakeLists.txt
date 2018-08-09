@@ -8,7 +8,7 @@ find_library(FLANN_CPP_S_LIB NAMES libflann_cpp_s IMPORTED)
 
 # or flann_cpp_s.lib /usr/lib/x86_64-linux-gnu/flann_s.lib
 
-target_link_libraries(${PROJECT_NAME} PointCloudProcessingObject ${FLANN_S_LIB} ${FLANN_CPP_S_LIB}  ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PointCloudProcessingObject ${FLANN_S_LIB} ${FLANN_CPP_S_LIB} -lpcl_filters ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES})
 
 target_sources(PointCloudProcessingBackend
         PRIVATE

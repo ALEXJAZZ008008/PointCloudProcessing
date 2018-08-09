@@ -258,7 +258,25 @@ void Ponnector::on__psh_pcl_clicked()
     }
     else
     {
+        QStringList q_file_paths = QFileDialog::getOpenFileNames(
+                    this,
+                    "Select one or more files to open",
+                    m_point_cloud_processing_backend_ptr->get_output_path().c_str(),
+                    "Headers (*.pcd)");
 
+        vector<string> std_file_paths = vector<string>(static_cast<unsigned long>(q_file_paths.size()), "");
+
+        for(int i = 0; i < q_file_paths.size(); ++i)
+        {
+            std_file_paths[static_cast<unsigned long>(i)] = q_file_paths[i].toStdString();
+        }
+
+        if(m_point_cloud_processing_backend_ptr->load_pcd(std_file_paths))
+        {
+            m_header_loaded = false;
+
+            m_pcl_loaded = true;
+        }
     }
 
     updateGUI_state();

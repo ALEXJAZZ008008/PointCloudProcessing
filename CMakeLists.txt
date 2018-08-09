@@ -52,7 +52,7 @@ endif()
 #else()
 
 #    set(PCL_ROOT "" CACHE PATH "Root path of PCL.")
-find_package(PCL 1.8 REQUIRED COMPONENTS common io)
+find_package(PCL 1.8 REQUIRED COMPONENTS common io visualization)
 include_directories(${PCL_INCLUDE_DIRS})
 #    link_directories(${PCL_LIBRARY_DIRS})
 #    add_definitions(${PCL_DEFINITIONS})

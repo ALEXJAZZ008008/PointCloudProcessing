@@ -1,6 +1,7 @@
 #include "src/include/PointCloudProcessingObject.h"
 
 PointCloudProcessingObject::PointCloudProcessingObject():
+    m_point_cloud_ptr(nullptr),
     m_data(0, 0.0f),
     //! \warning Legacy
 //    m_point_cloud(0, vector<double>(0, 0.0)),
@@ -20,6 +21,7 @@ PointCloudProcessingObject::~PointCloudProcessingObject()
 }
 
 PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObject &point_cloud_processing_ref):
+    m_point_cloud_ptr(point_cloud_processing_ref.get_point_cloud_ptr()),
     m_data(point_cloud_processing_ref.get_data()),
     //! \warning Legacy
 //    m_point_cloud(point_cloud_processing_ref.get_point_cloud()),
@@ -35,6 +37,7 @@ PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObjec
 
 PointCloudProcessingObject & PointCloudProcessingObject::operator = (PointCloudProcessingObject &point_cloud_processing_ref)
 {
+    m_point_cloud_ptr = point_cloud_processing_ref.get_point_cloud_ptr();
     m_data = point_cloud_processing_ref.get_data();
     //! \warning Legacy
 //    m_point_cloud = point_cloud_processing_ref.get_point_cloud();
@@ -49,6 +52,7 @@ PointCloudProcessingObject & PointCloudProcessingObject::operator = (PointCloudP
 }
 
 PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObject &&point_cloud_processing_ref_ref):
+    m_point_cloud_ptr(point_cloud_processing_ref_ref.get_point_cloud_ptr()),
     m_data(point_cloud_processing_ref_ref.get_data()),
     //! \warning Legacy
 //    m_point_cloud(point_cloud_processing_ref_ref.get_point_cloud()),
@@ -64,6 +68,7 @@ PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObjec
 
 PointCloudProcessingObject & PointCloudProcessingObject::operator = (PointCloudProcessingObject &&point_cloud_processing_ref_ref)
 {
+    m_point_cloud_ptr = point_cloud_processing_ref_ref.get_point_cloud_ptr();
     m_data = point_cloud_processing_ref_ref.get_data();
     //! \warning Legacy
 //    m_point_cloud = point_cloud_processing_ref_ref.get_point_cloud();

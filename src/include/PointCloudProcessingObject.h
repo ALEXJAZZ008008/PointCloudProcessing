@@ -38,6 +38,20 @@ public:
         return this->get_real_timestamp() < point_cloud_processing_object.get_real_timestamp();
     }
 
+    //! Gets the point cloud array
+    inline PointCloud<PointXYZ>::Ptr & get_point_cloud_ptr()
+    {
+        return m_point_cloud_ptr;
+    }
+
+    //! Sets the point cloud array
+    inline int set_point_cloud_ptr(PointCloud<PointXYZ>::Ptr &point_cloud)
+    {
+        m_point_cloud_ptr = point_cloud;
+
+        return 1;
+    }
+
     //! Gets the data array
     inline vector<float> & get_data()
     {
@@ -67,20 +81,6 @@ public:
 
 //        return 1;
 //    }
-
-    //! Gets the point cloud array
-    inline PointCloud<PointXYZ> & get_point_cloud()
-    {
-        return m_point_cloud;
-    }
-
-    //! Sets the point cloud array
-    inline int set_point_cloud(PointCloud<PointXYZ> &point_cloud)
-    {
-        m_point_cloud = point_cloud;
-
-        return 1;
-    }
 
     //! Gets the resolution array
     inline vector<unsigned int> & get_resolution()
@@ -174,15 +174,15 @@ public:
 
 private:
 
+    //! Holds the point cloud
+    PointCloud<PointXYZ>::Ptr m_point_cloud_ptr;
+
     //! Holds the data
     vector<float> m_data;
 
     //! \warning Legacy
     //! Holds the point cloud
 //    vector<vector<double>> m_point_cloud;
-
-    //! Holds the point cloud
-    PointCloud<PointXYZ> m_point_cloud;
 
     //! Holds the resolution that the kinect is set to
     vector<unsigned int> m_resolution;

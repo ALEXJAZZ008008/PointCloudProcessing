@@ -86,12 +86,10 @@ int PointCloudProcessingBackend::load_headers(vector<string> &input)
 {
     m_objects = vector<shared_ptr<PointCloudProcessingObject>>(0, nullptr);
 
-    m_objects = vector<shared_ptr<PointCloudProcessingObject>>(input.size(), nullptr);
+    m_objects = vector<shared_ptr<PointCloudProcessingObject>>(input.size(), shared_ptr<PointCloudProcessingObject>(new PointCloudProcessingObject()));
 
     for(unsigned long i = 0; i < input.size(); ++i)
     {
-        m_objects[i] = shared_ptr<PointCloudProcessingObject>(new PointCloudProcessingObject());
-
         ifstream header_stream(input[i], ios::in);
 
         string line = "";
@@ -437,22 +435,36 @@ int PointCloudProcessingBackend::calculate_point_cloud()
 {
     for(unsigned long i = 0; i < m_objects.size(); ++i)
     {
-        m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
-        m_objects[i].get()->get_point_cloud().height   = m_objects[i]->get_resolution()[1];
-        m_objects[i].get()->get_point_cloud().is_dense = false;
-        m_objects[i].get()->get_point_cloud().points.resize (m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
+        m_objects[i].get()->get_point_cloud_ptr() = PointCloud<PointXYZ>::Ptr(new PointCloud<PointXYZ>());
+
+        m_objects[i].get()->get_point_cloud_ptr().get()->width = m_objects[i]->get_resolution()[0];
+        m_objects[i].get()->get_point_cloud_ptr().get()->height = m_objects[i]->get_resolution()[1];
+        m_objects[i].get()->get_point_cloud_ptr().get()->is_dense = false;
+        m_objects[i].get()->get_point_cloud_ptr().get()->points.resize(m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
 
         for(unsigned int j = 0; j < m_objects[i]->get_resolution()[1]; ++j)
         {
             for(unsigned int k = 0; k < m_objects[i]->get_resolution()[0]; ++k)
             {
-                m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x =
-                        (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
+                if(m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] > 0.0f || m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] < 0.0f)
+                {
+                    m_objects[i].get()->get_point_cloud_ptr().get()->points[(m_objects[i]->get_resolution()[0] * j) + k].x =
+                            (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
 
-                m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y =
-                        (j - (m_objects[i]->get_resolution()[0] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
+                    m_objects[i].get()->get_point_cloud_ptr().get()->points[(m_objects[i]->get_resolution()[0] * j) + k].y =
+                            (j - (m_objects[i]->get_resolution()[0] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
 
-                m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
+                    m_objects[i].get()->get_point_cloud_ptr().get()->points[(m_objects[i]->get_resolution()[0] * j) + k].z =
+                            m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
+                }
+                else
+                {
+                    m_objects[i].get()->get_point_cloud_ptr().get()->points[(m_objects[i]->get_resolution()[0] * j) + k].x = numeric_limits<float>::quiet_NaN();
+
+                    m_objects[i].get()->get_point_cloud_ptr().get()->points[(m_objects[i]->get_resolution()[0] * j) + k].y = numeric_limits<float>::quiet_NaN();
+
+                    m_objects[i].get()->get_point_cloud_ptr().get()->points[(m_objects[i]->get_resolution()[0] * j) + k].z = numeric_limits<float>::quiet_NaN();
+                }
             }
         }
 
@@ -513,11 +525,34 @@ int PointCloudProcessingBackend::write_point_cloud_to_file()
 {
     for(unsigned long i = 0; i < m_objects.size(); ++i)
     {
-        savePCDFileBinary(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", m_objects[i].get()->get_point_cloud());
+        savePCDFileBinary(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", *m_objects[i].get()->get_point_cloud_ptr());
 
-        savePCDFileASCII(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", m_objects[i].get()->get_point_cloud());
+        savePCDFileASCII(m_output_path + "/point_cloud_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".pcd", *m_objects[i].get()->get_point_cloud_ptr());
 
         m_log += "<- pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+    }
+
+    return 1;
+}
+
+int PointCloudProcessingBackend::load_pcd(vector<string> &input)
+{
+    m_objects = vector<shared_ptr<PointCloudProcessingObject>>(0, nullptr);
+
+    m_objects = vector<shared_ptr<PointCloudProcessingObject>>(input.size(), shared_ptr<PointCloudProcessingObject>(new PointCloudProcessingObject()));
+
+    for(unsigned long i = 0; i < input.size(); ++i)
+    {
+        m_objects[i].get()->get_point_cloud_ptr() = PointCloud<PointXYZ>::Ptr(new PointCloud<PointXYZ>());
+
+        if(loadPCDFile<PointXYZ>(input[i], *m_objects[i].get()->get_point_cloud_ptr()))
+        {
+            PCL_ERROR("Couldn't read file test_pcd.pcd \n");
+
+            return 0;
+        }
+
+        m_log += "-> pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
     }
 
     return 1;
@@ -579,19 +614,74 @@ int PointCloudProcessingBackend::ricp()
 {
     string output = "";
 
-    IterativeClosestPoint<PointXYZ, PointXYZ> icp;
-
     for(unsigned long i = 0; i < m_objects.size() - 1; ++i)
     {
-        PointCloud<PointXYZ>::Ptr source(new PointCloud<PointXYZ>(m_objects[i].get()->get_point_cloud()));
-        PointCloud<PointXYZ>::Ptr target(new PointCloud<PointXYZ>(m_objects[i + 1].get()->get_point_cloud()));
+        PointCloud<PointXYZ>::Ptr source(new PointCloud<PointXYZ>(*m_objects[i].get()->get_point_cloud_ptr()));
 
-        icp.setInputSource(source);
-        icp.setInputTarget(target);
+        vector<int> indices;
 
-        PointCloud<PointXYZ> Final;
+        removeNaNFromPointCloud(*source, *source, indices);
 
-        icp.align(Final);
+        m_log += "-> pcl " + to_string(i) + " " + to_string(source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        PointCloud<PointXYZ>::Ptr target(new PointCloud<PointXYZ>(*m_objects[i + 1].get()->get_point_cloud_ptr()));
+
+        removeNaNFromPointCloud(*target, *target, indices);
+
+        m_log += "-> pcl " + to_string(i + 1) + " " + to_string(target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        PointCloud<PointXYZ>::Ptr filtered_source(new PointCloud<PointXYZ>());
+
+        ApproximateVoxelGrid<PointXYZ> approximate_voxel_filter;
+
+        approximate_voxel_filter.setLeafSize (0.2f, 0.2f, 0.2f);
+
+        approximate_voxel_filter.setInputCloud(source);
+        approximate_voxel_filter.filter(*filtered_source);
+
+        m_log += "-> pcl " + to_string(i) + " " + to_string(filtered_source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        PointCloud<PointXYZ>::Ptr filtered_target(new PointCloud<PointXYZ>());
+
+        approximate_voxel_filter.setInputCloud (target);
+        approximate_voxel_filter.filter (*filtered_target);
+
+        m_log += "-> pcl " + to_string(i + 1) + " " + to_string(filtered_target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        IterativeClosestPoint<PointXYZ, PointXYZ> icp;
+
+        icp.setInputSource(filtered_source);
+        icp.setInputTarget(filtered_target);
+
+        PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
+
+        icp.align(*final);
+
+        transformPointCloud(*source, *final, icp.getFinalTransformation());
+
+        boost::shared_ptr<PCLVisualizer> visualiser(new PCLVisualizer("PCL Viewer"));
+
+        visualiser->setBackgroundColor(0, 0, 0);
+
+        PointCloudColorHandlerCustom<PointXYZ> target_colour(target, 0, 0, 255);
+
+        visualiser->addPointCloud<PointXYZ>(target, target_colour, "target cloud");
+        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 1, "target cloud");
+
+        PointCloudColorHandlerCustom<PointXYZ> source_color(source, 255, 0, 0);
+
+        visualiser->addPointCloud<PointXYZ>(final, source_color, "output cloud");
+        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 1, "source cloud");
+
+        visualiser->addCoordinateSystem(1.0, "global");
+        visualiser->initCameraParameters();
+
+        while(!visualiser->wasStopped())
+        {
+            visualiser->spinOnce(100);
+
+            boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+        }
 
         string transform = to_string(icp.getFinalTransformation().coeff(0, 0)) + "\t" +
                 to_string(icp.getFinalTransformation().coeff(0, 1)) + "\t" +
@@ -633,6 +723,126 @@ int PointCloudProcessingBackend::ricp()
     ricp_txt_stream.close();
 
     m_log += "<- ricp: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+    return 1;
+}
+
+int PointCloudProcessingBackend::rndt()
+{
+    string output = "";
+
+    for(unsigned long i = 0; i < m_objects.size() - 1; ++i)
+    {
+        PointCloud<PointXYZ>::Ptr source(new PointCloud<PointXYZ>(*m_objects[i].get()->get_point_cloud_ptr()));
+
+        m_log += "-> pcl " + to_string(i) + " " + to_string(source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        PointCloud<PointXYZ>::Ptr target(new PointCloud<PointXYZ>(*m_objects[i + 1].get()->get_point_cloud_ptr()));
+
+        m_log += "-> pcl " + to_string(i + 1) + " " + to_string(target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        PointCloud<PointXYZ>::Ptr filtered_source(new PointCloud<PointXYZ>());
+
+        ApproximateVoxelGrid<PointXYZ> approximate_voxel_filter;
+
+        approximate_voxel_filter.setLeafSize (0.2f, 0.2f, 0.2f);
+
+        approximate_voxel_filter.setInputCloud(source);
+        approximate_voxel_filter.filter(*filtered_source);
+
+        m_log += "-> pcl " + to_string(i) + " " + to_string(filtered_source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        PointCloud<PointXYZ>::Ptr filtered_target(new PointCloud<PointXYZ>());
+
+        approximate_voxel_filter.setInputCloud (target);
+        approximate_voxel_filter.filter (*filtered_target);
+
+        m_log += "-> pcl " + to_string(i + 1) + " " + to_string(filtered_target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        NormalDistributionsTransform<PointXYZ, PointXYZ> ndt;
+
+        ndt.setTransformationEpsilon(0.01);
+        ndt.setStepSize(0.1);
+        ndt.setResolution(1.0f);
+        ndt.setMaximumIterations(35);
+
+        ndt.setInputSource(filtered_source);
+        ndt.setInputTarget(filtered_target);
+
+        Eigen::AngleAxisf rotation(0.6931f, Eigen::Vector3f::UnitZ());
+        Eigen::Translation3f translation(1.79387f, 0.720047f, 0);
+        Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
+
+        PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
+
+        ndt.align(*final, guess_matrix);
+
+        transformPointCloud(*source, *final, ndt.getFinalTransformation());
+
+        boost::shared_ptr<PCLVisualizer> visualiser(new PCLVisualizer("PCL Viewer"));
+
+        visualiser->setBackgroundColor(0, 0, 0);
+
+        PointCloudColorHandlerCustom<PointXYZ> target_colour(target, 0, 0, 255);
+
+        visualiser->addPointCloud<PointXYZ>(target, target_colour, "target cloud");
+        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 1, "target cloud");
+
+        PointCloudColorHandlerCustom<PointXYZ> source_color(source, 255, 0, 0);
+
+        visualiser->addPointCloud<PointXYZ>(final, source_color, "output cloud");
+        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 1, "source cloud");
+
+        visualiser->addCoordinateSystem(1.0, "global");
+        visualiser->initCameraParameters();
+
+        while(!visualiser->wasStopped())
+        {
+            visualiser->spinOnce(100);
+
+            boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+        }
+
+        string transform = to_string(ndt.getFinalTransformation().coeff(0, 0)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(0, 1)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(0, 2)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(0, 3)) + "\n" +
+                to_string(ndt.getFinalTransformation().coeff(1, 0)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(1, 1)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(1, 2)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(1, 3)) + "\n" +
+                to_string(ndt.getFinalTransformation().coeff(2, 0)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(2, 1)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(2, 2)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(2, 3)) + "\n" +
+                to_string(ndt.getFinalTransformation().coeff(3, 0)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(3, 1)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(3, 2)) + "\t" +
+                to_string(ndt.getFinalTransformation().coeff(3, 3));
+
+        output += transform + "\n\n";
+
+        m_log += "-> rndt " + to_string(i) + " " + to_string(i + 1) + "\n" +
+                "Has converged: " + to_string(ndt.hasConverged()) + "\n" +
+                "Score: " + to_string(ndt.getFitnessScore()) + "\n" +
+                "Transformation:\n" + transform + "\n";
+    }
+
+    ofstream rndp_bin_stream(m_output_path + "/rndp_bin_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", ios::out | ios::binary);
+
+    rndp_bin_stream.write(reinterpret_cast<char *>(&output), sizeof(output));
+
+    rndp_bin_stream.flush();
+    rndp_bin_stream.close();
+
+    ofstream rndp_txt_stream(m_output_path + "/rndp_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", ios::out);
+
+    rndp_txt_stream << output << endl;
+
+    rndp_txt_stream.flush();
+    rndp_txt_stream.close();
+
+    m_log += "<- rndp: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
     return 1;
 }
