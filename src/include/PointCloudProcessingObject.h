@@ -39,13 +39,13 @@ public:
     }
 
     //! Gets the point cloud array
-    inline PointCloud<PointXYZ>::Ptr & get_point_cloud_ptr()
+    inline PointCloud<PointXYZ> & get_point_cloud()
     {
         return m_point_cloud_ptr;
     }
 
     //! Sets the point cloud array
-    inline int set_point_cloud_ptr(PointCloud<PointXYZ>::Ptr &point_cloud)
+    inline int set_point_cloud(PointCloud<PointXYZ> &point_cloud)
     {
         m_point_cloud_ptr = point_cloud;
 
@@ -175,7 +175,7 @@ public:
 private:
 
     //! Holds the point cloud
-    PointCloud<PointXYZ>::Ptr m_point_cloud_ptr;
+    PointCloud<PointXYZ> m_point_cloud_ptr;
 
     //! Holds the data
     vector<float> m_data;

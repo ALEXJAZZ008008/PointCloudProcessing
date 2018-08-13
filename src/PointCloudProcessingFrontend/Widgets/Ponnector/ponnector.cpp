@@ -223,21 +223,24 @@ void Ponnector::on__psh_header_clicked()
                 m_point_cloud_processing_backend_ptr->get_input_path().c_str(),
                 "Headers (*.kpclp)");
 
-    vector<string> std_file_paths = vector<string>(static_cast<unsigned long>(q_file_paths.size()), "");
-
-    for(int i = 0; i < q_file_paths.size(); ++i)
+    if(q_file_paths.size() > 0)
     {
-        std_file_paths[static_cast<unsigned long>(i)] = q_file_paths[i].toStdString();
+        vector<string> std_file_paths = vector<string>(static_cast<unsigned long>(q_file_paths.size()), "");
+
+        for(int i = 0; i < q_file_paths.size(); ++i)
+        {
+            std_file_paths[static_cast<unsigned long>(i)] = q_file_paths[i].toStdString();
+        }
+
+        if(m_point_cloud_processing_backend_ptr->load_headers(std_file_paths))
+        {
+            m_header_loaded = true;
+
+            m_pcl_loaded = false;
+        }
+
+        updateGUI_state();
     }
-
-    if(m_point_cloud_processing_backend_ptr->load_headers(std_file_paths))
-    {
-        m_header_loaded = true;
-
-        m_pcl_loaded = false;
-    }
-
-    updateGUI_state();
 }
 
 void Ponnector::on__psh_pcl_clicked()
@@ -264,18 +267,21 @@ void Ponnector::on__psh_pcl_clicked()
                     m_point_cloud_processing_backend_ptr->get_output_path().c_str(),
                     "Headers (*.pcd)");
 
-        vector<string> std_file_paths = vector<string>(static_cast<unsigned long>(q_file_paths.size()), "");
-
-        for(int i = 0; i < q_file_paths.size(); ++i)
+        if(q_file_paths.size() > 0)
         {
-            std_file_paths[static_cast<unsigned long>(i)] = q_file_paths[i].toStdString();
-        }
+            vector<string> std_file_paths = vector<string>(static_cast<unsigned long>(q_file_paths.size()), "");
 
-        if(m_point_cloud_processing_backend_ptr->load_pcd(std_file_paths))
-        {
-            m_header_loaded = false;
+            for(int i = 0; i < q_file_paths.size(); ++i)
+            {
+                std_file_paths[static_cast<unsigned long>(i)] = q_file_paths[i].toStdString();
+            }
 
-            m_pcl_loaded = true;
+            if(m_point_cloud_processing_backend_ptr->load_pcd(std_file_paths))
+            {
+                m_header_loaded = false;
+
+                m_pcl_loaded = true;
+            }
         }
     }
 
