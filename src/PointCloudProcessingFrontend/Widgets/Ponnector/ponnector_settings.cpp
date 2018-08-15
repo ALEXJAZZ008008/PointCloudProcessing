@@ -19,7 +19,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->_le_default_output->setText(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     }
 
-    if(settings.contains("defaults/output_path"))
+    if(settings.contains("defaults/input_path"))
     {
         m_ui_ptr->_le_default_input->setText(settings.value("defaults/input_path").toString());
     }
@@ -44,6 +44,78 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     else
     {
         m_ui_ptr->_chk_output_pc_bin->setChecked(false);
+    }
+
+    if(settings.contains("register/set_vis"))
+    {
+        m_ui_ptr->_chk_register_vis->setChecked(settings.value("register/set_vis").toBool());
+    }
+    else
+    {
+        m_ui_ptr->_chk_register_vis->setChecked(false);
+    }
+
+    if(settings.contains("register/set_tr_txt"))
+    {
+        m_ui_ptr->_chk_register_tr_txt->setChecked(settings.value("register/set_tr_txt").toBool());
+    }
+    else
+    {
+        m_ui_ptr->_chk_register_tr_txt->setChecked(false);
+    }
+
+    if(settings.contains("register/set_tr_bin"))
+    {
+        m_ui_ptr->_chk_register_tr_bin->setChecked(settings.value("register/set_tr_bin").toBool());
+    }
+    else
+    {
+        m_ui_ptr->_chk_register_tr_bin->setChecked(false);
+    }
+
+    if(settings.contains("register/set_icp"))
+    {
+        m_ui_ptr->rb_register_icp->setChecked(settings.value("register/set_icp").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_icp->setChecked(true);
+    }
+
+    if(settings.contains("register/set_ndt"))
+    {
+        m_ui_ptr->rb_register_ndt->setChecked(settings.value("register/set_ndt").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_ndt->setChecked(false);
+    }
+
+    if(settings.contains("register/filter_x"))
+    {
+        m_ui_ptr->le_register_filter_x->setText(settings.value("register/filter_x").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_x->setText("10.0");
+    }
+
+    if(settings.contains("register/filter_y"))
+    {
+        m_ui_ptr->le_register_filter_y->setText(settings.value("register/filter_y").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_y->setText("10.0");
+    }
+
+    if(settings.contains("register/filter_z"))
+    {
+        m_ui_ptr->le_register_filter_z->setText(settings.value("register/filter_z").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_z->setText("10.0");
     }
 }
 
@@ -116,6 +188,15 @@ void Ponnector_Settings::on_buttonBox_accepted()
 
     settings.setValue("output/set_pc_txt", m_ui_ptr->_chk_output_pc_txt->isChecked());
     settings.setValue("output/set_pc_bin", m_ui_ptr->_chk_output_pc_bin->isChecked());
+
+    settings.setValue("register/set_vis", m_ui_ptr->_chk_register_vis->isChecked());
+    settings.setValue("register/set_tr_txt", m_ui_ptr->_chk_register_tr_txt->isChecked());
+    settings.setValue("register/set_tr_bin", m_ui_ptr->_chk_register_tr_bin->isChecked());
+    settings.setValue("register/set_icp", m_ui_ptr->rb_register_icp->isChecked());
+    settings.setValue("register/set_ndt", m_ui_ptr->rb_register_ndt->isChecked());
+    settings.setValue("register/filter_x", m_ui_ptr->le_register_filter_x->text());
+    settings.setValue("register/filter_y", m_ui_ptr->le_register_filter_y->text());
+    settings.setValue("register/filter_z", m_ui_ptr->le_register_filter_z->text());
 }
 
 void Ponnector_Settings::on_pushButton_clicked()

@@ -163,20 +163,125 @@ int Ponnector::update_settings()
 
     if(settings.contains("output/set_pc_txt"))
     {
-
+        m_point_cloud_processing_backend_ptr->set_point_cloud_text(settings.value("output/set_pc_txt").toBool());
     }
     else
     {
-
+        m_point_cloud_processing_backend_ptr->set_point_cloud_text(false);
     }
 
     if(settings.contains("output/set_pc_bin"))
     {
-
+        m_point_cloud_processing_backend_ptr->set_point_cloud_binary(settings.value("output/set_pc_bin").toBool());
     }
     else
     {
+        m_point_cloud_processing_backend_ptr->set_point_cloud_binary(false);
+    }
 
+    if(settings.contains("register/set_vis"))
+    {
+        m_point_cloud_processing_backend_ptr->set_visualisation(settings.value("register/set_vis").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_visualisation(false);
+    }
+
+    if(settings.contains("register/set_tr_txt"))
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_text(settings.value("register/set_tr_txt").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_text(false);
+    }
+
+    if(settings.contains("register/set_tr_bin"))
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_binary(settings.value("register/set_tr_bin").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_binary(false);
+    }
+
+    if(settings.contains("register/set_icp"))
+    {
+        m_point_cloud_processing_backend_ptr->set_icp(settings.value("register/set_icp").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_icp(false);
+    }
+
+    if(settings.contains("register/set_ndt"))
+    {
+        m_point_cloud_processing_backend_ptr->set_ndt(settings.value("register/set_ndt").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_ndt(false);
+    }
+
+    if(settings.contains("register/filter_x"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/filter_x").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_x(filter);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
+    }
+
+    if(settings.contains("register/filter_y"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/filter_y").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_y(filter);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
+    }
+
+    if(settings.contains("register/filter_z"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/filter_z").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_z(filter);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
     }
 
     return 1;
@@ -292,10 +397,7 @@ void Ponnector::on__psh_register_clicked()
 {
     if(m_pcl_loaded)
     {
-        if(m_point_cloud_processing_backend_ptr->ricp())
-        {
-
-        }
+        m_point_cloud_processing_backend_ptr->registration();
     }
 
     updateGUI_state();

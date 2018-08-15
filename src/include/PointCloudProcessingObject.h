@@ -66,22 +66,6 @@ public:
         return 1;
     }
 
-    //! \warning Legacy
-    //! Gets the point cloud array
-//    inline vector<vector<double>> & get_point_cloud()
-//    {
-//        return m_point_cloud;
-//    }
-
-    //! \warning Legacy
-    //! Sets the point cloud array
-//    inline int set_point_cloud(vector<vector<double>> &point_cloud)
-//    {
-//        m_point_cloud = point_cloud;
-
-//        return 1;
-//    }
-
     //! Gets the resolution array
     inline vector<unsigned int> & get_resolution()
     {
@@ -179,10 +163,6 @@ private:
 
     //! Holds the data
     vector<float> m_data;
-
-    //! \warning Legacy
-    //! Holds the point cloud
-//    vector<vector<double>> m_point_cloud;
 
     //! Holds the resolution that the kinect is set to
     vector<unsigned int> m_resolution;

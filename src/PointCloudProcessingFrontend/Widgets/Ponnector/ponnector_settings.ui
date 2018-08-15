@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>317</height>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,22 +19,26 @@
      <item row="1" column="0">
       <widget class="QGroupBox" name="groupBox_2">
        <property name="title">
-        <string>Types of Output</string>
+        <string>Types of Output:</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_5">
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="_chk_output_pc_bin">
-          <property name="text">
-           <string>Point cloud (bin)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="_chk_output_pc_txt">
-          <property name="text">
-           <string>Point cloud (txt)</string>
-          </property>
-         </widget>
+        <item row="2" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="_chk_output_pc_txt">
+            <property name="text">
+             <string>Point cloud (txt)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="_chk_output_pc_bin">
+            <property name="text">
+             <string>Point cloud (bin)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -42,9 +46,82 @@
      <item row="2" column="0">
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>Registration</string>
+        <string>Registration:</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_4"/>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="_chk_register_vis">
+          <property name="text">
+           <string>Visualise</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Filter (xyz):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_filter_x"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_filter_y"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_filter_z"/>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="rb_register_icp">
+            <property name="text">
+             <string>ICP</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="rb_register_ndt">
+            <property name="text">
+             <string>NDT</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="_chk_register_tr_txt">
+            <property name="text">
+             <string>Transform (txt)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="_chk_register_tr_bin">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Transform (bin)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="0" column="0">
@@ -53,53 +130,62 @@
         <string>Paths: </string>
        </property>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Default output path: </string>
-          </property>
-          <property name="buddy">
-           <cstring>_le_default_output</cstring>
-          </property>
-         </widget>
+        <item row="0" column="0" colspan="3">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Default output path: </string>
+            </property>
+            <property name="buddy">
+             <cstring>_le_default_output</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="_le_default_output">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open">
+              <normaloff>.</normaloff>.</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset theme="document-open">
-            <normaloff>.</normaloff>.</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Default input path:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="_le_default_input"/>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset theme="document-open"/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="_le_default_output">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
+        <item row="2" column="0" colspan="3">
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Default input path:    </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="_le_default_input"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open">
+              <normaloff>.</normaloff>.</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -118,12 +204,6 @@
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>_le_default_output</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>_chk_output_pc_txt</tabstop>
-  <tabstop>_chk_output_pc_bin</tabstop>
- </tabstops>
  <resources/>
  <connections>
   <connection>

@@ -8,25 +8,30 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <math.h>
 #include <algorithm>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/search/impl/kdtree.hpp>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <flann/flann.h>
+#include <pcl/filters/filter.h>
+#include <pcl/filters/statistical_outlier_removal.h>
+#include <pcl/filters/approximate_voxel_grid.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
-#include <pcl/filters/filter.h>
-#include <pcl/filters/approximate_voxel_grid.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <boost/thread/thread.hpp>
 
 #include "src/include/PointCloudProcessingObject.h"
 
+#define _USE_MATH_DEFINES
+
 using namespace std;
 using namespace std::chrono;
 using namespace pcl;
 using namespace pcl::io;
+using namespace pcl::search;
 using namespace pcl::visualization;
 
 //!
@@ -161,6 +166,126 @@ public:
         return 1;
     }
 
+    inline float get_filter_x()
+    {
+        return m_filter_x;
+    }
+
+    inline int set_filter_x(float filter_x)
+    {
+        m_filter_x = filter_x;
+
+        return 1;
+    }
+
+    inline float get_filter_y()
+    {
+        return m_filter_y;
+    }
+
+    inline int set_filter_y(float filter_y)
+    {
+        m_filter_y = filter_y;
+
+        return 1;
+    }
+
+    inline float get_filter_z()
+    {
+        return m_filter_z;
+    }
+
+    inline int set_filter_z(float filter_z)
+    {
+        m_filter_z = filter_z;
+
+        return 1;
+    }
+
+    inline bool get_point_cloud_text()
+    {
+        return m_point_cloud_text;
+    }
+
+    inline int set_point_cloud_text(bool point_cloud_text)
+    {
+        m_point_cloud_text = point_cloud_text;
+
+        return 1;
+    }
+
+    inline bool get_point_cloud_binary()
+    {
+        return m_point_cloud_binary;
+    }
+
+    inline int set_point_cloud_binary(bool point_cloud_binary)
+    {
+        m_point_cloud_binary = point_cloud_binary;
+
+        return 1;
+    }
+
+    inline bool get_visualisation()
+    {
+        return m_visualisation;
+    }
+
+    inline int set_visualisation(bool visualisation)
+    {
+        m_visualisation = visualisation;
+
+        return 1;
+    }
+
+    inline bool get_translation_text()
+    {
+        return m_translation_text;
+    }
+
+    inline int set_translation_text(bool translation_text)
+    {
+        m_translation_text = translation_text;
+
+        return 1;
+    }
+
+    inline bool get_tranlsation_binary()
+    {
+        return m_translation_binary;
+    }
+
+    inline int set_translation_binary(bool translation_binary)
+    {
+        m_translation_binary = translation_binary;
+
+        return 1;
+    }
+
+    inline bool get_icp()
+    {
+        return m_icp;
+    }
+
+    inline int set_icp(bool icp)
+    {
+        m_icp = icp;
+
+        return 1;
+    }
+
+    inline bool get_ndt()
+    {
+        return m_ndt;
+    }
+
+    inline int set_ndt(bool ndt)
+    {
+        m_ndt = ndt;
+
+        return 1;
+    }
+
     //! Main, currently unused
     int kinect_input_output_main();
 
@@ -174,9 +299,6 @@ public:
     //! Loads the data from the paths in the headers
     int load_data();
 
-    //! Writes the data loaded from the paths in the headers
-    int write_data_to_file();
-
     //! Calculates point clouds from the data loaded from the paths in the headers
     int calculate_point_cloud();
 
@@ -185,13 +307,7 @@ public:
 
     int load_pcd(vector<string> &);
 
-    //! \warning Legacy
-    //! Averages all point clouds
-//    int average_point_cloud_buffer(vector<float> &, vector<vector<float>> &, vector<unsigned short> &);
-
-    int ricp();
-
-    int rndt();
+    int registration();
 
 private:
 
@@ -212,6 +328,38 @@ private:
 
     //! Holds the log string
     string m_log;
+
+    float m_filter_x;
+
+    float m_filter_y;
+
+    float m_filter_z;
+
+    bool m_point_cloud_text;
+
+    bool m_point_cloud_binary;
+
+    bool m_visualisation;
+
+    bool m_translation_text;
+
+    bool m_translation_binary;
+
+    bool m_icp;
+
+    bool m_ndt;
+
+    int remove_nan(PointCloud<PointXYZ>::Ptr &);
+
+    int filter(PointCloud<PointXYZ>::Ptr &);
+
+    PointCloud<PointXYZ>::Ptr to_point_cloud_pointxyz_ptr(Eigen::Vector4f &);
+
+    int ricp(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
+
+    int rndt(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
+
+    int visualise(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, Eigen::Matrix<float, 4, 4> &);
 
     //! Called by destructor,
     //! other methods may call to destruct the class
