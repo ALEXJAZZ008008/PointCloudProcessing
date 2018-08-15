@@ -166,6 +166,66 @@ public:
         return 1;
     }
 
+    inline double get_threshold()
+    {
+        return m_threshold;
+    }
+
+    inline int set_threshold(double threshold)
+    {
+        m_threshold = threshold;
+
+        return 1;
+    }
+
+    inline double get_distance_movement()
+    {
+        return m_distance_movement;
+    }
+
+    inline int set_distance_movement(int distance_movement)
+    {
+        m_distance_movement = distance_movement;
+
+        return 1;
+    }
+
+    inline double get_eigen_movement()
+    {
+        return m_eigen_movement;
+    }
+
+    inline int set_eigen_movement(double eigen_movement)
+    {
+        m_eigen_movement = eigen_movement;
+
+        return 1;
+    }
+
+    inline double get_transformation_epsilon()
+    {
+        return m_transformation_epsilon;
+    }
+
+    inline int set_transformation_epsilon(double transformation_epsilon)
+    {
+        m_transformation_epsilon = transformation_epsilon;
+
+        return 1;
+    }
+
+    inline float get_focal_length()
+    {
+        return m_focal_length;
+    }
+
+    inline int set_focal_length(float focal_length)
+    {
+        m_focal_length = focal_length;
+
+        return 1;
+    }
+
     inline float get_filter_x()
     {
         return m_filter_x;
@@ -198,6 +258,270 @@ public:
     inline int set_filter_z(float filter_z)
     {
         m_filter_z = filter_z;
+
+        return 1;
+    }
+
+    inline float get_rotation_guess()
+    {
+        return m_rotation_guess;
+    }
+
+    inline int set_rotation_guess(float rotation_guess)
+    {
+        m_rotation_guess = rotation_guess;
+
+        return 1;
+    }
+
+    inline float get_translation_guess_x()
+    {
+        return m_translation_guess_x;
+    }
+
+    inline int set_translation_guess_x(float translation_guess_x)
+    {
+        m_translation_guess_x = translation_guess_x;
+
+        return 1;
+    }
+
+    inline float get_translation_guess_y()
+    {
+        return m_translation_guess_y;
+    }
+
+    inline int set_translation_guess_y(float translation_guess_y)
+    {
+        m_translation_guess_y = translation_guess_y;
+
+        return 1;
+    }
+
+    inline float get_translation_guess_z()
+    {
+        return m_translation_guess_z;
+    }
+
+    inline int set_translation_guess_z(float translation_guess_z)
+    {
+        m_translation_guess_z = translation_guess_z;
+
+        return 1;
+    }
+
+    inline int get_cloud_point_size()
+    {
+        return m_cloud_point_size;
+    }
+
+    inline int set_cloud_point_size(int cloud_point_size)
+    {
+        m_cloud_point_size = cloud_point_size;
+
+        return 1;
+    }
+
+    inline int get_centroid_point_size()
+    {
+        return m_centroid_point_size;
+    }
+
+    inline int set_centroid_point_size(int centroid_point_size)
+    {
+        m_centroid_point_size = centroid_point_size;
+
+        return 1;
+    }
+
+    inline int get_offset()
+    {
+        return m_offset;
+    }
+
+    inline int set_offset(int offset)
+    {
+        m_offset = offset;
+
+        return 1;
+    }
+
+    inline int get_smoothing_size()
+    {
+        return m_smoothing_size;
+    }
+
+    inline int set_smoothing_size(int smoothing_size)
+    {
+        m_smoothing_size = smoothing_size;
+
+        return 1;
+    }
+
+    inline int get_smoothing_deviation()
+    {
+        return m_smoothing_deviation;
+    }
+
+    inline int set_smoothing_deviation(int smoothing_deviation)
+    {
+        m_smoothing_deviation = smoothing_deviation;
+
+        return 1;
+    }
+
+    inline int get_iterations()
+    {
+        return m_iterations;
+    }
+
+    inline int set_iterations(int iterations)
+    {
+        m_iterations = iterations;
+
+        return 1;
+    }
+
+    inline unsigned char get_cloud_one_r()
+    {
+        return m_cloud_one_r;
+    }
+
+    inline int set_cloud_one_r(unsigned char cloud_one_r)
+    {
+        m_cloud_one_r = cloud_one_r;
+
+        return 1;
+    }
+
+    inline unsigned char get_cloud_one_g()
+    {
+        return m_cloud_one_g;
+    }
+
+    inline int set_cloud_one_g(unsigned char cloud_one_g)
+    {
+        m_cloud_one_g = cloud_one_g;
+
+        return 1;
+    }
+
+    inline unsigned char get_cloud_one_b()
+    {
+        return m_cloud_one_b;
+    }
+
+    inline int set_cloud_one_b(unsigned char cloud_one_b)
+    {
+        m_cloud_one_b = cloud_one_b;
+
+        return 1;
+    }
+
+    inline unsigned char get_cloud_two_r()
+    {
+        return m_cloud_two_r;
+    }
+
+    inline int set_cloud_two_r(unsigned char cloud_two_r)
+    {
+        m_cloud_two_r = cloud_two_r;
+
+        return 1;
+    }
+
+    inline unsigned char get_cloud_two_g()
+    {
+        return m_cloud_two_g;
+    }
+
+    inline int set_cloud_two_g(unsigned char cloud_two_g)
+    {
+        m_cloud_two_g = cloud_two_g;
+
+        return 1;
+    }
+
+    inline unsigned char get_cloud_two_b()
+    {
+        return m_cloud_two_b;
+    }
+
+    inline int set_cloud_two_b(unsigned char cloud_two_b)
+    {
+        m_cloud_two_b = cloud_two_b;
+
+        return 1;
+    }
+
+    inline unsigned char get_centroid_one_r()
+    {
+        return m_centroid_one_r;
+    }
+
+    inline int set_centroid_one_r(unsigned char centroid_one_r)
+    {
+        m_centroid_one_r = centroid_one_r;
+
+        return 1;
+    }
+
+    inline unsigned char get_centroid_one_g()
+    {
+        return m_centroid_one_g;
+    }
+
+    inline int set_centroid_one_g(unsigned char centroid_one_g)
+    {
+        m_centroid_one_g = centroid_one_g;
+
+        return 1;
+    }
+
+    inline unsigned char get_centroid_one_b()
+    {
+        return m_centroid_one_b;
+    }
+
+    inline int set_centroid_one_b(unsigned char centroid_one_b)
+    {
+        m_centroid_one_b = centroid_one_b;
+
+        return 1;
+    }
+
+    inline unsigned char get_centroid_two_r()
+    {
+        return m_centroid_two_r;
+    }
+
+    inline int set_centroid_two_r(unsigned char centroid_two_r)
+    {
+        m_centroid_two_r = centroid_two_r;
+
+        return 1;
+    }
+
+    inline unsigned char get_centroid_two_g()
+    {
+        return m_centroid_two_g;
+    }
+
+    inline int set_centroid_two_g(unsigned char centroid_two_g)
+    {
+        m_centroid_two_g = centroid_two_g;
+
+        return 1;
+    }
+
+    inline unsigned char get_centroid_two_b()
+    {
+        return m_centroid_two_b;
+    }
+
+    inline int set_centroid_two_b(unsigned char centroid_two_b)
+    {
+        m_centroid_two_b = centroid_two_b;
 
         return 1;
     }
@@ -286,6 +610,30 @@ public:
         return 1;
     }
 
+    inline bool get_distance()
+    {
+        return m_distance;
+    }
+
+    inline int set_distance(bool distance)
+    {
+        m_distance = distance;
+
+        return 1;
+    }
+
+    inline bool get_eigen()
+    {
+        return m_eigen;
+    }
+
+    inline int set_eigen(bool eigen)
+    {
+        m_eigen = eigen;
+
+        return 1;
+    }
+
     //! Main, currently unused
     int kinect_input_output_main();
 
@@ -329,11 +677,65 @@ private:
     //! Holds the log string
     string m_log;
 
+    double m_threshold;
+
+    double m_distance_movement;
+
+    double m_eigen_movement;
+
+    double m_transformation_epsilon;
+
+    float m_focal_length;
+
     float m_filter_x;
 
     float m_filter_y;
 
     float m_filter_z;
+
+    float m_rotation_guess;
+
+    float m_translation_guess_x;
+
+    float m_translation_guess_y;
+
+    float m_translation_guess_z;
+
+    int m_cloud_point_size;
+
+    int m_centroid_point_size;
+
+    int m_offset;
+
+    int m_smoothing_size;
+
+    int m_smoothing_deviation;
+
+    int m_iterations;
+
+    unsigned char m_cloud_one_r;
+
+    unsigned char m_cloud_one_g;
+
+    unsigned char m_cloud_one_b;
+
+    unsigned char m_cloud_two_r;
+
+    unsigned char m_cloud_two_g;
+
+    unsigned char m_cloud_two_b;
+
+    unsigned char m_centroid_one_r;
+
+    unsigned char m_centroid_one_g;
+
+    unsigned char m_centroid_one_b;
+
+    unsigned char m_centroid_two_r;
+
+    unsigned char m_centroid_two_g;
+
+    unsigned char m_centroid_two_b;
 
     bool m_point_cloud_text;
 
@@ -348,6 +750,10 @@ private:
     bool m_icp;
 
     bool m_ndt;
+
+    bool m_distance;
+
+    bool m_eigen;
 
     int remove_nan(PointCloud<PointXYZ>::Ptr &);
 

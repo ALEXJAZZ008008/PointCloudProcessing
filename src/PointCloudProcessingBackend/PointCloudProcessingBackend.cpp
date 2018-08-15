@@ -456,7 +456,7 @@ int PointCloudProcessingBackend::calculate_point_cloud()
 
                     float z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
 
-                    if(abs(sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))) < 1000.0)
+                    if(fabs(sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))) < 1000.0)
                     {
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = x;
 
@@ -593,7 +593,7 @@ int PointCloudProcessingBackend::registration()
 
         compute3DCentroid(*target, target_centroid);
 
-        double movement = abs(sqrt(pow((target_centroid.coeff(0) - source_centroid.coeff(0)), 2) +
+        double movement = fabs(sqrt(pow((target_centroid.coeff(0) - source_centroid.coeff(0)), 2) +
                                    pow((target_centroid.coeff(1) - source_centroid.coeff(0)), 2) +
                                    pow((target_centroid.coeff(2) - source_centroid.coeff(0)), 2)));
 
@@ -712,7 +712,7 @@ int PointCloudProcessingBackend::filter(PointCloud<PointXYZ>::Ptr &point_cloud)
     StatisticalOutlierRemoval<PointXYZ> statistical_outlier_removal;
 
     statistical_outlier_removal.setInputCloud(point_cloud);
-    statistical_outlier_removal.setMeanK(50);
+    statistical_outlier_removal.setMeanK(100);
     statistical_outlier_removal.setStddevMulThresh(1.0);
     statistical_outlier_removal.filter(*point_cloud);
 
@@ -750,12 +750,19 @@ int PointCloudProcessingBackend::ricp(PointCloud<PointXYZ>::Ptr &source,
 {
     IterativeClosestPoint<PointXYZ, PointXYZ> icp;
 
+    icp.setTransformationEpsilon(0.01);
+    icp.setMaximumIterations(100);
+
     icp.setInputSource(source);
     icp.setInputTarget(target);
 
+    Eigen::AngleAxisf rotation(0.6931f, Eigen::Vector3f::UnitZ());
+    Eigen::Translation3f translation(1.79387f, 0.720047f, 0.0f);
+    Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
+
     PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
 
-    icp.align(*final);
+    icp.align(*final, guess_matrix);
 
     final_transformation = icp.getFinalTransformation();
 
@@ -775,15 +782,13 @@ int PointCloudProcessingBackend::rndt(PointCloud<PointXYZ>::Ptr &source,
     NormalDistributionsTransform<PointXYZ, PointXYZ> ndt;
 
     ndt.setTransformationEpsilon(0.01);
-    ndt.setStepSize(0.1);
-    ndt.setResolution(1.0f);
-    ndt.setMaximumIterations(35);
+    ndt.setMaximumIterations(100);
 
     ndt.setInputSource(source);
     ndt.setInputTarget(target);
 
     Eigen::AngleAxisf rotation(0.6931f, Eigen::Vector3f::UnitZ());
-    Eigen::Translation3f translation(1.79387f, 0.720047f, 0);
+    Eigen::Translation3f translation(1.79387f, 0.720047f, 0.0f);
     Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
 
     PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
@@ -814,22 +819,22 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
     PointCloudColorHandlerCustom<PointXYZ> source_color(source, 255, 0, 0);
 
     visualiser->addPointCloud<PointXYZ>(source, source_color, "source cloud");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 1, "source cloud");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 2, "source cloud");
 
     PointCloudColorHandlerCustom<PointXYZ> source_centroid_colour(source_centroid, 255, 255, 0);
 
     visualiser->addPointCloud<PointXYZ>(source_centroid, source_centroid_colour, "source centroid");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 10, "source centroid");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 8, "source centroid");
 
     PointCloudColorHandlerCustom<PointXYZ> target_colour(target, 0, 0, 255);
 
     visualiser->addPointCloud<PointXYZ>(target, target_colour, "target cloud");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 1, "target cloud");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 2, "target cloud");
 
     PointCloudColorHandlerCustom<PointXYZ> target_centroid_colour(target_centroid, 0, 255, 255);
 
     visualiser->addPointCloud<PointXYZ>(target_centroid, target_centroid_colour, "target centroid");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 10, "target centroid");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 8, "target centroid");
 
     visualiser->addCoordinateSystem(1.0, "global");
     visualiser->initCameraParameters();
