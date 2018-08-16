@@ -183,7 +183,7 @@ public:
         return m_distance_movement;
     }
 
-    inline int set_distance_movement(int distance_movement)
+    inline int set_distance_movement(double distance_movement)
     {
         m_distance_movement = distance_movement;
 
@@ -198,6 +198,18 @@ public:
     inline int set_eigen_movement(double eigen_movement)
     {
         m_eigen_movement = eigen_movement;
+
+        return 1;
+    }
+
+    inline double get_smoothing_deviation()
+    {
+        return m_smoothing_deviation;
+    }
+
+    inline int set_smoothing_deviation(double smoothing_deviation)
+    {
+        m_smoothing_deviation = smoothing_deviation;
 
         return 1;
     }
@@ -354,18 +366,6 @@ public:
     inline int set_smoothing_size(int smoothing_size)
     {
         m_smoothing_size = smoothing_size;
-
-        return 1;
-    }
-
-    inline int get_smoothing_deviation()
-    {
-        return m_smoothing_deviation;
-    }
-
-    inline int set_smoothing_deviation(int smoothing_deviation)
-    {
-        m_smoothing_deviation = smoothing_deviation;
 
         return 1;
     }
@@ -610,6 +610,30 @@ public:
         return 1;
     }
 
+    inline bool get_iterative()
+    {
+        return m_iterative;
+    }
+
+    inline int set_iterative(bool iterative)
+    {
+        m_iterative = iterative;
+
+        return 1;
+    }
+
+    inline bool get_continuous()
+    {
+        return m_continuous;
+    }
+
+    inline int set_continuous(bool continuous)
+    {
+        m_continuous = continuous;
+
+        return 1;
+    }
+
     inline bool get_distance()
     {
         return m_distance;
@@ -683,6 +707,8 @@ private:
 
     double m_eigen_movement;
 
+    double m_smoothing_deviation;
+
     double m_transformation_epsilon;
 
     float m_focal_length;
@@ -708,8 +734,6 @@ private:
     int m_offset;
 
     int m_smoothing_size;
-
-    int m_smoothing_deviation;
 
     int m_iterations;
 
@@ -751,9 +775,15 @@ private:
 
     bool m_ndt;
 
+    bool m_iterative;
+
+    bool m_continuous;
+
     bool m_distance;
 
     bool m_eigen;
+
+    string output_header_init();
 
     int remove_nan(PointCloud<PointXYZ>::Ptr &);
 
@@ -766,6 +796,8 @@ private:
     int rndt(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
 
     int visualise(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, Eigen::Matrix<float, 4, 4> &);
+
+    int write_translations_to_file(string);
 
     //! Called by destructor,
     //! other methods may call to destruct the class

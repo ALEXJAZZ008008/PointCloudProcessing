@@ -188,6 +188,384 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_visualisation(false);
     }
 
+    if(settings.contains("register/set_cloudps"))
+    {
+        bool *ok = new bool(false);
+
+        int cloudps = settings.value("register/set_cloudps").toString().toInt(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_point_size(cloudps);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_point_size(2);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_point_size(2);
+    }
+
+    if(settings.contains("register/set_centps"))
+    {
+        bool *ok = new bool(false);
+
+        int centps = settings.value("register/set_centps").toString().toInt(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_point_size(centps);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_point_size(8);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_point_size(8);
+    }
+
+    if(settings.contains("register/set_cloud1r"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cloud1r = static_cast<unsigned char>(settings.value("register/set_cloud1r").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_one_r(cloud1r);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_one_r(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_one_r(255);
+    }
+
+    if(settings.contains("register/set_cloud1g"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cloud1g = static_cast<unsigned char>(settings.value("register/set_cloud1g").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_one_g(cloud1g);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_one_g(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_one_g(0);
+    }
+
+    if(settings.contains("register/set_cloud1b"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cloud1b = static_cast<unsigned char>(settings.value("register/set_cloud1b").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_one_b(cloud1b);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_one_b(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_one_b(0);
+    }
+
+    if(settings.contains("register/set_cloud2r"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cloud2r = static_cast<unsigned char>(settings.value("register/set_cloud2r").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_two_r(cloud2r);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_two_r(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_two_r(0);
+    }
+
+    if(settings.contains("register/set_cloud2g"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cloud2g = static_cast<unsigned char>(settings.value("register/set_cloud2g").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_two_g(cloud2g);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_two_g(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_two_g(0);
+    }
+
+    if(settings.contains("register/set_cloud2b"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cloud2b = static_cast<unsigned char>(settings.value("register/set_cloud2b").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_two_b(cloud2b);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_cloud_two_b(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_cloud_two_b(255);
+    }
+
+    if(settings.contains("register/set_cent1r"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cent1r = static_cast<unsigned char>(settings.value("register/set_cent1r").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_one_r(cent1r);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_one_r(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_one_r(255);
+    }
+
+    if(settings.contains("register/set_cent1g"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cent1g = static_cast<unsigned char>(settings.value("register/set_cent1g").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_one_g(cent1g);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_one_g(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_one_g(255);
+    }
+
+    if(settings.contains("register/set_cent1b"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cent1b = static_cast<unsigned char>(settings.value("register/set_cent1b").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_one_b(cent1b);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_one_b(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_one_b(0);
+    }
+
+    if(settings.contains("register/set_cent2r"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cent2r = static_cast<unsigned char>(settings.value("register/set_cent2r").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_two_r(cent2r);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_two_r(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_two_r(0);
+    }
+
+    if(settings.contains("register/set_cent2g"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cent2g = static_cast<unsigned char>(settings.value("register/set_cent2g").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_two_g(cent2g);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_two_g(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_two_g(255);
+    }
+
+    if(settings.contains("register/set_cent2b"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char cent2b = static_cast<unsigned char>(settings.value("register/set_cent2b").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_two_b(cent2b);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_centroid_two_b(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_centroid_two_b(255);
+    }
+
     if(settings.contains("register/set_tr_txt"))
     {
         m_point_cloud_processing_backend_ptr->set_translation_text(settings.value("register/set_tr_txt").toBool());
@@ -224,11 +602,398 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_ndt(false);
     }
 
-    if(settings.contains("register/filter_x"))
+    if(settings.contains("register/set_iterative"))
+    {
+        m_point_cloud_processing_backend_ptr->set_iterative(settings.value("register/set_iterative").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_iterative(true);
+    }
+
+    if(settings.contains("register/set_continuous"))
+    {
+        m_point_cloud_processing_backend_ptr->set_continuous(settings.value("register/set_continuous").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_continuous(false);
+    }
+
+    if(settings.contains("register/set_distance"))
+    {
+        m_point_cloud_processing_backend_ptr->set_distance(settings.value("register/set_distance").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_distance(true);
+    }
+
+    if(settings.contains("register/set_eigen"))
+    {
+        m_point_cloud_processing_backend_ptr->set_eigen(settings.value("register/set_eigen").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_eigen(false);
+    }
+
+    if(settings.contains("register/set_threshold"))
     {
         bool *ok = new bool(false);
 
-        float filter = settings.value("register/filter_x").toString().toFloat(ok);
+        double threshold = settings.value("register/set_threshold").toString().toDouble(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_threshold(threshold);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_threshold(1000.0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_threshold(1000.0);
+    }
+
+    if(settings.contains("register/set_offset"))
+    {
+        bool *ok = new bool(false);
+
+        int offset = settings.value("register/set_offset").toString().toInt(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_offset(offset);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_offset(10);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_offset(10);
+    }
+
+    if(settings.contains("register/set_fl"))
+    {
+        bool *ok = new bool(false);
+
+        float fl = settings.value("register/set_fl").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_focal_length(fl);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_focal_length(0.0021f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_focal_length(0.0021f);
+    }
+
+    if(settings.contains("register/set_dm"))
+    {
+        bool *ok = new bool(false);
+
+        double dm = settings.value("register/set_dm").toString().toDouble(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_distance_movement(dm);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_distance_movement(1000.0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_distance_movement(1000.0);
+    }
+
+    if(settings.contains("register/set_em"))
+    {
+        bool *ok = new bool(false);
+
+        double em = settings.value("register/set_em").toString().toDouble(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_eigen_movement(em);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_eigen_movement(1000.0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_eigen_movement(1000.0);
+    }
+
+    if(settings.contains("register/set_ss"))
+    {
+        bool *ok = new bool(false);
+
+        int ss = settings.value("register/set_ss").toString().toInt(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_smoothing_size(ss);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_smoothing_size(100);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_smoothing_size(100);
+    }
+
+    if(settings.contains("register/set_sd"))
+    {
+        bool *ok = new bool(false);
+
+        double sd = settings.value("register/set_sd").toString().toDouble(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_smoothing_deviation(sd);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_smoothing_deviation(1.0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_smoothing_deviation(1.0);
+    }
+
+    if(settings.contains("register/set_te"))
+    {
+        bool *ok = new bool(false);
+
+        double te = settings.value("register/set_te").toString().toDouble(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_transformation_epsilon(te);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_transformation_epsilon(0.01);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_transformation_epsilon(0.01);
+    }
+
+    if(settings.contains("register/set_iterations"))
+    {
+        bool *ok = new bool(false);
+
+        int iterations = settings.value("register/set_iterations").toString().toInt(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_iterations(iterations);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_iterations(100);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_iterations(100);
+    }
+
+    if(settings.contains("register/set_rg"))
+    {
+        bool *ok = new bool(false);
+
+        float rg = settings.value("register/set_rg").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_rotation_guess(rg);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_rotation_guess(100);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_rotation_guess(0.6931f);
+    }
+
+    if(settings.contains("register/set_tgx"))
+    {
+        bool *ok = new bool(false);
+
+        float tgx = settings.value("register/set_tgx").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_translation_guess_x(tgx);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_translation_guess_x(1.79387f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_guess_x(1.79387f);
+    }
+
+    if(settings.contains("register/set_tgy"))
+    {
+        bool *ok = new bool(false);
+
+        float tgy = settings.value("register/set_tgy").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_translation_guess_y(tgy);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_translation_guess_y(0.720047f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_guess_y(0.720047f);
+    }
+
+    if(settings.contains("register/set_tgz"))
+    {
+        bool *ok = new bool(false);
+
+        float tgz = settings.value("register/set_tgz").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_translation_guess_z(tgz);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_translation_guess_z(0.0f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_translation_guess_z(0.0f);
+    }
+
+    if(settings.contains("register/set_filter_x"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/set_filter_x").toString().toFloat(ok);
 
         if(*ok)
         {
@@ -238,17 +1003,24 @@ int Ponnector::update_settings()
         {
             m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
         }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
     }
     else
     {
         m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
     }
 
-    if(settings.contains("register/filter_y"))
+    if(settings.contains("register/set_filter_y"))
     {
         bool *ok = new bool(false);
 
-        float filter = settings.value("register/filter_y").toString().toFloat(ok);
+        float filter = settings.value("register/set_filter_y").toString().toFloat(ok);
 
         if(*ok)
         {
@@ -258,17 +1030,24 @@ int Ponnector::update_settings()
         {
             m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
         }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
     }
     else
     {
         m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
     }
 
-    if(settings.contains("register/filter_z"))
+    if(settings.contains("register/set_filter_z"))
     {
         bool *ok = new bool(false);
 
-        float filter = settings.value("register/filter_z").toString().toFloat(ok);
+        float filter = settings.value("register/set_filter_z").toString().toFloat(ok);
 
         if(*ok)
         {
@@ -277,6 +1056,13 @@ int Ponnector::update_settings()
         else
         {
             m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
         }
     }
     else

@@ -217,6 +217,24 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->rb_register_ndt->setChecked(false);
     }
 
+    if(settings.contains("register/set_iterative"))
+    {
+        m_ui_ptr->rb_register_iterative->setChecked(settings.value("register/set_iterative").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_iterative->setChecked(true);
+    }
+
+    if(settings.contains("register/set_continuous"))
+    {
+        m_ui_ptr->rb_register_continuous->setChecked(settings.value("register/set_continuous").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_continuous->setChecked(false);
+    }
+
     if(settings.contains("register/set_distance"))
     {
         m_ui_ptr->rb_register_distance->setChecked(settings.value("register/set_distance").toBool());
@@ -471,6 +489,8 @@ void Ponnector_Settings::on_buttonBox_accepted()
 
     settings.setValue("register/set_icp", m_ui_ptr->rb_register_icp->isChecked());
     settings.setValue("register/set_ndt", m_ui_ptr->rb_register_ndt->isChecked());
+    settings.setValue("register/set_iterative", m_ui_ptr->rb_register_iterative->isChecked());
+    settings.setValue("register/set_continuous", m_ui_ptr->rb_register_continuous->isChecked());
     settings.setValue("register/set_distance", m_ui_ptr->rb_register_distance->isChecked());
     settings.setValue("register/set_eigen", m_ui_ptr->rb_register_eigen->isChecked());
 

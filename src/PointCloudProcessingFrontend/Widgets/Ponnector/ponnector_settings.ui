@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>603</width>
-    <height>802</height>
+    <height>832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,39 +49,7 @@
         <string>Registration:</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="9" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_10">
-          <item>
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Distance Movement:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_dm">
-            <property name="text">
-             <string>1000.0</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Eigen Movement:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_em">
-            <property name="text">
-             <string>1000.0</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="10" column="0">
+        <item row="11" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_11">
           <item>
            <widget class="QLabel" name="label_10">
@@ -113,220 +81,33 @@
           </item>
          </layout>
         </item>
-        <item row="7" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item row="10" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Global Threshold:</string>
+             <string>Distance Movement:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="le_register_threshold">
+           <widget class="QLineEdit" name="le_register_dm">
             <property name="text">
              <string>1000.0</string>
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item row="6" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QRadioButton" name="rb_register_distance">
+           <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>Distance</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+             <string>Eigen Movement:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rb_register_eigen">
+           <widget class="QLineEdit" name="le_register_em">
             <property name="text">
-             <string>Eigen</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="14" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_12">
-          <item>
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Transformation Epsilon:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_te">
-            <property name="text">
-             <string>0.01</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Iterations:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_iterations">
-            <property name="text">
-             <string>100</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="8" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
-          <item>
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Reconstruction Offset:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_offset">
-            <property name="text">
-             <string>10</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Camera Focal Length:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_fl">
-            <property name="text">
-             <string>0.0021f</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="_chk_register_vis">
-          <property name="text">
-           <string>Visualise</string>
-          </property>
-         </widget>
-        </item>
-        <item row="13" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Filter (xyz):</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_filter_x">
-            <property name="text">
-             <string>10.0f</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_filter_y">
-            <property name="text">
-             <string>10.0f</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_filter_z">
-            <property name="text">
-             <string>10.0f</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="5" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="rb_register_icp">
-            <property name="text">
-             <string>ICP</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="rb_register_ndt">
-            <property name="text">
-             <string>NDT</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="4" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QCheckBox" name="_chk_register_tr_txt">
-            <property name="text">
-             <string>Transform (txt)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="_chk_register_tr_bin">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Transform (bin)</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_14">
-          <item>
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>Cloud Point Size:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_cloudps">
-            <property name="text">
-             <string>2</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Centroid Point Size:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_centps">
-            <property name="text">
-             <string>8</string>
+             <string>1000.0</string>
             </property>
            </widget>
           </item>
@@ -392,47 +173,22 @@
           </item>
          </layout>
         </item>
-        <item row="15" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item row="4" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QLabel" name="label_14">
+           <widget class="QCheckBox" name="_chk_register_tr_txt">
             <property name="text">
-             <string>Rotation Guess:</string>
+             <string>Transform (txt)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="le_register_rg">
-            <property name="text">
-             <string>0.6931f</string>
+           <widget class="QCheckBox" name="_chk_register_tr_bin">
+            <property name="enabled">
+             <bool>true</bool>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>Translation Guess (xyz):</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_tgx">
-            <property name="text">
-             <string>1.79387f</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_tgy">
-            <property name="text">
-             <string>0.720047f</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="le_register_tgz">
-            <property name="text">
-             <string>0.0f</string>
+             <string>Transform (bin)</string>
             </property>
            </widget>
           </item>
@@ -493,6 +249,286 @@
            <widget class="QLineEdit" name="le_register_cent2b">
             <property name="text">
              <string>255</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="14" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Filter (xyz):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_filter_x">
+            <property name="text">
+             <string>10.0f</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_filter_y">
+            <property name="text">
+             <string>10.0f</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_filter_z">
+            <property name="text">
+             <string>10.0f</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="16" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Rotation Guess:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_rg">
+            <property name="text">
+             <string>0.6931f</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Translation Guess (xyz):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_tgx">
+            <property name="text">
+             <string>1.79387f</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_tgy">
+            <property name="text">
+             <string>0.720047f</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_tgz">
+            <property name="text">
+             <string>0.0f</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="9" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Reconstruction Offset:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_offset">
+            <property name="text">
+             <string>10</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Camera Focal Length:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_fl">
+            <property name="text">
+             <string>0.0021f</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="5" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="rb_register_icp">
+            <property name="text">
+             <string>ICP</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="rb_register_ndt">
+            <property name="text">
+             <string>NDT</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="15" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Transformation Epsilon:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_te">
+            <property name="text">
+             <string>0.01</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Iterations:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_iterations">
+            <property name="text">
+             <string>100</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="8" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Global Threshold:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_threshold">
+            <property name="text">
+             <string>1000.0</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="7" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QRadioButton" name="rb_register_distance">
+            <property name="text">
+             <string>Distance</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_register_eigen">
+            <property name="text">
+             <string>Eigen</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="_chk_register_vis">
+          <property name="text">
+           <string>Visualise</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Cloud Point Size:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_cloudps">
+            <property name="text">
+             <string>2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Centroid Point Size:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="le_register_centps">
+            <property name="text">
+             <string>8</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="6" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_18">
+          <item>
+           <widget class="QRadioButton" name="rb_register_iterative">
+            <property name="text">
+             <string>Iterati&amp;ve</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_register_continuous">
+            <property name="text">
+             <string>Continuous</string>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
             </property>
            </widget>
           </item>

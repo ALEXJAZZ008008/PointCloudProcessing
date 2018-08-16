@@ -7,16 +7,47 @@ PointCloudProcessingBackend::PointCloudProcessingBackend():
     m_input_path(""),
     m_output_path(""),
     m_log(""),
+    m_threshold(0.0),
+    m_distance_movement(0.0),
+    m_eigen_movement(0.0),
+    m_smoothing_deviation(0.0),
+    m_transformation_epsilon(0.0),
+    m_focal_length(0.0f),
     m_filter_x(0.0f),
     m_filter_y(0.0f),
     m_filter_z(0.0f),
+    m_rotation_guess(0.0f),
+    m_translation_guess_x(0.0f),
+    m_translation_guess_y(0.0f),
+    m_translation_guess_z(0.0f),
+    m_cloud_point_size(0),
+    m_centroid_point_size(0),
+    m_offset(0),
+    m_smoothing_size(0),
+    m_iterations(0),
+    m_cloud_one_r(0),
+    m_cloud_one_g(0),
+    m_cloud_one_b(0),
+    m_cloud_two_r(0),
+    m_cloud_two_g(0),
+    m_cloud_two_b(0),
+    m_centroid_one_r(0),
+    m_centroid_one_g(0),
+    m_centroid_one_b(0),
+    m_centroid_two_r(0),
+    m_centroid_two_g(0),
+    m_centroid_two_b(0),
     m_point_cloud_text(false),
     m_point_cloud_binary(false),
     m_visualisation(false),
     m_translation_text(false),
     m_translation_binary(false),
     m_icp(false),
-    m_ndt(false)
+    m_ndt(false),
+    m_iterative(false),
+    m_continuous(false),
+    m_distance(false),
+    m_eigen(false)
 {
     m_header_map["kpclp_header_version"] = header_enum::kpclp_header_version;
     m_header_map["data_type"] = header_enum::data_type;
@@ -44,16 +75,47 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_input_path(point_cloud_processing_backend_output_ref.get_input_path()),
     m_output_path(point_cloud_processing_backend_output_ref.get_output_path()),
     m_log(point_cloud_processing_backend_output_ref.get_log()),
+    m_threshold(point_cloud_processing_backend_output_ref.get_threshold()),
+    m_distance_movement(point_cloud_processing_backend_output_ref.get_distance_movement()),
+    m_eigen_movement(point_cloud_processing_backend_output_ref.get_eigen_movement()),
+    m_smoothing_deviation(point_cloud_processing_backend_output_ref.get_smoothing_deviation()),
+    m_transformation_epsilon(point_cloud_processing_backend_output_ref.get_transformation_epsilon()),
+    m_focal_length(point_cloud_processing_backend_output_ref.get_focal_length()),
     m_filter_x(point_cloud_processing_backend_output_ref.get_filter_x()),
     m_filter_y(point_cloud_processing_backend_output_ref.get_filter_y()),
     m_filter_z(point_cloud_processing_backend_output_ref.get_filter_z()),
+    m_rotation_guess(point_cloud_processing_backend_output_ref.get_rotation_guess()),
+    m_translation_guess_x(point_cloud_processing_backend_output_ref.get_translation_guess_x()),
+    m_translation_guess_y(point_cloud_processing_backend_output_ref.get_translation_guess_y()),
+    m_translation_guess_z(point_cloud_processing_backend_output_ref.get_translation_guess_z()),
+    m_cloud_point_size(point_cloud_processing_backend_output_ref.get_cloud_point_size()),
+    m_centroid_point_size(point_cloud_processing_backend_output_ref.get_centroid_point_size()),
+    m_offset(point_cloud_processing_backend_output_ref.get_offset()),
+    m_smoothing_size(point_cloud_processing_backend_output_ref.get_smoothing_size()),
+    m_iterations(point_cloud_processing_backend_output_ref.get_iterations()),
+    m_cloud_one_r(point_cloud_processing_backend_output_ref.get_cloud_one_r()),
+    m_cloud_one_g(point_cloud_processing_backend_output_ref.get_cloud_one_g()),
+    m_cloud_one_b(point_cloud_processing_backend_output_ref.get_cloud_one_b()),
+    m_cloud_two_r(point_cloud_processing_backend_output_ref.get_cloud_two_r()),
+    m_cloud_two_g(point_cloud_processing_backend_output_ref.get_cloud_two_g()),
+    m_cloud_two_b(point_cloud_processing_backend_output_ref.get_cloud_two_b()),
+    m_centroid_one_r(point_cloud_processing_backend_output_ref.get_centroid_one_r()),
+    m_centroid_one_g(point_cloud_processing_backend_output_ref.get_centroid_one_g()),
+    m_centroid_one_b(point_cloud_processing_backend_output_ref.get_centroid_one_b()),
+    m_centroid_two_r(point_cloud_processing_backend_output_ref.get_centroid_two_r()),
+    m_centroid_two_g(point_cloud_processing_backend_output_ref.get_centroid_two_g()),
+    m_centroid_two_b(point_cloud_processing_backend_output_ref.get_centroid_one_b()),
     m_point_cloud_text(point_cloud_processing_backend_output_ref.get_point_cloud_text()),
     m_point_cloud_binary(point_cloud_processing_backend_output_ref.get_point_cloud_binary()),
     m_visualisation(point_cloud_processing_backend_output_ref.get_visualisation()),
     m_translation_text(point_cloud_processing_backend_output_ref.get_translation_text()),
     m_translation_binary(point_cloud_processing_backend_output_ref.get_tranlsation_binary()),
     m_icp(point_cloud_processing_backend_output_ref.get_icp()),
-    m_ndt(point_cloud_processing_backend_output_ref.get_ndt())
+    m_ndt(point_cloud_processing_backend_output_ref.get_ndt()),
+    m_iterative(point_cloud_processing_backend_output_ref.get_iterative()),
+    m_continuous(point_cloud_processing_backend_output_ref.get_continuous()),
+    m_distance(point_cloud_processing_backend_output_ref.get_distance()),
+    m_eigen(point_cloud_processing_backend_output_ref.get_eigen())
 {
 
 }
@@ -65,9 +127,36 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_input_path = point_cloud_processing_backend_output_ref.get_input_path();
     m_output_path = point_cloud_processing_backend_output_ref.get_output_path();
     m_log = point_cloud_processing_backend_output_ref.get_log();
+    m_threshold = point_cloud_processing_backend_output_ref.get_threshold();
+    m_distance_movement = point_cloud_processing_backend_output_ref.get_distance_movement();
+    m_eigen_movement = point_cloud_processing_backend_output_ref.get_eigen_movement();
+    m_smoothing_deviation = point_cloud_processing_backend_output_ref.get_smoothing_deviation();
+    m_transformation_epsilon = point_cloud_processing_backend_output_ref.get_transformation_epsilon();
+    m_focal_length = point_cloud_processing_backend_output_ref.get_focal_length();
     m_filter_x = point_cloud_processing_backend_output_ref.get_filter_x();
     m_filter_y = point_cloud_processing_backend_output_ref.get_filter_y();
     m_filter_z = point_cloud_processing_backend_output_ref.get_filter_z();
+    m_rotation_guess = point_cloud_processing_backend_output_ref.get_rotation_guess();
+    m_translation_guess_x = point_cloud_processing_backend_output_ref.get_translation_guess_x();
+    m_translation_guess_y = point_cloud_processing_backend_output_ref.get_translation_guess_y();
+    m_translation_guess_z = point_cloud_processing_backend_output_ref.get_translation_guess_z();
+    m_cloud_point_size = point_cloud_processing_backend_output_ref.get_cloud_point_size();
+    m_centroid_point_size = point_cloud_processing_backend_output_ref.get_centroid_point_size();
+    m_offset = point_cloud_processing_backend_output_ref.get_offset();
+    m_smoothing_size = point_cloud_processing_backend_output_ref.get_smoothing_size();
+    m_iterations = point_cloud_processing_backend_output_ref.get_iterations();
+    m_cloud_one_r = point_cloud_processing_backend_output_ref.get_cloud_one_r();
+    m_cloud_one_g = point_cloud_processing_backend_output_ref.get_cloud_one_g();
+    m_cloud_one_b = point_cloud_processing_backend_output_ref.get_cloud_one_b();
+    m_cloud_two_r = point_cloud_processing_backend_output_ref.get_cloud_two_r();
+    m_cloud_two_g = point_cloud_processing_backend_output_ref.get_cloud_two_g();
+    m_cloud_two_b = point_cloud_processing_backend_output_ref.get_cloud_two_b();
+    m_centroid_one_r = point_cloud_processing_backend_output_ref.get_centroid_one_r();
+    m_centroid_one_g = point_cloud_processing_backend_output_ref.get_centroid_one_g();
+    m_centroid_one_b = point_cloud_processing_backend_output_ref.get_centroid_one_b();
+    m_centroid_two_r = point_cloud_processing_backend_output_ref.get_centroid_two_r();
+    m_centroid_two_g = point_cloud_processing_backend_output_ref.get_centroid_two_g();
+    m_centroid_two_b = point_cloud_processing_backend_output_ref.get_centroid_one_b();
     m_point_cloud_text = point_cloud_processing_backend_output_ref.get_point_cloud_text();
     m_point_cloud_binary = point_cloud_processing_backend_output_ref.get_point_cloud_binary();
     m_visualisation = point_cloud_processing_backend_output_ref.get_visualisation();
@@ -75,6 +164,10 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_translation_binary = point_cloud_processing_backend_output_ref.get_tranlsation_binary();
     m_icp = point_cloud_processing_backend_output_ref.get_icp();
     m_ndt = point_cloud_processing_backend_output_ref.get_ndt();
+    m_iterative = point_cloud_processing_backend_output_ref.get_iterative();
+    m_continuous = point_cloud_processing_backend_output_ref.get_continuous();
+    m_distance = point_cloud_processing_backend_output_ref.get_distance();
+    m_eigen = point_cloud_processing_backend_output_ref.get_eigen();
 
     return *this;
 }
@@ -85,16 +178,47 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_input_path(point_cloud_processing_backend_output_ref_ref.get_input_path()),
     m_output_path(point_cloud_processing_backend_output_ref_ref.get_output_path()),
     m_log(point_cloud_processing_backend_output_ref_ref.get_log()),
+    m_threshold(point_cloud_processing_backend_output_ref_ref.get_threshold()),
+    m_distance_movement(point_cloud_processing_backend_output_ref_ref.get_distance_movement()),
+    m_eigen_movement(point_cloud_processing_backend_output_ref_ref.get_eigen_movement()),
+    m_smoothing_deviation(point_cloud_processing_backend_output_ref_ref.get_smoothing_deviation()),
+    m_transformation_epsilon(point_cloud_processing_backend_output_ref_ref.get_transformation_epsilon()),
+    m_focal_length(point_cloud_processing_backend_output_ref_ref.get_focal_length()),
     m_filter_x(point_cloud_processing_backend_output_ref_ref.get_filter_x()),
     m_filter_y(point_cloud_processing_backend_output_ref_ref.get_filter_y()),
     m_filter_z(point_cloud_processing_backend_output_ref_ref.get_filter_z()),
+    m_rotation_guess(point_cloud_processing_backend_output_ref_ref.get_rotation_guess()),
+    m_translation_guess_x(point_cloud_processing_backend_output_ref_ref.get_translation_guess_x()),
+    m_translation_guess_y(point_cloud_processing_backend_output_ref_ref.get_translation_guess_y()),
+    m_translation_guess_z(point_cloud_processing_backend_output_ref_ref.get_translation_guess_z()),
+    m_cloud_point_size(point_cloud_processing_backend_output_ref_ref.get_cloud_point_size()),
+    m_centroid_point_size(point_cloud_processing_backend_output_ref_ref.get_centroid_point_size()),
+    m_offset(point_cloud_processing_backend_output_ref_ref.get_offset()),
+    m_smoothing_size(point_cloud_processing_backend_output_ref_ref.get_smoothing_size()),
+    m_iterations(point_cloud_processing_backend_output_ref_ref.get_iterations()),
+    m_cloud_one_r(point_cloud_processing_backend_output_ref_ref.get_cloud_one_r()),
+    m_cloud_one_g(point_cloud_processing_backend_output_ref_ref.get_cloud_one_g()),
+    m_cloud_one_b(point_cloud_processing_backend_output_ref_ref.get_cloud_one_b()),
+    m_cloud_two_r(point_cloud_processing_backend_output_ref_ref.get_cloud_two_r()),
+    m_cloud_two_g(point_cloud_processing_backend_output_ref_ref.get_cloud_two_g()),
+    m_cloud_two_b(point_cloud_processing_backend_output_ref_ref.get_cloud_two_b()),
+    m_centroid_one_r(point_cloud_processing_backend_output_ref_ref.get_centroid_one_r()),
+    m_centroid_one_g(point_cloud_processing_backend_output_ref_ref.get_centroid_one_g()),
+    m_centroid_one_b(point_cloud_processing_backend_output_ref_ref.get_centroid_one_b()),
+    m_centroid_two_r(point_cloud_processing_backend_output_ref_ref.get_centroid_two_r()),
+    m_centroid_two_g(point_cloud_processing_backend_output_ref_ref.get_centroid_two_g()),
+    m_centroid_two_b(point_cloud_processing_backend_output_ref_ref.get_centroid_one_b()),
     m_point_cloud_text(point_cloud_processing_backend_output_ref_ref.get_point_cloud_text()),
     m_point_cloud_binary(point_cloud_processing_backend_output_ref_ref.get_point_cloud_binary()),
     m_visualisation(point_cloud_processing_backend_output_ref_ref.get_visualisation()),
     m_translation_text(point_cloud_processing_backend_output_ref_ref.get_translation_text()),
     m_translation_binary(point_cloud_processing_backend_output_ref_ref.get_tranlsation_binary()),
     m_icp(point_cloud_processing_backend_output_ref_ref.get_icp()),
-    m_ndt(point_cloud_processing_backend_output_ref_ref.get_ndt())
+    m_ndt(point_cloud_processing_backend_output_ref_ref.get_ndt()),
+    m_iterative(point_cloud_processing_backend_output_ref_ref.get_iterative()),
+    m_continuous(point_cloud_processing_backend_output_ref_ref.get_continuous()),
+    m_distance(point_cloud_processing_backend_output_ref_ref.get_distance()),
+    m_eigen(point_cloud_processing_backend_output_ref_ref.get_eigen())
 {
 
 }
@@ -106,9 +230,36 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_input_path = point_cloud_processing_backend_output_ref_ref.get_input_path();
     m_output_path = point_cloud_processing_backend_output_ref_ref.get_output_path();
     m_log = point_cloud_processing_backend_output_ref_ref.get_log();
+    m_threshold = point_cloud_processing_backend_output_ref_ref.get_threshold();
+    m_distance_movement = point_cloud_processing_backend_output_ref_ref.get_distance_movement();
+    m_eigen_movement = point_cloud_processing_backend_output_ref_ref.get_eigen_movement();
+    m_smoothing_deviation = point_cloud_processing_backend_output_ref_ref.get_smoothing_deviation();
+    m_transformation_epsilon = point_cloud_processing_backend_output_ref_ref.get_transformation_epsilon();
+    m_focal_length = point_cloud_processing_backend_output_ref_ref.get_focal_length();
     m_filter_x = point_cloud_processing_backend_output_ref_ref.get_filter_x();
     m_filter_y = point_cloud_processing_backend_output_ref_ref.get_filter_y();
     m_filter_z = point_cloud_processing_backend_output_ref_ref.get_filter_z();
+    m_rotation_guess = point_cloud_processing_backend_output_ref_ref.get_rotation_guess();
+    m_translation_guess_x = point_cloud_processing_backend_output_ref_ref.get_translation_guess_x();
+    m_translation_guess_y = point_cloud_processing_backend_output_ref_ref.get_translation_guess_y();
+    m_translation_guess_z = point_cloud_processing_backend_output_ref_ref.get_translation_guess_z();
+    m_cloud_point_size = point_cloud_processing_backend_output_ref_ref.get_cloud_point_size();
+    m_centroid_point_size = point_cloud_processing_backend_output_ref_ref.get_centroid_point_size();
+    m_offset = point_cloud_processing_backend_output_ref_ref.get_offset();
+    m_smoothing_size = point_cloud_processing_backend_output_ref_ref.get_smoothing_size();
+    m_iterations = point_cloud_processing_backend_output_ref_ref.get_iterations();
+    m_cloud_one_r = point_cloud_processing_backend_output_ref_ref.get_cloud_one_r();
+    m_cloud_one_g = point_cloud_processing_backend_output_ref_ref.get_cloud_one_g();
+    m_cloud_one_b = point_cloud_processing_backend_output_ref_ref.get_cloud_one_b();
+    m_cloud_two_r = point_cloud_processing_backend_output_ref_ref.get_cloud_two_r();
+    m_cloud_two_g = point_cloud_processing_backend_output_ref_ref.get_cloud_two_g();
+    m_cloud_two_b = point_cloud_processing_backend_output_ref_ref.get_cloud_two_b();
+    m_centroid_one_r = point_cloud_processing_backend_output_ref_ref.get_centroid_one_r();
+    m_centroid_one_g = point_cloud_processing_backend_output_ref_ref.get_centroid_one_g();
+    m_centroid_one_b = point_cloud_processing_backend_output_ref_ref.get_centroid_one_b();
+    m_centroid_two_r = point_cloud_processing_backend_output_ref_ref.get_centroid_two_r();
+    m_centroid_two_g = point_cloud_processing_backend_output_ref_ref.get_centroid_two_g();
+    m_centroid_two_b = point_cloud_processing_backend_output_ref_ref.get_centroid_one_b();
     m_point_cloud_text = point_cloud_processing_backend_output_ref_ref.get_point_cloud_text();
     m_point_cloud_binary = point_cloud_processing_backend_output_ref_ref.get_point_cloud_binary();
     m_visualisation = point_cloud_processing_backend_output_ref_ref.get_visualisation();
@@ -116,6 +267,10 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_translation_binary = point_cloud_processing_backend_output_ref_ref.get_tranlsation_binary();
     m_icp = point_cloud_processing_backend_output_ref_ref.get_icp();
     m_ndt = point_cloud_processing_backend_output_ref_ref.get_ndt();
+    m_iterative = point_cloud_processing_backend_output_ref_ref.get_iterative();
+    m_continuous = point_cloud_processing_backend_output_ref_ref.get_continuous();
+    m_distance = point_cloud_processing_backend_output_ref_ref.get_distance();
+    m_eigen = point_cloud_processing_backend_output_ref_ref.get_eigen();
 
     return *this;
 }
@@ -450,13 +605,13 @@ int PointCloudProcessingBackend::calculate_point_cloud()
             {
                 if(m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] > 0.0f || m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] < 0.0f)
                 {
-                    float x = (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
+                    float x = (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - m_offset) * m_focal_length;
 
-                    float y = (j - (m_objects[i]->get_resolution()[0] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - 10) * 0.0021f;
+                    float y = (j - (m_objects[i]->get_resolution()[0] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - m_offset) * m_focal_length;
 
                     float z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
 
-                    if(fabs(sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))) < 1000.0)
+                    if(fabs(sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))) < m_threshold)
                     {
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = x;
 
@@ -554,7 +709,8 @@ int PointCloudProcessingBackend::registration()
     unsigned long i = 0;
     unsigned long j = 0;
 
-    string output_header = "";
+    string output_header = output_header_init();
+
     string output = "";
 
     while(j < m_objects.size() - 1)
@@ -594,12 +750,12 @@ int PointCloudProcessingBackend::registration()
         compute3DCentroid(*target, target_centroid);
 
         double movement = fabs(sqrt(pow((target_centroid.coeff(0) - source_centroid.coeff(0)), 2) +
-                                   pow((target_centroid.coeff(1) - source_centroid.coeff(0)), 2) +
-                                   pow((target_centroid.coeff(2) - source_centroid.coeff(0)), 2)));
+                                    pow((target_centroid.coeff(1) - source_centroid.coeff(0)), 2) +
+                                    pow((target_centroid.coeff(2) - source_centroid.coeff(0)), 2)));
 
         m_log += "-> movement " + to_string(i) + " " + to_string(j) + ": " + to_string(movement) + "\n";
 
-        if(movement < 1000.0)
+        if(movement > m_distance_movement)
         {
             m_log += "-> registration " + to_string(i) + " " + to_string(j) + ": " + "Skipped" + "\n";
 
@@ -667,35 +823,80 @@ int PointCloudProcessingBackend::registration()
                 "Target centroid: " + target_centroid_position + "\n" +
                 "Transformation: " + transform + "\n";
 
-        i = j;
+        if(m_iterative)
+        {
+            i = j;
+        }
+        else
+        {
+            if(m_continuous)
+            {
+                i = 0;
+            }
+        }
     }
 
-    if(m_translation_binary)
-    {
-        ofstream ricp_bin_stream(m_output_path + "/ricp_bin_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", ios::out | ios::binary);
-
-        ricp_bin_stream.write(reinterpret_cast<char *>(&output_header), sizeof(output_header));
-        ricp_bin_stream.write(reinterpret_cast<char *>(&output), sizeof(output));
-
-        ricp_bin_stream.flush();
-        ricp_bin_stream.close();
-
-        m_log += "<- ricp_bin: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
-    }
-
-    if(m_translation_text)
-    {
-        ofstream ricp_txt_stream(m_output_path + "/ricp_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", ios::out);
-
-        ricp_txt_stream << output_header << output << endl;
-
-        ricp_txt_stream.flush();
-        ricp_txt_stream.close();
-
-        m_log += "<- ricp_txt: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
-    }
+    write_translations_to_file(output_header + output);
 
     return 1;
+}
+
+string PointCloudProcessingBackend::output_header_init()
+{
+    string output_header = "Registration Type: ";
+
+    if(m_icp)
+    {
+        output_header += "ICP\n";
+    }
+    else
+    {
+        if(m_ndt)
+        {
+            output_header += "NDT\n";
+        }
+    }
+
+    output_header += "Registration Style: ";
+
+    if(m_iterative)
+    {
+        output_header += "Iterative\n";
+    }
+    else
+    {
+        if(m_continuous)
+        {
+            output_header += "Continuous\n";
+        }
+    }
+
+    output_header += "Movement Type: ";
+
+    if(m_distance)
+    {
+        output_header += "Distance\nMovement Distance: " + to_string(m_distance_movement) + "\n";
+    }
+    else
+    {
+        if(m_eigen)
+        {
+            output_header += "Eigen\nEigen Distance: " + to_string(m_eigen_movement) + "\n";
+        }
+    }
+
+    output_header += "Threshold: " + to_string(m_threshold) + "\n" +
+            "Offset: " + to_string(m_offset) + "\n" +
+            "Focal Length: " + to_string(m_focal_length) + "\n" +
+            "Smoothing Size: " + to_string(m_smoothing_size) + "\n" +
+            "Smoothing Deviation: " + to_string(m_smoothing_deviation) + "\n" +
+            "Filter (xyz): " + to_string(m_filter_x) + ", " + to_string(m_filter_y) + ", " + to_string(m_filter_z) + "\n" +
+            "Transformation Epsilon: " + to_string(m_transformation_epsilon) + "\n" +
+            "Iterations: " + to_string(m_iterations) + "\n" +
+            "Rotation Guess: " + to_string(m_rotation_guess) + "\n" +
+            "Translation Guess (xyz): " + to_string(m_translation_guess_x) + ", " + to_string(m_translation_guess_y) + ", " + to_string(m_translation_guess_z) + "\n";
+
+    return output_header;
 }
 
 int PointCloudProcessingBackend::remove_nan(PointCloud<PointXYZ>::Ptr &point_cloud)
@@ -712,8 +913,8 @@ int PointCloudProcessingBackend::filter(PointCloud<PointXYZ>::Ptr &point_cloud)
     StatisticalOutlierRemoval<PointXYZ> statistical_outlier_removal;
 
     statistical_outlier_removal.setInputCloud(point_cloud);
-    statistical_outlier_removal.setMeanK(100);
-    statistical_outlier_removal.setStddevMulThresh(1.0);
+    statistical_outlier_removal.setMeanK(m_smoothing_size);
+    statistical_outlier_removal.setStddevMulThresh(m_smoothing_deviation);
     statistical_outlier_removal.filter(*point_cloud);
 
     ApproximateVoxelGrid<PointXYZ> approximate_voxel_filter;
@@ -750,14 +951,14 @@ int PointCloudProcessingBackend::ricp(PointCloud<PointXYZ>::Ptr &source,
 {
     IterativeClosestPoint<PointXYZ, PointXYZ> icp;
 
-    icp.setTransformationEpsilon(0.01);
-    icp.setMaximumIterations(100);
+    icp.setTransformationEpsilon(m_transformation_epsilon);
+    icp.setMaximumIterations(m_iterations);
 
     icp.setInputSource(source);
     icp.setInputTarget(target);
 
-    Eigen::AngleAxisf rotation(0.6931f, Eigen::Vector3f::UnitZ());
-    Eigen::Translation3f translation(1.79387f, 0.720047f, 0.0f);
+    Eigen::AngleAxisf rotation(m_rotation_guess, Eigen::Vector3f::UnitZ());
+    Eigen::Translation3f translation(m_translation_guess_x, m_translation_guess_y, m_translation_guess_z);
     Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
 
     PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
@@ -781,14 +982,14 @@ int PointCloudProcessingBackend::rndt(PointCloud<PointXYZ>::Ptr &source,
 {
     NormalDistributionsTransform<PointXYZ, PointXYZ> ndt;
 
-    ndt.setTransformationEpsilon(0.01);
-    ndt.setMaximumIterations(100);
+    ndt.setTransformationEpsilon(m_transformation_epsilon);
+    ndt.setMaximumIterations(m_iterations);
 
     ndt.setInputSource(source);
     ndt.setInputTarget(target);
 
-    Eigen::AngleAxisf rotation(0.6931f, Eigen::Vector3f::UnitZ());
-    Eigen::Translation3f translation(1.79387f, 0.720047f, 0.0f);
+    Eigen::AngleAxisf rotation(m_rotation_guess, Eigen::Vector3f::UnitZ());
+    Eigen::Translation3f translation(m_translation_guess_x, m_translation_guess_y, m_translation_guess_z);
     Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
 
     PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
@@ -816,25 +1017,25 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
 
     visualiser->setBackgroundColor(0, 0, 0);
 
-    PointCloudColorHandlerCustom<PointXYZ> source_color(source, 255, 0, 0);
+    PointCloudColorHandlerCustom<PointXYZ> source_color(source, m_cloud_one_r, m_cloud_one_g, m_cloud_one_b);
 
     visualiser->addPointCloud<PointXYZ>(source, source_color, "source cloud");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 2, "source cloud");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_cloud_point_size, "source cloud");
 
-    PointCloudColorHandlerCustom<PointXYZ> source_centroid_colour(source_centroid, 255, 255, 0);
+    PointCloudColorHandlerCustom<PointXYZ> source_centroid_colour(source_centroid, m_centroid_one_r, m_centroid_one_g, m_centroid_one_b);
 
     visualiser->addPointCloud<PointXYZ>(source_centroid, source_centroid_colour, "source centroid");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 8, "source centroid");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_centroid_point_size, "source centroid");
 
-    PointCloudColorHandlerCustom<PointXYZ> target_colour(target, 0, 0, 255);
+    PointCloudColorHandlerCustom<PointXYZ> target_colour(target, m_cloud_two_r, m_cloud_two_g, m_cloud_two_b);
 
     visualiser->addPointCloud<PointXYZ>(target, target_colour, "target cloud");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 2, "target cloud");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_cloud_point_size, "target cloud");
 
-    PointCloudColorHandlerCustom<PointXYZ> target_centroid_colour(target_centroid, 0, 255, 255);
+    PointCloudColorHandlerCustom<PointXYZ> target_centroid_colour(target_centroid, m_centroid_two_r, m_centroid_two_g, m_centroid_two_b);
 
     visualiser->addPointCloud<PointXYZ>(target_centroid, target_centroid_colour, "target centroid");
-    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, 8, "target centroid");
+    visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_centroid_point_size, "target centroid");
 
     visualiser->addCoordinateSystem(1.0, "global");
     visualiser->initCameraParameters();
@@ -842,6 +1043,35 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
     visualiser->spin();
 
     visualiser->close();
+
+    return 1;
+}
+
+int PointCloudProcessingBackend::write_translations_to_file(string output)
+{
+    if(m_translation_binary)
+    {
+        ofstream ricp_bin_stream(m_output_path + "/ricp_bin_" + to_string(system_clock::now().time_since_epoch().count()) + ".bin", ios::out | ios::binary);
+
+        ricp_bin_stream.write(reinterpret_cast<char *>(&output), sizeof(output));
+
+        ricp_bin_stream.flush();
+        ricp_bin_stream.close();
+
+        m_log += "<- ricp_bin: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+    }
+
+    if(m_translation_text)
+    {
+        ofstream ricp_txt_stream(m_output_path + "/ricp_txt_" + to_string(system_clock::now().time_since_epoch().count()) + ".txt", ios::out);
+
+        ricp_txt_stream << output << endl;
+
+        ricp_txt_stream.flush();
+        ricp_txt_stream.close();
+
+        m_log += "<- ricp_txt: " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+    }
 
     return 1;
 }
