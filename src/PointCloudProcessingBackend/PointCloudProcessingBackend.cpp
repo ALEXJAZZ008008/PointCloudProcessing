@@ -20,6 +20,10 @@ PointCloudProcessingBackend::PointCloudProcessingBackend():
     m_translation_guess_x(0.0f),
     m_translation_guess_y(0.0f),
     m_translation_guess_z(0.0f),
+    m_signal_magnitude(0.0f),
+    m_signal_x(0.0f),
+    m_signal_y(0.0f),
+    m_signal_z(0.0f),
     m_cloud_point_size(0),
     m_centroid_point_size(0),
     m_offset(0),
@@ -37,6 +41,9 @@ PointCloudProcessingBackend::PointCloudProcessingBackend():
     m_centroid_two_r(0),
     m_centroid_two_g(0),
     m_centroid_two_b(0),
+    m_signal_r(0),
+    m_signal_g(0),
+    m_signal_b(0),
     m_point_cloud_text(false),
     m_point_cloud_binary(false),
     m_visualisation(false),
@@ -47,7 +54,9 @@ PointCloudProcessingBackend::PointCloudProcessingBackend():
     m_iterative(false),
     m_continuous(false),
     m_distance(false),
-    m_eigen(false)
+    m_eigen(false),
+    m_manual(false),
+    m_auto(false)
 {
     m_header_map["kpclp_header_version"] = header_enum::kpclp_header_version;
     m_header_map["data_type"] = header_enum::data_type;
@@ -88,6 +97,10 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_translation_guess_x(point_cloud_processing_backend_output_ref.get_translation_guess_x()),
     m_translation_guess_y(point_cloud_processing_backend_output_ref.get_translation_guess_y()),
     m_translation_guess_z(point_cloud_processing_backend_output_ref.get_translation_guess_z()),
+    m_signal_magnitude(point_cloud_processing_backend_output_ref.get_signal_magnitude()),
+    m_signal_x(point_cloud_processing_backend_output_ref.get_signal_x()),
+    m_signal_y(point_cloud_processing_backend_output_ref.get_signal_y()),
+    m_signal_z(point_cloud_processing_backend_output_ref.get_signal_z()),
     m_cloud_point_size(point_cloud_processing_backend_output_ref.get_cloud_point_size()),
     m_centroid_point_size(point_cloud_processing_backend_output_ref.get_centroid_point_size()),
     m_offset(point_cloud_processing_backend_output_ref.get_offset()),
@@ -105,6 +118,9 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_centroid_two_r(point_cloud_processing_backend_output_ref.get_centroid_two_r()),
     m_centroid_two_g(point_cloud_processing_backend_output_ref.get_centroid_two_g()),
     m_centroid_two_b(point_cloud_processing_backend_output_ref.get_centroid_one_b()),
+    m_signal_r(point_cloud_processing_backend_output_ref.get_signal_r()),
+    m_signal_g(point_cloud_processing_backend_output_ref.get_signal_g()),
+    m_signal_b(point_cloud_processing_backend_output_ref.get_signal_b()),
     m_point_cloud_text(point_cloud_processing_backend_output_ref.get_point_cloud_text()),
     m_point_cloud_binary(point_cloud_processing_backend_output_ref.get_point_cloud_binary()),
     m_visualisation(point_cloud_processing_backend_output_ref.get_visualisation()),
@@ -115,7 +131,9 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_iterative(point_cloud_processing_backend_output_ref.get_iterative()),
     m_continuous(point_cloud_processing_backend_output_ref.get_continuous()),
     m_distance(point_cloud_processing_backend_output_ref.get_distance()),
-    m_eigen(point_cloud_processing_backend_output_ref.get_eigen())
+    m_eigen(point_cloud_processing_backend_output_ref.get_eigen()),
+    m_manual(point_cloud_processing_backend_output_ref.get_manual()),
+    m_auto(point_cloud_processing_backend_output_ref.get_auto())
 {
 
 }
@@ -140,6 +158,10 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_translation_guess_x = point_cloud_processing_backend_output_ref.get_translation_guess_x();
     m_translation_guess_y = point_cloud_processing_backend_output_ref.get_translation_guess_y();
     m_translation_guess_z = point_cloud_processing_backend_output_ref.get_translation_guess_z();
+    m_signal_magnitude = point_cloud_processing_backend_output_ref.get_signal_magnitude();
+    m_signal_x = point_cloud_processing_backend_output_ref.get_signal_x();
+    m_signal_y = point_cloud_processing_backend_output_ref.get_signal_y();
+    m_signal_z = point_cloud_processing_backend_output_ref.get_signal_z();
     m_cloud_point_size = point_cloud_processing_backend_output_ref.get_cloud_point_size();
     m_centroid_point_size = point_cloud_processing_backend_output_ref.get_centroid_point_size();
     m_offset = point_cloud_processing_backend_output_ref.get_offset();
@@ -157,6 +179,9 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_centroid_two_r = point_cloud_processing_backend_output_ref.get_centroid_two_r();
     m_centroid_two_g = point_cloud_processing_backend_output_ref.get_centroid_two_g();
     m_centroid_two_b = point_cloud_processing_backend_output_ref.get_centroid_one_b();
+    m_signal_r = point_cloud_processing_backend_output_ref.get_signal_r();
+    m_signal_g = point_cloud_processing_backend_output_ref.get_signal_g();
+    m_signal_b = point_cloud_processing_backend_output_ref.get_signal_b();
     m_point_cloud_text = point_cloud_processing_backend_output_ref.get_point_cloud_text();
     m_point_cloud_binary = point_cloud_processing_backend_output_ref.get_point_cloud_binary();
     m_visualisation = point_cloud_processing_backend_output_ref.get_visualisation();
@@ -168,6 +193,8 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_continuous = point_cloud_processing_backend_output_ref.get_continuous();
     m_distance = point_cloud_processing_backend_output_ref.get_distance();
     m_eigen = point_cloud_processing_backend_output_ref.get_eigen();
+    m_manual = point_cloud_processing_backend_output_ref.get_manual();
+    m_auto = point_cloud_processing_backend_output_ref.get_auto();
 
     return *this;
 }
@@ -191,6 +218,10 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_translation_guess_x(point_cloud_processing_backend_output_ref_ref.get_translation_guess_x()),
     m_translation_guess_y(point_cloud_processing_backend_output_ref_ref.get_translation_guess_y()),
     m_translation_guess_z(point_cloud_processing_backend_output_ref_ref.get_translation_guess_z()),
+    m_signal_magnitude(point_cloud_processing_backend_output_ref_ref.get_signal_magnitude()),
+    m_signal_x(point_cloud_processing_backend_output_ref_ref.get_signal_x()),
+    m_signal_y(point_cloud_processing_backend_output_ref_ref.get_signal_y()),
+    m_signal_z(point_cloud_processing_backend_output_ref_ref.get_signal_z()),
     m_cloud_point_size(point_cloud_processing_backend_output_ref_ref.get_cloud_point_size()),
     m_centroid_point_size(point_cloud_processing_backend_output_ref_ref.get_centroid_point_size()),
     m_offset(point_cloud_processing_backend_output_ref_ref.get_offset()),
@@ -208,6 +239,9 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_centroid_two_r(point_cloud_processing_backend_output_ref_ref.get_centroid_two_r()),
     m_centroid_two_g(point_cloud_processing_backend_output_ref_ref.get_centroid_two_g()),
     m_centroid_two_b(point_cloud_processing_backend_output_ref_ref.get_centroid_one_b()),
+    m_signal_r(point_cloud_processing_backend_output_ref_ref.get_signal_r()),
+    m_signal_g(point_cloud_processing_backend_output_ref_ref.get_signal_g()),
+    m_signal_b(point_cloud_processing_backend_output_ref_ref.get_signal_b()),
     m_point_cloud_text(point_cloud_processing_backend_output_ref_ref.get_point_cloud_text()),
     m_point_cloud_binary(point_cloud_processing_backend_output_ref_ref.get_point_cloud_binary()),
     m_visualisation(point_cloud_processing_backend_output_ref_ref.get_visualisation()),
@@ -218,7 +252,9 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_iterative(point_cloud_processing_backend_output_ref_ref.get_iterative()),
     m_continuous(point_cloud_processing_backend_output_ref_ref.get_continuous()),
     m_distance(point_cloud_processing_backend_output_ref_ref.get_distance()),
-    m_eigen(point_cloud_processing_backend_output_ref_ref.get_eigen())
+    m_eigen(point_cloud_processing_backend_output_ref_ref.get_eigen()),
+    m_manual(point_cloud_processing_backend_output_ref_ref.get_manual()),
+    m_auto(point_cloud_processing_backend_output_ref_ref.get_auto())
 {
 
 }
@@ -243,6 +279,10 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_translation_guess_x = point_cloud_processing_backend_output_ref_ref.get_translation_guess_x();
     m_translation_guess_y = point_cloud_processing_backend_output_ref_ref.get_translation_guess_y();
     m_translation_guess_z = point_cloud_processing_backend_output_ref_ref.get_translation_guess_z();
+    m_signal_magnitude = point_cloud_processing_backend_output_ref_ref.get_signal_magnitude();
+    m_signal_x = point_cloud_processing_backend_output_ref_ref.get_signal_x();
+    m_signal_y = point_cloud_processing_backend_output_ref_ref.get_signal_y();
+    m_signal_z = point_cloud_processing_backend_output_ref_ref.get_signal_z();
     m_cloud_point_size = point_cloud_processing_backend_output_ref_ref.get_cloud_point_size();
     m_centroid_point_size = point_cloud_processing_backend_output_ref_ref.get_centroid_point_size();
     m_offset = point_cloud_processing_backend_output_ref_ref.get_offset();
@@ -260,6 +300,9 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_centroid_two_r = point_cloud_processing_backend_output_ref_ref.get_centroid_two_r();
     m_centroid_two_g = point_cloud_processing_backend_output_ref_ref.get_centroid_two_g();
     m_centroid_two_b = point_cloud_processing_backend_output_ref_ref.get_centroid_one_b();
+    m_signal_r = point_cloud_processing_backend_output_ref_ref.get_signal_r();
+    m_signal_g = point_cloud_processing_backend_output_ref_ref.get_signal_g();
+    m_signal_b = point_cloud_processing_backend_output_ref_ref.get_signal_b();
     m_point_cloud_text = point_cloud_processing_backend_output_ref_ref.get_point_cloud_text();
     m_point_cloud_binary = point_cloud_processing_backend_output_ref_ref.get_point_cloud_binary();
     m_visualisation = point_cloud_processing_backend_output_ref_ref.get_visualisation();
@@ -271,6 +314,8 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_continuous = point_cloud_processing_backend_output_ref_ref.get_continuous();
     m_distance = point_cloud_processing_backend_output_ref_ref.get_distance();
     m_eigen = point_cloud_processing_backend_output_ref_ref.get_eigen();
+    m_manual = point_cloud_processing_backend_output_ref_ref.get_manual();
+    m_auto = point_cloud_processing_backend_output_ref_ref.get_auto();
 
     return *this;
 }
@@ -709,6 +754,8 @@ int PointCloudProcessingBackend::registration()
     unsigned long i = 0;
     unsigned long j = 0;
 
+    Eigen::Matrix<float, 4, 4> initial_transformation = initial_transformation_init();
+
     string output_header = output_header_init();
 
     string output = "";
@@ -780,13 +827,13 @@ int PointCloudProcessingBackend::registration()
 
         if(m_icp)
         {
-            ricp(source, target, final_transformation, has_converged, fitness_score);
+            ricp(source, target, initial_transformation, final_transformation, has_converged, fitness_score);
         }
         else
         {
             if(m_ndt)
             {
-                rndt(source, target, final_transformation, has_converged, fitness_score);
+                rndt(source, target, initial_transformation, final_transformation, has_converged, fitness_score);
             }
         }
 
@@ -841,6 +888,15 @@ int PointCloudProcessingBackend::registration()
     return 1;
 }
 
+Eigen::Matrix<float, 4, 4> PointCloudProcessingBackend::initial_transformation_init()
+{
+    Eigen::AngleAxisf rotation(m_rotation_guess, Eigen::Vector3f::UnitZ());
+    Eigen::Translation3f translation(m_translation_guess_x, m_translation_guess_y, m_translation_guess_z);
+    Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
+
+    return guess_matrix;
+}
+
 string PointCloudProcessingBackend::output_header_init()
 {
     string output_header = "Registration Type: ";
@@ -885,6 +941,20 @@ string PointCloudProcessingBackend::output_header_init()
         }
     }
 
+    output_header += "Translation Estimation: ";
+
+    if(m_manual)
+    {
+        output_header += "Manual\n";
+    }
+    else
+    {
+        if(m_auto)
+        {
+            output_header += "Automatic\n";
+        }
+    }
+
     output_header += "Threshold: " + to_string(m_threshold) + "\n" +
             "Offset: " + to_string(m_offset) + "\n" +
             "Focal Length: " + to_string(m_focal_length) + "\n" +
@@ -894,7 +964,9 @@ string PointCloudProcessingBackend::output_header_init()
             "Transformation Epsilon: " + to_string(m_transformation_epsilon) + "\n" +
             "Iterations: " + to_string(m_iterations) + "\n" +
             "Rotation Guess: " + to_string(m_rotation_guess) + "\n" +
-            "Translation Guess (xyz): " + to_string(m_translation_guess_x) + ", " + to_string(m_translation_guess_y) + ", " + to_string(m_translation_guess_z) + "\n";
+            "Translation Guess (xyz): " + to_string(m_translation_guess_x) + ", " + to_string(m_translation_guess_y) + ", " + to_string(m_translation_guess_z) + "\n" +
+            "Signal Magnitude: " + to_string(m_signal_magnitude) + "\n" +
+            "Signal (xyz): " + to_string(m_signal_x) + ", " + to_string(m_signal_y) + ", " + to_string(m_signal_z) + "\n";
 
     return output_header;
 }
@@ -945,6 +1017,7 @@ PointCloud<PointXYZ>::Ptr PointCloudProcessingBackend::to_point_cloud_pointxyz_p
 
 int PointCloudProcessingBackend::ricp(PointCloud<PointXYZ>::Ptr &source,
                                       PointCloud<PointXYZ>::Ptr &target,
+                                      Eigen::Matrix<float, 4, 4> &initial_transformation,
                                       Eigen::Matrix<float, 4, 4> &final_transformation,
                                       shared_ptr<bool> &has_converged,
                                       shared_ptr<double> &fitness_score)
@@ -957,13 +1030,21 @@ int PointCloudProcessingBackend::ricp(PointCloud<PointXYZ>::Ptr &source,
     icp.setInputSource(source);
     icp.setInputTarget(target);
 
-    Eigen::AngleAxisf rotation(m_rotation_guess, Eigen::Vector3f::UnitZ());
-    Eigen::Translation3f translation(m_translation_guess_x, m_translation_guess_y, m_translation_guess_z);
-    Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
-
     PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
 
-    icp.align(*final, guess_matrix);
+    icp.align(*final, initial_transformation);
+
+    if(m_manual)
+    {
+        initial_transformation = initial_transformation_init();
+    }
+    else
+    {
+        if(m_auto)
+        {
+            initial_transformation = icp.getFinalTransformation();
+        }
+    }
 
     final_transformation = icp.getFinalTransformation();
 
@@ -976,6 +1057,7 @@ int PointCloudProcessingBackend::ricp(PointCloud<PointXYZ>::Ptr &source,
 
 int PointCloudProcessingBackend::rndt(PointCloud<PointXYZ>::Ptr &source,
                                       PointCloud<PointXYZ>::Ptr &target,
+                                      Eigen::Matrix<float, 4, 4> &initial_transformation,
                                       Eigen::Matrix<float, 4, 4> &final_transformation,
                                       shared_ptr<bool> &has_converged,
                                       shared_ptr<double> &fitness_score)
@@ -988,13 +1070,21 @@ int PointCloudProcessingBackend::rndt(PointCloud<PointXYZ>::Ptr &source,
     ndt.setInputSource(source);
     ndt.setInputTarget(target);
 
-    Eigen::AngleAxisf rotation(m_rotation_guess, Eigen::Vector3f::UnitZ());
-    Eigen::Translation3f translation(m_translation_guess_x, m_translation_guess_y, m_translation_guess_z);
-    Eigen::Matrix4f guess_matrix = (rotation * translation).matrix();
-
     PointCloud<PointXYZ>::Ptr final(new PointCloud<PointXYZ>());
 
-    ndt.align(*final, guess_matrix);
+    ndt.align(*final, initial_transformation);
+
+    if(m_manual)
+    {
+        initial_transformation = initial_transformation_init();
+    }
+    else
+    {
+        if(m_auto)
+        {
+            initial_transformation = ndt.getFinalTransformation();
+        }
+    }
 
     final_transformation = ndt.getFinalTransformation();
 

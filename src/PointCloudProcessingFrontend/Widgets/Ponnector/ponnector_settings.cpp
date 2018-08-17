@@ -181,6 +181,33 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->le_register_cent2b->setText("255");
     }
 
+    if(settings.contains("register/set_sr"))
+    {
+        m_ui_ptr->le_register_sr->setText(settings.value("register/set_sr").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sr->setText("0");
+    }
+
+    if(settings.contains("register/set_sg"))
+    {
+        m_ui_ptr->le_register_sg->setText(settings.value("register/set_sg").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sg->setText("255");
+    }
+
+    if(settings.contains("register/set_sb"))
+    {
+        m_ui_ptr->le_register_sb->setText(settings.value("register/set_sb").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sb->setText("0");
+    }
+
     if(settings.contains("register/set_tr_txt"))
     {
         m_ui_ptr->_chk_register_tr_txt->setChecked(settings.value("register/set_tr_txt").toBool());
@@ -316,6 +343,33 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->le_register_sd->setText("1.0");
     }
 
+    if(settings.contains("register/set_filter_x"))
+    {
+        m_ui_ptr->le_register_filter_x->setText(settings.value("register/set_filter_x").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_x->setText("10.0");
+    }
+
+    if(settings.contains("register/set_filter_y"))
+    {
+        m_ui_ptr->le_register_filter_y->setText(settings.value("register/set_filter_y").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_y->setText("10.0");
+    }
+
+    if(settings.contains("register/set_filter_z"))
+    {
+        m_ui_ptr->le_register_filter_z->setText(settings.value("register/set_filter_z").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_z->setText("10.0");
+    }
+
     if(settings.contains("register/set_te"))
     {
         m_ui_ptr->le_register_te->setText(settings.value("register/set_te").toString());
@@ -332,6 +386,24 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     else
     {
         m_ui_ptr->le_register_iterations->setText("100");
+    }
+
+    if(settings.contains("register/set_manual"))
+    {
+        m_ui_ptr->rb_register_manual->setChecked(settings.value("register/set_manual").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_manual->setChecked(true);
+    }
+
+    if(settings.contains("register/set_auto"))
+    {
+        m_ui_ptr->rb_register_auto->setChecked(settings.value("register/set_auto").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_auto->setChecked(false);
     }
 
     if(settings.contains("register/set_rg"))
@@ -370,31 +442,40 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->le_register_tgz->setText("0.0");
     }
 
-    if(settings.contains("register/set_filter_x"))
+    if(settings.contains("register/set_sm"))
     {
-        m_ui_ptr->le_register_filter_x->setText(settings.value("register/set_filter_x").toString());
+        m_ui_ptr->le_register_sm->setText(settings.value("register/set_sm").toString());
     }
     else
     {
-        m_ui_ptr->le_register_filter_x->setText("10.0");
+        m_ui_ptr->le_register_sm->setText("1.0");
     }
 
-    if(settings.contains("register/set_filter_y"))
+    if(settings.contains("register/set_sx"))
     {
-        m_ui_ptr->le_register_filter_y->setText(settings.value("register/set_filter_y").toString());
+        m_ui_ptr->le_register_sx->setText(settings.value("register/set_sx").toString());
     }
     else
     {
-        m_ui_ptr->le_register_filter_y->setText("10.0");
+        m_ui_ptr->le_register_sx->setText("0.0");
     }
 
-    if(settings.contains("register/set_filter_z"))
+    if(settings.contains("register/set_sy"))
     {
-        m_ui_ptr->le_register_filter_z->setText(settings.value("register/set_filter_z").toString());
+        m_ui_ptr->le_register_sy->setText(settings.value("register/set_sy").toString());
     }
     else
     {
-        m_ui_ptr->le_register_filter_z->setText("10.0");
+        m_ui_ptr->le_register_sy->setText("0.0");
+    }
+
+    if(settings.contains("register/set_sz"))
+    {
+        m_ui_ptr->le_register_sz->setText(settings.value("register/set_sz").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sz->setText("0.0");
     }
 }
 
@@ -483,6 +564,9 @@ void Ponnector_Settings::on_buttonBox_accepted()
     settings.setValue("register/set_cent2r", m_ui_ptr->le_register_cent2r->text());
     settings.setValue("register/set_cent2g", m_ui_ptr->le_register_cent2g->text());
     settings.setValue("register/set_cent2b", m_ui_ptr->le_register_cent2b->text());
+    settings.setValue("register/set_sr", m_ui_ptr->le_register_sr->text());
+    settings.setValue("register/set_sg", m_ui_ptr->le_register_sg->text());
+    settings.setValue("register/set_sb", m_ui_ptr->le_register_sb->text());
 
     settings.setValue("register/set_tr_txt", m_ui_ptr->_chk_register_tr_txt->isChecked());
     settings.setValue("register/set_tr_bin", m_ui_ptr->_chk_register_tr_bin->isChecked());
@@ -501,15 +585,21 @@ void Ponnector_Settings::on_buttonBox_accepted()
     settings.setValue("register/set_em", m_ui_ptr->le_register_em->text());
     settings.setValue("register/set_ss", m_ui_ptr->le_register_ss->text());
     settings.setValue("register/set_sd", m_ui_ptr->le_register_sd->text());
+    settings.setValue("register/set_filter_x", m_ui_ptr->le_register_filter_x->text());
+    settings.setValue("register/set_filter_y", m_ui_ptr->le_register_filter_y->text());
+    settings.setValue("register/set_filter_z", m_ui_ptr->le_register_filter_z->text());
     settings.setValue("register/set_te", m_ui_ptr->le_register_te->text());
     settings.setValue("register/set_iterations", m_ui_ptr->le_register_iterations->text());
+    settings.setValue("register/set_manual", m_ui_ptr->rb_register_manual->isChecked());
+    settings.setValue("register/set_auto", m_ui_ptr->rb_register_auto->isChecked());
     settings.setValue("register/set_rg", m_ui_ptr->le_register_rg->text());
     settings.setValue("register/set_tgx", m_ui_ptr->le_register_tgx->text());
     settings.setValue("register/set_tgy", m_ui_ptr->le_register_tgy->text());
     settings.setValue("register/set_tgz", m_ui_ptr->le_register_tgz->text());
-    settings.setValue("register/set_filter_x", m_ui_ptr->le_register_filter_x->text());
-    settings.setValue("register/set_filter_y", m_ui_ptr->le_register_filter_y->text());
-    settings.setValue("register/set_filter_z", m_ui_ptr->le_register_filter_z->text());
+    settings.setValue("register/set_sm", m_ui_ptr->le_register_sm->text());
+    settings.setValue("register/set_sx", m_ui_ptr->le_register_sx->text());
+    settings.setValue("register/set_sy", m_ui_ptr->le_register_sy->text());
+    settings.setValue("register/set_sz", m_ui_ptr->le_register_sz->text());
 }
 
 void Ponnector_Settings::on_pushButton_clicked()

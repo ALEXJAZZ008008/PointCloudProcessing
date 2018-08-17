@@ -566,6 +566,87 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_centroid_two_b(255);
     }
 
+    if(settings.contains("register/set_sr"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char sr = static_cast<unsigned char>(settings.value("register/set_sr").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_r(sr);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_r(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_signal_r(0);
+    }
+
+    if(settings.contains("register/set_sg"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char sg = static_cast<unsigned char>(settings.value("register/set_sg").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_g(sg);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_g(255);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_signal_g(255);
+    }
+
+    if(settings.contains("register/set_sb"))
+    {
+        bool *ok = new bool(false);
+
+        unsigned char sb = static_cast<unsigned char>(settings.value("register/set_sb").toString().toUShort(ok));
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_b(sb);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_b(0);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_signal_b(0);
+    }
+
     if(settings.contains("register/set_tr_txt"))
     {
         m_point_cloud_processing_backend_ptr->set_translation_text(settings.value("register/set_tr_txt").toBool());
@@ -827,6 +908,87 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_smoothing_deviation(1.0);
     }
 
+    if(settings.contains("register/set_filter_x"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/set_filter_x").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_x(filter);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
+    }
+
+    if(settings.contains("register/set_filter_y"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/set_filter_y").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_y(filter);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
+    }
+
+    if(settings.contains("register/set_filter_z"))
+    {
+        bool *ok = new bool(false);
+
+        float filter = settings.value("register/set_filter_z").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_z(filter);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
+    }
+
     if(settings.contains("register/set_te"))
     {
         bool *ok = new bool(false);
@@ -879,6 +1041,24 @@ int Ponnector::update_settings()
     else
     {
         m_point_cloud_processing_backend_ptr->set_iterations(100);
+    }
+
+    if(settings.contains("register/set_manual"))
+    {
+        m_point_cloud_processing_backend_ptr->set_manual(settings.value("register/set_manual").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_manual(true);
+    }
+
+    if(settings.contains("register/set_auto"))
+    {
+        m_point_cloud_processing_backend_ptr->set_auto(settings.value("register/set_auto").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_auto(false);
     }
 
     if(settings.contains("register/set_rg"))
@@ -989,19 +1169,19 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_translation_guess_z(0.0f);
     }
 
-    if(settings.contains("register/set_filter_x"))
+    if(settings.contains("register/set_sm"))
     {
         bool *ok = new bool(false);
 
-        float filter = settings.value("register/set_filter_x").toString().toFloat(ok);
+        float sm = settings.value("register/set_sm").toString().toFloat(ok);
 
         if(*ok)
         {
-            m_point_cloud_processing_backend_ptr->set_filter_x(filter);
+            m_point_cloud_processing_backend_ptr->set_signal_magnitude(sm);
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
+            m_point_cloud_processing_backend_ptr->set_signal_magnitude(1.0f);
         }
 
         if(ok != nullptr)
@@ -1013,22 +1193,22 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_filter_x(10.0f);
+        m_point_cloud_processing_backend_ptr->set_signal_magnitude(1.0f);
     }
 
-    if(settings.contains("register/set_filter_y"))
+    if(settings.contains("register/set_sx"))
     {
         bool *ok = new bool(false);
 
-        float filter = settings.value("register/set_filter_y").toString().toFloat(ok);
+        float sx = settings.value("register/set_sx").toString().toFloat(ok);
 
         if(*ok)
         {
-            m_point_cloud_processing_backend_ptr->set_filter_y(filter);
+            m_point_cloud_processing_backend_ptr->set_signal_x(sx);
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
+            m_point_cloud_processing_backend_ptr->set_signal_x(0.0f);
         }
 
         if(ok != nullptr)
@@ -1040,22 +1220,22 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_filter_y(10.0f);
+        m_point_cloud_processing_backend_ptr->set_signal_x(0.0f);
     }
 
-    if(settings.contains("register/set_filter_z"))
+    if(settings.contains("register/set_sy"))
     {
         bool *ok = new bool(false);
 
-        float filter = settings.value("register/set_filter_z").toString().toFloat(ok);
+        float sy = settings.value("register/set_sy").toString().toFloat(ok);
 
         if(*ok)
         {
-            m_point_cloud_processing_backend_ptr->set_filter_z(filter);
+            m_point_cloud_processing_backend_ptr->set_signal_y(sy);
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
+            m_point_cloud_processing_backend_ptr->set_signal_y(0.0f);
         }
 
         if(ok != nullptr)
@@ -1067,7 +1247,34 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_filter_z(10.0f);
+        m_point_cloud_processing_backend_ptr->set_signal_y(0.0f);
+    }
+
+    if(settings.contains("register/set_sz"))
+    {
+        bool *ok = new bool(false);
+
+        float sz = settings.value("register/set_sz").toString().toFloat(ok);
+
+        if(*ok)
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_z(sz);
+        }
+        else
+        {
+            m_point_cloud_processing_backend_ptr->set_signal_z(0.0f);
+        }
+
+        if(ok != nullptr)
+        {
+            delete ok;
+
+            ok = nullptr;
+        }
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_signal_z(0.0f);
     }
 
     return 1;
@@ -1181,6 +1388,8 @@ void Ponnector::on__psh_pcl_clicked()
 
 void Ponnector::on__psh_register_clicked()
 {
+    m_logger_ptr->show();
+
     if(m_pcl_loaded)
     {
         m_point_cloud_processing_backend_ptr->registration();

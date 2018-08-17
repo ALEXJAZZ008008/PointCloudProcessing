@@ -322,6 +322,54 @@ public:
         return 1;
     }
 
+    inline float get_signal_magnitude()
+    {
+        return m_signal_magnitude;
+    }
+
+    inline int set_signal_magnitude(float signal_magnitude)
+    {
+        m_signal_magnitude = signal_magnitude;
+
+        return 1;
+    }
+
+    inline float get_signal_x()
+    {
+        return m_signal_x;
+    }
+
+    inline int set_signal_x(float signal_x)
+    {
+        m_signal_x = signal_x;
+
+        return 1;
+    }
+
+    inline float get_signal_y()
+    {
+        return m_signal_y;
+    }
+
+    inline int set_signal_y(float signal_y)
+    {
+        m_signal_y = signal_y;
+
+        return 1;
+    }
+
+    inline float get_signal_z()
+    {
+        return m_signal_z;
+    }
+
+    inline int set_signal_z(float signal_z)
+    {
+        m_signal_z = signal_z;
+
+        return 1;
+    }
+
     inline int get_cloud_point_size()
     {
         return m_cloud_point_size;
@@ -526,6 +574,42 @@ public:
         return 1;
     }
 
+    inline unsigned char get_signal_r()
+    {
+        return m_signal_r;
+    }
+
+    inline int set_signal_r(unsigned char signal_r)
+    {
+        m_signal_r = signal_r;
+
+        return 1;
+    }
+
+    inline unsigned char get_signal_g()
+    {
+        return m_signal_g;
+    }
+
+    inline int set_signal_g(unsigned char signal_g)
+    {
+        m_signal_g = signal_g;
+
+        return 1;
+    }
+
+    inline unsigned char get_signal_b()
+    {
+        return m_signal_b;
+    }
+
+    inline int set_signal_b(unsigned char signal_b)
+    {
+        m_signal_b = signal_b;
+
+        return 1;
+    }
+
     inline bool get_point_cloud_text()
     {
         return m_point_cloud_text;
@@ -658,6 +742,30 @@ public:
         return 1;
     }
 
+    inline bool get_manual()
+    {
+        return m_manual;
+    }
+
+    inline int set_manual(bool manual)
+    {
+        m_manual = manual;
+
+        return 1;
+    }
+
+    inline bool get_auto()
+    {
+        return m_auto;
+    }
+
+    inline int set_auto(bool _auto)
+    {
+        m_auto = _auto;
+
+        return 1;
+    }
+
     //! Main, currently unused
     int kinect_input_output_main();
 
@@ -727,6 +835,14 @@ private:
 
     float m_translation_guess_z;
 
+    float m_signal_magnitude;
+
+    float m_signal_x;
+
+    float m_signal_y;
+
+    float m_signal_z;
+
     int m_cloud_point_size;
 
     int m_centroid_point_size;
@@ -761,6 +877,12 @@ private:
 
     unsigned char m_centroid_two_b;
 
+    unsigned char m_signal_r;
+
+    unsigned char m_signal_g;
+
+    unsigned char m_signal_b;
+
     bool m_point_cloud_text;
 
     bool m_point_cloud_binary;
@@ -783,6 +905,12 @@ private:
 
     bool m_eigen;
 
+    bool m_manual;
+
+    bool m_auto;
+
+    Eigen::Matrix<float, 4, 4> initial_transformation_init();
+
     string output_header_init();
 
     int remove_nan(PointCloud<PointXYZ>::Ptr &);
@@ -791,9 +919,9 @@ private:
 
     PointCloud<PointXYZ>::Ptr to_point_cloud_pointxyz_ptr(Eigen::Vector4f &);
 
-    int ricp(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
+    int ricp(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
 
-    int rndt(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
+    int rndt(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
 
     int visualise(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, Eigen::Matrix<float, 4, 4> &);
 
