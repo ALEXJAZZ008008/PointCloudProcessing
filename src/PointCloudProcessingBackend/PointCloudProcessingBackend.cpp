@@ -656,29 +656,23 @@ int PointCloudProcessingBackend::calculate_point_cloud()
 
                     float z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
 
-                    if(fabs(sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))) < m_threshold)
+                    if(distance(0.0f, 0.0f, 0.0f, x, y, z) < m_threshold)
                     {
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = x;
-
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = y;
-
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = z;
                     }
                     else
                     {
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = numeric_limits<float>::quiet_NaN();
-
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = numeric_limits<float>::quiet_NaN();
-
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = numeric_limits<float>::quiet_NaN();
                     }
                 }
                 else
                 {
                     m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = numeric_limits<float>::quiet_NaN();
-
                     m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = numeric_limits<float>::quiet_NaN();
-
                     m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = numeric_limits<float>::quiet_NaN();
                 }
             }
@@ -751,6 +745,8 @@ int PointCloudProcessingBackend::load_pcd(vector<string> &input)
 
 int PointCloudProcessingBackend::registration()
 {
+    vector<Eigen::Vector4f> signal_positions;
+
     unsigned long i = 0;
     unsigned long j = 0;
 
@@ -796,9 +792,12 @@ int PointCloudProcessingBackend::registration()
 
         compute3DCentroid(*target, target_centroid);
 
-        double movement = fabs(sqrt(pow((target_centroid.coeff(0) - source_centroid.coeff(0)), 2) +
-                                    pow((target_centroid.coeff(1) - source_centroid.coeff(0)), 2) +
-                                    pow((target_centroid.coeff(2) - source_centroid.coeff(0)), 2)));
+        double movement = static_cast<double>(distance(source_centroid.coeff(0),
+                                                       source_centroid.coeff(1),
+                                                       source_centroid.coeff(2),
+                                                       target_centroid.coeff(0),
+                                                       target_centroid.coeff(1),
+                                                       target_centroid.coeff(2)));
 
         m_log += "-> movement " + to_string(i) + " " + to_string(j) + ": " + to_string(movement) + "\n";
 
@@ -818,6 +817,25 @@ int PointCloudProcessingBackend::registration()
                 to_string(target_centroid.coeff(1)) + "," +
                 to_string(target_centroid.coeff(2)) + "," +
                 to_string(target_centroid.coeff(3));
+
+        PointCloud<PointXYZ>::Ptr signal(new PointCloud<PointXYZ>(*target));
+
+        m_log += "-> pcl signal " + to_string(signal->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        calculate_signal(signal, target_centroid);
+
+        m_log += "-> pcl signal " + to_string(signal->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+        Eigen::Vector4f signal_centroid;
+
+        compute3DCentroid(*signal, signal_centroid);
+
+        string signal_centroid_position = to_string(signal_centroid.coeff(0)) + "," +
+                to_string(signal_centroid.coeff(1)) + "," +
+                to_string(signal_centroid.coeff(2)) + "," +
+                to_string(signal_centroid.coeff(3));
+
+        signal_positions.push_back(signal_centroid);
 
         Eigen::Matrix<float, 4, 4> final_transformation;
 
@@ -839,7 +857,13 @@ int PointCloudProcessingBackend::registration()
 
         if(m_visualisation)
         {
-            visualise(source, to_point_cloud_pointxyz_ptr(source_centroid), target, to_point_cloud_pointxyz_ptr(target_centroid), final_transformation);
+            visualise(source,
+                      to_point_cloud_pointxyz_ptr(source_centroid),
+                      target,
+                      to_point_cloud_pointxyz_ptr(target_centroid),
+                      signal,
+                      to_point_cloud_pointxyz_ptr(signal_centroid),
+                      final_transformation);
         }
 
         string transform = to_string(final_transformation.coeff(0, 0)) + "," +
@@ -859,15 +883,19 @@ int PointCloudProcessingBackend::registration()
                 to_string(final_transformation.coeff(3, 2)) + "," +
                 to_string(final_transformation.coeff(3, 3));
 
-        output_header += m_objects[i].get()->get_data_path() + "," + m_objects[j].get()->get_data_path() + "\n";
+        output_header += "File Paths " + to_string(j) + ": " + m_objects[i].get()->get_data_path() + "," + m_objects[j].get()->get_data_path() + "\n";
 
-        output += source_centroid_position + "\n" + target_centroid_position + "\n" + transform + "\n";
+        output += "Source Centroid " + to_string(j) + ": " + source_centroid_position + "\n" +
+                "Target Centroid " + to_string(j) + ": " + target_centroid_position + "\n" +
+                "Signal Centroid " + to_string(j) + ": " + signal_centroid_position + "\n" +
+                "transform " + to_string(j) + ": " + transform + "\n";
 
         m_log += "-> registration " + to_string(i) + " " + to_string(j) + ":" + "\n" +
-                "Has converged: " + to_string(*has_converged) + "\n" +
+                "Has Converged: " + to_string(*has_converged) + "\n" +
                 "Score: " + to_string(*fitness_score) + "\n" +
-                "Source centroid: " + source_centroid_position + "\n" +
-                "Target centroid: " + target_centroid_position + "\n" +
+                "Source Centroid: " + source_centroid_position + "\n" +
+                "Target Centroid: " + target_centroid_position + "\n" +
+                "Signal Centroid" + signal_centroid_position + "\n" +
                 "Transformation: " + transform + "\n";
 
         if(m_iterative)
@@ -883,9 +911,24 @@ int PointCloudProcessingBackend::registration()
         }
     }
 
+    calculate_signal_difference(output, signal_positions);
+
     write_translations_to_file(output_header + output);
 
     return 1;
+}
+
+float PointCloudProcessingBackend::distance(float x1, float y1, float z1, float x2, float y2, float z2)
+{
+    float x = x2 - x1;
+    float y = y2 - y1;
+    float z = z2 - z1;
+
+    x *= x;
+    y *= y;
+    z *= z;
+
+    return sqrt(x + y + z);
 }
 
 Eigen::Matrix<float, 4, 4> PointCloudProcessingBackend::initial_transformation_init()
@@ -999,6 +1042,27 @@ int PointCloudProcessingBackend::filter(PointCloud<PointXYZ>::Ptr &point_cloud)
     return 1;
 }
 
+int PointCloudProcessingBackend::calculate_signal(PointCloud<PointXYZ>::Ptr &point_cloud, Eigen::Vector4f &centroid)
+{
+    float x = centroid.coeff(0) + m_signal_x;
+    float y = centroid.coeff(1) + m_signal_y;
+    float z = centroid.coeff(2) + m_signal_z;
+
+    for(unsigned long i = 0; i < point_cloud->size(); ++i)
+    {
+        if(distance(x, y, z, point_cloud.get()->points[i].x, point_cloud.get()->points[i].y, point_cloud.get()->points[i].z) > m_signal_magnitude)
+        {
+            point_cloud.get()->points[i].x = numeric_limits<float>::quiet_NaN();
+            point_cloud.get()->points[i].y = numeric_limits<float>::quiet_NaN();
+            point_cloud.get()->points[i].y = numeric_limits<float>::quiet_NaN();
+        }
+    }
+
+    remove_nan(point_cloud);
+
+    return 1;
+}
+
 PointCloud<PointXYZ>::Ptr PointCloudProcessingBackend::to_point_cloud_pointxyz_ptr(Eigen::Vector4f &centroid)
 {
     PointCloud<PointXYZ>::Ptr centroid_ptr(new PointCloud<PointXYZ>());
@@ -1099,6 +1163,8 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
                                            PointCloud<PointXYZ>::Ptr source_centroid,
                                            PointCloud<PointXYZ>::Ptr &target,
                                            PointCloud<PointXYZ>::Ptr target_centroid,
+                                           PointCloud<PointXYZ>::Ptr &signal,
+                                           PointCloud<PointXYZ>::Ptr signal_centroid,
                                            Eigen::Matrix<float, 4, 4> &transformation)
 {
     transformPointCloud(*source, *source, transformation);
@@ -1127,12 +1193,38 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
     visualiser->addPointCloud<PointXYZ>(target_centroid, target_centroid_colour, "target centroid");
     visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_centroid_point_size, "target centroid");
 
+    if(signal->size() > 0)
+    {
+        PointCloudColorHandlerCustom<PointXYZ> signal_colour(signal, m_signal_r, m_signal_g, m_signal_b);
+
+        visualiser->addPointCloud<PointXYZ>(signal, signal_colour, "signal cloud");
+        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_cloud_point_size, "signal cloud");
+
+        PointCloudColorHandlerCustom<PointXYZ> signal_centroid_colour(signal_centroid, m_signal_r, m_signal_g, m_signal_b);
+
+        visualiser->addPointCloud<PointXYZ>(signal_centroid, signal_centroid_colour, "signal centroid");
+        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_centroid_point_size, "signal centroid");
+    }
+
     visualiser->addCoordinateSystem(1.0, "global");
     visualiser->initCameraParameters();
 
     visualiser->spin();
 
     visualiser->close();
+
+    return 1;
+}
+
+int PointCloudProcessingBackend::calculate_signal_difference(string & output, vector<Eigen::Vector4f> &signal)
+{
+    for(unsigned long i = 0; i < signal.size() - 1; ++i)
+    {
+        output += "Signal " + to_string(i) + ": " +  to_string(signal[i + 1].coeff(0) - signal[i].coeff(0)) + "," +
+                to_string(signal[i + 1].coeff(1) - signal[i].coeff(1)) + "," +
+                to_string(signal[i + 1].coeff(2) - signal[i].coeff(2)) + "," +
+                to_string(signal[i + 1].coeff(3) - signal[i].coeff(3)) + "\n";
+    }
 
     return 1;
 }

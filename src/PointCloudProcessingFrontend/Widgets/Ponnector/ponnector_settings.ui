@@ -518,7 +518,7 @@
           <item>
            <widget class="QLabel" name="label_15">
             <property name="text">
-             <string>Point Size:</string>
+             <string>CentroidPoint Size:</string>
             </property>
            </widget>
           </item>

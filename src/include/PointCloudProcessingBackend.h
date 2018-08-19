@@ -909,6 +909,8 @@ private:
 
     bool m_auto;
 
+    float distance(float, float, float, float, float, float);
+
     Eigen::Matrix<float, 4, 4> initial_transformation_init();
 
     string output_header_init();
@@ -917,13 +919,23 @@ private:
 
     int filter(PointCloud<PointXYZ>::Ptr &);
 
+    int calculate_signal(PointCloud<PointXYZ>::Ptr &, Eigen::Vector4f &);
+
     PointCloud<PointXYZ>::Ptr to_point_cloud_pointxyz_ptr(Eigen::Vector4f &);
 
     int ricp(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
 
     int rndt(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
 
-    int visualise(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr, Eigen::Matrix<float, 4, 4> &);
+    int visualise(PointCloud<PointXYZ>::Ptr &,
+                  PointCloud<PointXYZ>::Ptr,
+                  PointCloud<PointXYZ>::Ptr &,
+                  PointCloud<PointXYZ>::Ptr,
+                  PointCloud<PointXYZ>::Ptr &,
+                  PointCloud<PointXYZ>::Ptr,
+                  Eigen::Matrix<float, 4, 4> &);
+
+    int calculate_signal_difference(string &, vector<Eigen::Vector4f> &);
 
     int write_translations_to_file(string);
 
