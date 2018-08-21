@@ -812,7 +812,7 @@ int Ponnector::update_settings()
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_distance_movement(1000.0);
+            m_point_cloud_processing_backend_ptr->set_distance_movement(1.0);
         }
 
         if(ok != nullptr)
@@ -824,7 +824,7 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_distance_movement(1000.0);
+        m_point_cloud_processing_backend_ptr->set_distance_movement(1.0);
     }
 
     if(settings.contains("register/set_em"))
@@ -839,7 +839,7 @@ int Ponnector::update_settings()
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_eigen_movement(1000.0);
+            m_point_cloud_processing_backend_ptr->set_eigen_movement(1.0);
         }
 
         if(ok != nullptr)
@@ -851,7 +851,7 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_eigen_movement(1000.0);
+        m_point_cloud_processing_backend_ptr->set_eigen_movement(1.0);
     }
 
     if(settings.contains("register/set_ss"))
@@ -1073,7 +1073,7 @@ int Ponnector::update_settings()
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_rotation_guess(100);
+            m_point_cloud_processing_backend_ptr->set_rotation_guess(0.0f);
         }
 
         if(ok != nullptr)
@@ -1085,7 +1085,7 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_rotation_guess(0.6931f);
+        m_point_cloud_processing_backend_ptr->set_rotation_guess(0.0f);
     }
 
     if(settings.contains("register/set_tgx"))
@@ -1100,7 +1100,7 @@ int Ponnector::update_settings()
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_translation_guess_x(1.79387f);
+            m_point_cloud_processing_backend_ptr->set_translation_guess_x(0.0f);
         }
 
         if(ok != nullptr)
@@ -1112,7 +1112,7 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_translation_guess_x(1.79387f);
+        m_point_cloud_processing_backend_ptr->set_translation_guess_x(0.0f);
     }
 
     if(settings.contains("register/set_tgy"))
@@ -1127,7 +1127,7 @@ int Ponnector::update_settings()
         }
         else
         {
-            m_point_cloud_processing_backend_ptr->set_translation_guess_y(0.720047f);
+            m_point_cloud_processing_backend_ptr->set_translation_guess_y(0.0f);
         }
 
         if(ok != nullptr)
@@ -1139,7 +1139,7 @@ int Ponnector::update_settings()
     }
     else
     {
-        m_point_cloud_processing_backend_ptr->set_translation_guess_y(0.720047f);
+        m_point_cloud_processing_backend_ptr->set_translation_guess_y(0.0f);
     }
 
     if(settings.contains("register/set_tgz"))

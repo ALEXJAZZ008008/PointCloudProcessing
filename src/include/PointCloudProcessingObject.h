@@ -123,13 +123,13 @@ public:
     }
 
     //! Gets the relative timestamp value
-    inline unsigned int get_relative_timestamp()
+    inline unsigned long get_relative_timestamp()
     {
         return m_relative_timestamp;
     }
 
     //! Sets the relative timestamp value
-    inline int set_relative_timestamp(unsigned int relative_timestamp)
+    inline int set_relative_timestamp(unsigned long relative_timestamp)
     {
         m_relative_timestamp = relative_timestamp;
 
@@ -137,13 +137,13 @@ public:
     }
 
     //! Gets the data size value
-    inline unsigned int get_data_size()
+    inline unsigned char get_data_size()
     {
         return m_data_size;
     }
 
     //! Sets the data size value
-    inline int set_data_size(unsigned int data_size)
+    inline int set_data_size(unsigned char data_size)
     {
         m_data_size = data_size;
 
@@ -177,10 +177,10 @@ private:
     milliseconds::rep m_real_timestamp;
 
     //! Holds the time on the camera when the header was written
-    unsigned int m_relative_timestamp;
+    unsigned long m_relative_timestamp;
 
     //! Holds the size in bits of the data
-    unsigned int m_data_size;
+    unsigned char m_data_size;
 
     //! Called by destructor,
     //! other methods may call to destruct the class

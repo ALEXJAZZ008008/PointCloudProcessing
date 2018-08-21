@@ -423,7 +423,7 @@ int PointCloudProcessingBackend::load_headers(vector<string> &input)
 
             case header_enum::kinect_timestamp:
 
-                m_objects[i].get()->set_relative_timestamp(static_cast<unsigned int>(stoi(subline[1])));
+                m_objects[i].get()->set_relative_timestamp(static_cast<unsigned int>(stol(subline[1])));
 
                 break;
 
@@ -801,7 +801,7 @@ int PointCloudProcessingBackend::registration()
 
         m_log += "-> movement " + to_string(i) + " " + to_string(j) + ": " + to_string(movement) + "\n";
 
-        if(movement > m_distance_movement)
+        if(movement < m_distance_movement)
         {
             m_log += "-> registration " + to_string(i) + " " + to_string(j) + ": " + "Skipped" + "\n";
 
@@ -888,7 +888,7 @@ int PointCloudProcessingBackend::registration()
         output += "Source Centroid " + to_string(j) + ": " + source_centroid_position + "\n" +
                 "Target Centroid " + to_string(j) + ": " + target_centroid_position + "\n" +
                 "Signal Centroid " + to_string(j) + ": " + signal_centroid_position + "\n" +
-                "transform " + to_string(j) + ": " + transform + "\n";
+                "Transform " + to_string(j) + ": " + transform + "\n";
 
         m_log += "-> registration " + to_string(i) + " " + to_string(j) + ":" + "\n" +
                 "Has Converged: " + to_string(*has_converged) + "\n" +
@@ -911,7 +911,10 @@ int PointCloudProcessingBackend::registration()
         }
     }
 
-    calculate_signal_difference(output, signal_positions);
+    if(signal_positions.size() > 1)
+    {
+        calculate_signal_difference(output, signal_positions);
+    }
 
     write_translations_to_file(output_header + output);
 

@@ -313,7 +313,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     }
     else
     {
-        m_ui_ptr->le_register_dm->setText("1000.0");
+        m_ui_ptr->le_register_dm->setText("1.0");
     }
 
     if(settings.contains("register/set_em"))
@@ -322,7 +322,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     }
     else
     {
-        m_ui_ptr->le_register_em->setText("1000.0");
+        m_ui_ptr->le_register_em->setText("1.0");
     }
 
     if(settings.contains("register/set_ss"))
@@ -412,7 +412,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     }
     else
     {
-        m_ui_ptr->le_register_rg->setText("0.6931");
+        m_ui_ptr->le_register_rg->setText("0.0");
     }
 
     if(settings.contains("register/set_tgx"))
@@ -421,7 +421,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     }
     else
     {
-        m_ui_ptr->le_register_tgx->setText("1.79387");
+        m_ui_ptr->le_register_tgx->setText("0.0");
     }
 
     if(settings.contains("register/set_tgy"))
@@ -430,7 +430,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     }
     else
     {
-        m_ui_ptr->le_register_tgy->setText("0.720047");
+        m_ui_ptr->le_register_tgy->setText("0.0");
     }
 
     if(settings.contains("register/set_tgz"))
