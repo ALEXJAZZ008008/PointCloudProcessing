@@ -2,7 +2,7 @@ PROJECT(PointCloudProcessingBackend VERSION 0.0 LANGUAGES CXX)
 
 add_library(PointCloudProcessingBackend ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(PointCloudProcessingBackend) 
+target_link_libraries(${PROJECT_NAME} PointCloudProcessingObject) 
 
 target_sources(PointCloudProcessingBackend 
 	PRIVATE

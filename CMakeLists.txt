@@ -155,9 +155,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(src/include)
 
-if(PCL_FOUND)
+#if(PCL_FOUND)
 
     include(src/CMakeLists.txt)
 
-endif()
+#endif()
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL "A flag showing that CMake has configured at least once.")
