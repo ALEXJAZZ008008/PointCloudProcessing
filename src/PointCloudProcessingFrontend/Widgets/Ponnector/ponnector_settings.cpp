@@ -477,6 +477,24 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     {
         m_ui_ptr->le_register_sz->setText("0.0");
     }
+
+    if(settings.contains("register/set_naive"))
+    {
+        m_ui_ptr->rb_register_naive->setChecked(settings.value("register/set_naive").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_naive->setChecked(true);
+    }
+
+    if(settings.contains("register/set_complex"))
+    {
+        m_ui_ptr->rb_register_complex->setChecked(settings.value("register/set_complex").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_complex->setChecked(false);
+    }
 }
 
 Ponnector_Settings::~Ponnector_Settings()
@@ -600,6 +618,9 @@ void Ponnector_Settings::on_buttonBox_accepted()
     settings.setValue("register/set_sx", m_ui_ptr->le_register_sx->text());
     settings.setValue("register/set_sy", m_ui_ptr->le_register_sy->text());
     settings.setValue("register/set_sz", m_ui_ptr->le_register_sz->text());
+    settings.setValue("register/set_naive", m_ui_ptr->rb_register_naive->isChecked());
+    settings.setValue("register/set_complex", m_ui_ptr->rb_register_complex->isChecked());
+
 }
 
 void Ponnector_Settings::on_pushButton_clicked()

@@ -766,6 +766,30 @@ public:
         return 1;
     }
 
+    inline bool get_naive()
+    {
+        return m_naive;
+    }
+
+    inline int set_naive(bool naive)
+    {
+        m_naive = naive;
+
+        return 1;
+    }
+
+    inline bool get_complex()
+    {
+        return m_complex;
+    }
+
+    inline int set_complex(bool complex)
+    {
+        m_complex = complex;
+
+        return 1;
+    }
+
     //! Main, currently unused
     int kinect_input_output_main();
 
@@ -909,6 +933,10 @@ private:
 
     bool m_auto;
 
+    bool m_naive;
+
+    bool m_complex;
+
     float distance(float, float, float, float, float, float);
 
     Eigen::Matrix<float, 4, 4> initial_transformation_init();
@@ -919,13 +947,15 @@ private:
 
     int filter(PointCloud<PointXYZ>::Ptr &);
 
-    int calculate_signal(PointCloud<PointXYZ>::Ptr &, Eigen::Vector4f &);
-
     PointCloud<PointXYZ>::Ptr to_point_cloud_pointxyz_ptr(Eigen::Vector4f &);
 
     int ricp(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
 
     int rndt(PointCloud<PointXYZ>::Ptr &, PointCloud<PointXYZ>::Ptr &, Eigen::Matrix<float, 4, 4> &, Eigen::Matrix<float, 4, 4> &, shared_ptr<bool> &, shared_ptr<double> &);
+
+    int calculate_signal_from_centroid(PointCloud<PointXYZ>::Ptr &, Eigen::Vector4f &);
+
+    string calculate_vector_difference(Eigen::Vector4f &, Eigen::Vector4f &);
 
     int visualise(PointCloud<PointXYZ>::Ptr &,
                   PointCloud<PointXYZ>::Ptr,
@@ -934,8 +964,6 @@ private:
                   PointCloud<PointXYZ>::Ptr &,
                   PointCloud<PointXYZ>::Ptr,
                   Eigen::Matrix<float, 4, 4> &);
-
-    int calculate_signal_difference(string &, vector<Eigen::Vector4f> &);
 
     int write_translations_to_file(string);
 

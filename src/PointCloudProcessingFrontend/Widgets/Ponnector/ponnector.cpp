@@ -1277,6 +1277,24 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_signal_z(0.0f);
     }
 
+    if(settings.contains("register/set_naive"))
+    {
+        m_point_cloud_processing_backend_ptr->set_naive(settings.value("register/set_naive").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_naive(true);
+    }
+
+    if(settings.contains("register/set_complex"))
+    {
+        m_point_cloud_processing_backend_ptr->set_complex(settings.value("register/set_complex").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_complex(false);
+    }
+
     return 1;
 }
 
