@@ -46,6 +46,7 @@ PointCloudProcessingBackend::PointCloudProcessingBackend():
     m_signal_b(0),
     m_point_cloud_text(false),
     m_point_cloud_binary(false),
+    m_test(false),
     m_visualisation(false),
     m_translation_text(false),
     m_translation_binary(false),
@@ -125,6 +126,7 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_signal_b(point_cloud_processing_backend_output_ref.get_signal_b()),
     m_point_cloud_text(point_cloud_processing_backend_output_ref.get_point_cloud_text()),
     m_point_cloud_binary(point_cloud_processing_backend_output_ref.get_point_cloud_binary()),
+    m_test(point_cloud_processing_backend_output_ref.get_test()),
     m_visualisation(point_cloud_processing_backend_output_ref.get_visualisation()),
     m_translation_text(point_cloud_processing_backend_output_ref.get_translation_text()),
     m_translation_binary(point_cloud_processing_backend_output_ref.get_tranlsation_binary()),
@@ -188,6 +190,7 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_signal_b = point_cloud_processing_backend_output_ref.get_signal_b();
     m_point_cloud_text = point_cloud_processing_backend_output_ref.get_point_cloud_text();
     m_point_cloud_binary = point_cloud_processing_backend_output_ref.get_point_cloud_binary();
+    m_test = point_cloud_processing_backend_output_ref.get_test();
     m_visualisation = point_cloud_processing_backend_output_ref.get_visualisation();
     m_translation_text = point_cloud_processing_backend_output_ref.get_translation_text();
     m_translation_binary = point_cloud_processing_backend_output_ref.get_tranlsation_binary();
@@ -250,6 +253,7 @@ PointCloudProcessingBackend::PointCloudProcessingBackend(PointCloudProcessingBac
     m_signal_b(point_cloud_processing_backend_output_ref_ref.get_signal_b()),
     m_point_cloud_text(point_cloud_processing_backend_output_ref_ref.get_point_cloud_text()),
     m_point_cloud_binary(point_cloud_processing_backend_output_ref_ref.get_point_cloud_binary()),
+    m_test(point_cloud_processing_backend_output_ref_ref.get_test()),
     m_visualisation(point_cloud_processing_backend_output_ref_ref.get_visualisation()),
     m_translation_text(point_cloud_processing_backend_output_ref_ref.get_translation_text()),
     m_translation_binary(point_cloud_processing_backend_output_ref_ref.get_tranlsation_binary()),
@@ -313,6 +317,7 @@ PointCloudProcessingBackend & PointCloudProcessingBackend::operator = (PointClou
     m_signal_b = point_cloud_processing_backend_output_ref_ref.get_signal_b();
     m_point_cloud_text = point_cloud_processing_backend_output_ref_ref.get_point_cloud_text();
     m_point_cloud_binary = point_cloud_processing_backend_output_ref_ref.get_point_cloud_binary();
+    m_test = point_cloud_processing_backend_output_ref_ref.get_test();
     m_visualisation = point_cloud_processing_backend_output_ref_ref.get_visualisation();
     m_translation_text = point_cloud_processing_backend_output_ref_ref.get_translation_text();
     m_translation_binary = point_cloud_processing_backend_output_ref_ref.get_tranlsation_binary();
@@ -647,18 +652,18 @@ int PointCloudProcessingBackend::load_data()
 
 int PointCloudProcessingBackend::calculate_point_cloud()
 {
-    for(unsigned long i = 0; i < m_objects.size(); ++i)
+    if(m_test)
     {
-        m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
-        m_objects[i].get()->get_point_cloud().height = m_objects[i]->get_resolution()[1];
-        m_objects[i].get()->get_point_cloud().is_dense = false;
-        m_objects[i].get()->get_point_cloud().points.resize(m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
-
-        for(unsigned int j = 0; j < m_objects[i]->get_resolution()[1]; ++j)
+        for(unsigned long i = 0; i < m_objects.size(); ++i)
         {
-            for(unsigned int k = 0; k < m_objects[i]->get_resolution()[0]; ++k)
+            m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
+            m_objects[i].get()->get_point_cloud().height = m_objects[i]->get_resolution()[1];
+            m_objects[i].get()->get_point_cloud().is_dense = false;
+            m_objects[i].get()->get_point_cloud().points.resize(m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
+
+            for(unsigned int j = 0; j < m_objects[i]->get_resolution()[1]; ++j)
             {
-                if(m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] > 0.0f || m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] < 0.0f)
+                for(unsigned int k = 0; k < m_objects[i]->get_resolution()[0]; ++k)
                 {
                     float x = (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - m_offset) * m_focal_length;
 
@@ -666,11 +671,48 @@ int PointCloudProcessingBackend::calculate_point_cloud()
 
                     float z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
 
-                    if(distance(0.0f, 0.0f, 0.0f, x, y, z) < static_cast<float>(m_threshold))
+                    m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = x;
+                    m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = y;
+                    m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = z;
+                }
+            }
+
+            m_log += "-> pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+        }
+    }
+    else
+    {
+        for(unsigned long i = 0; i < m_objects.size(); ++i)
+        {
+            m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
+            m_objects[i].get()->get_point_cloud().height = m_objects[i]->get_resolution()[1];
+            m_objects[i].get()->get_point_cloud().is_dense = false;
+            m_objects[i].get()->get_point_cloud().points.resize(m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
+
+            for(unsigned int j = 0; j < m_objects[i]->get_resolution()[1]; ++j)
+            {
+                for(unsigned int k = 0; k < m_objects[i]->get_resolution()[0]; ++k)
+                {
+                    if(m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] > 0.0f || m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] < 0.0f)
                     {
-                        m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = x;
-                        m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = y;
-                        m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = z;
+                        float x = (k - (m_objects[i]->get_resolution()[1] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - m_offset) * m_focal_length;
+
+                        float y = (j - (m_objects[i]->get_resolution()[0] / 2.0f)) * (m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k] - m_offset) * m_focal_length;
+
+                        float z = m_objects[i]->get_data()[(m_objects[i]->get_resolution()[0] * j) + k];
+
+                        if(distance(0.0f, 0.0f, 0.0f, x, y, z) < static_cast<float>(m_threshold))
+                        {
+                            m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = x;
+                            m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = y;
+                            m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = z;
+                        }
+                        else
+                        {
+                            m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = numeric_limits<float>::quiet_NaN();
+                            m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = numeric_limits<float>::quiet_NaN();
+                            m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = numeric_limits<float>::quiet_NaN();
+                        }
                     }
                     else
                     {
@@ -679,16 +721,10 @@ int PointCloudProcessingBackend::calculate_point_cloud()
                         m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = numeric_limits<float>::quiet_NaN();
                     }
                 }
-                else
-                {
-                    m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].x = numeric_limits<float>::quiet_NaN();
-                    m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].y = numeric_limits<float>::quiet_NaN();
-                    m_objects[i].get()->get_point_cloud().points[(m_objects[i]->get_resolution()[0] * j) + k].z = numeric_limits<float>::quiet_NaN();
-                }
             }
-        }
 
-        m_log += "-> pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+            m_log += "-> pcl " + to_string(i) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+        }
     }
 
     return 1;
@@ -782,9 +818,12 @@ int PointCloudProcessingBackend::registration()
 
         m_log += "-> pcl " + to_string(i) + " " + to_string(source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
-        filter(source);
+        if(!m_test)
+        {
+            filter(source);
 
-        m_log += "-> pcl " + to_string(i) + " " + to_string(source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+            m_log += "-> pcl " + to_string(i) + " " + to_string(source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+        }
 
         PointCloud<PointXYZ>::Ptr target(new PointCloud<PointXYZ>(m_objects[j].get()->get_point_cloud()));
 
@@ -794,9 +833,12 @@ int PointCloudProcessingBackend::registration()
 
         m_log += "-> pcl " + to_string(j) + " " + to_string(target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
-        filter(target);
+        if(!m_test)
+        {
+            filter(target);
 
-        m_log += "-> pcl " + to_string(j) + " " + to_string(target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+            m_log += "-> pcl " + to_string(j) + " " + to_string(target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+        }
 
         Eigen::Vector4f source_centroid;
 
@@ -815,13 +857,16 @@ int PointCloudProcessingBackend::registration()
 
         m_log += "-> movement " + to_string(i) + " " + to_string(j) + ": " + to_string(movement) + "\n";
 
-        if(movement < m_distance_movement)
+        if(!m_test)
         {
-            m_log += "-> registration " + to_string(i) + " " + to_string(j) + ": " + "Skipped" + "\n";
+            if(movement < m_distance_movement)
+            {
+                m_log += "-> registration " + to_string(i) + " " + to_string(j) + ": " + "Skipped" + "\n";
 
-            output += "Registration " + to_string(i) + " " + to_string(j) + ": Skipped\n";
+                output += "Registration " + to_string(i) + " " + to_string(j) + ": Skipped\n";
 
-            continue;
+                continue;
+            }
         }
 
         Eigen::Matrix<float, 4, 4> final_transformation;
@@ -842,13 +887,16 @@ int PointCloudProcessingBackend::registration()
             }
         }
 
-        if(!has_converged)
+        if(!m_test)
         {
-            m_log += "-> registration " + to_string(i) + " " + to_string(j) + ": " + "Failed" + "\n";
+            if(!has_converged)
+            {
+                m_log += "-> registration " + to_string(i) + " " + to_string(j) + ": " + "Failed" + "\n";
 
-            output += "Registration " + to_string(i) + " " + to_string(j) + ": Failed\n";
+                output += "Registration " + to_string(i) + " " + to_string(j) + ": Failed\n";
 
-            continue;
+                continue;
+            }
         }
 
         string source_centroid_position = "Source Centroid " + to_string(i) + ": " + to_string(source_centroid.coeff(0)) + "," +
@@ -897,7 +945,10 @@ int PointCloudProcessingBackend::registration()
             previous_signal = signal_source_centroid;
         }
 
-        string centroid_difference = "Centroid Differences " + to_string(previous_centroid_index) + " " + to_string(j) + ": " + calculate_vector_difference(target_centroid, previous_centroid);
+        string centroid_difference = "Centroid Differences " +
+                to_string(previous_centroid_index) + " " +
+                to_string(j) + ": " +
+                calculate_vector_difference(target_centroid, previous_centroid);
 
         previous_centroid = target_centroid;
 
@@ -930,7 +981,10 @@ int PointCloudProcessingBackend::registration()
                 to_string(signal_target_centroid.coeff(2)) + "," +
                 to_string(signal_target_centroid.coeff(3));
 
-        string signal_difference = "Signal Differences " + to_string(previous_signal_index) + " " + to_string(j) + ": " + calculate_vector_difference(signal_target_centroid, previous_signal);
+        string signal_difference = "Signal Differences " +
+                to_string(previous_signal_index) + " " +
+                to_string(j) + ": " +
+                calculate_vector_difference(signal_target_centroid, previous_signal);
 
         previous_signal = signal_target_centroid;
 
@@ -1026,7 +1080,14 @@ Eigen::Matrix<float, 4, 4> PointCloudProcessingBackend::initial_transformation_i
 
 string PointCloudProcessingBackend::output_header_init()
 {
-    string output_header = "Registration Type: ";
+    string output_header = "";
+
+    if(m_test)
+    {
+        output_header += "TEST\n";
+    }
+
+    output_header += "Registration Type: ";
 
     if(m_icp)
     {

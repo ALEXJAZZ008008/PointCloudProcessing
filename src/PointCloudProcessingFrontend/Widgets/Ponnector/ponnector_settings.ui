@@ -76,12 +76,19 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-490</y>
+             <y>0</y>
              <width>624</width>
-             <height>894</height>
+             <height>922</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QCheckBox" name="chk_register_test">
+              <property name="text">
+               <string>Test</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QCheckBox" name="_chk_register_vis">
               <property name="text">
@@ -537,6 +544,32 @@
              </layout>
             </item>
             <item>
+             <widget class="QGroupBox" name="groupBox_8">
+              <property name="title">
+               <string>Tracking Type:</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QRadioButton" name="rb_register_naive">
+                 <property name="text">
+                  <string>Nai&amp;ve</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rb_register_complex">
+                 <property name="text">
+                  <string>Comple&amp;x</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_21">
               <item>
                <widget class="QLabel" name="label_23">
@@ -685,32 +718,6 @@
                </widget>
               </item>
              </layout>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_8">
-              <property name="title">
-               <string>Tracking Type:</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
-                <widget class="QRadioButton" name="rb_register_naive">
-                 <property name="text">
-                  <string>Nai&amp;ve</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="rb_register_complex">
-                 <property name="text">
-                  <string>Comple&amp;x</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
             </item>
            </layout>
           </widget>

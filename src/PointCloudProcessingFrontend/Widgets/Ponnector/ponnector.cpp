@@ -179,6 +179,15 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_point_cloud_binary(false);
     }
 
+    if(settings.contains("register/set_test"))
+    {
+        m_point_cloud_processing_backend_ptr->set_test(settings.value("register/set_test").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_test(false);
+    }
+
     if(settings.contains("register/set_vis"))
     {
         m_point_cloud_processing_backend_ptr->set_visualisation(settings.value("register/set_vis").toBool());
