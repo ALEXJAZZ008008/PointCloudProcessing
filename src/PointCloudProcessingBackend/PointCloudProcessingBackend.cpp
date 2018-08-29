@@ -656,8 +656,8 @@ int PointCloudProcessingBackend::calculate_point_cloud()
     {
         for(unsigned long i = 0; i < m_objects.size(); ++i)
         {
-            m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
-            m_objects[i].get()->get_point_cloud().height = m_objects[i]->get_resolution()[1];
+            m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1];
+            m_objects[i].get()->get_point_cloud().height = 1;
             m_objects[i].get()->get_point_cloud().is_dense = false;
             m_objects[i].get()->get_point_cloud().points.resize(m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
 
@@ -684,8 +684,8 @@ int PointCloudProcessingBackend::calculate_point_cloud()
     {
         for(unsigned long i = 0; i < m_objects.size(); ++i)
         {
-            m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0];
-            m_objects[i].get()->get_point_cloud().height = m_objects[i]->get_resolution()[1];
+            m_objects[i].get()->get_point_cloud().width = m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1];
+            m_objects[i].get()->get_point_cloud().height = 1;
             m_objects[i].get()->get_point_cloud().is_dense = false;
             m_objects[i].get()->get_point_cloud().points.resize(m_objects[i]->get_resolution()[0] * m_objects[i]->get_resolution()[1]);
 
@@ -911,10 +911,13 @@ int PointCloudProcessingBackend::registration()
 
         string signal_position = "";
 
-        if(previous_centroid_index == 0 && previous_signal_index == 0)
+        if(previous_centroid_index == 0)
         {
             previous_centroid = source_centroid;
+        }
 
+        if(previous_signal_index == 0)
+        {
             PointCloud<PointXYZ>::Ptr signal_source(new PointCloud<PointXYZ>(*source));
 
             m_log += "-> pcl signal " + to_string(signal_source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
@@ -933,16 +936,23 @@ int PointCloudProcessingBackend::registration()
 
             m_log += "-> pcl signal " + to_string(signal_source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
-            Eigen::Vector4f signal_source_centroid;
+            if(signal_source->size() != 0)
+            {
+                Eigen::Vector4f signal_source_centroid;
 
-            compute3DCentroid(*signal_source, signal_source_centroid);
+                compute3DCentroid(*signal_source, signal_source_centroid);
 
-            signal_position += "Signal " + to_string(i) + ": " + to_string(signal_source_centroid.coeff(0)) + "," +
-                    to_string(signal_source_centroid.coeff(1)) + "," +
-                    to_string(signal_source_centroid.coeff(2)) + "," +
-                    to_string(signal_source_centroid.coeff(3)) + "\n";
+                signal_position += "Signal " + to_string(i) + ": " + to_string(signal_source_centroid.coeff(0)) + "," +
+                        to_string(signal_source_centroid.coeff(1)) + "," +
+                        to_string(signal_source_centroid.coeff(2)) + "," +
+                        to_string(signal_source_centroid.coeff(3)) + "\n";
 
-            previous_signal = signal_source_centroid;
+                previous_signal = signal_source_centroid;
+            }
+            else
+            {
+                signal_position += "Signal " + to_string(i) + ": Skipped" + "\n";
+            }
         }
 
         string centroid_difference = "Centroid Differences " +
@@ -974,21 +984,39 @@ int PointCloudProcessingBackend::registration()
 
         Eigen::Vector4f signal_target_centroid;
 
-        compute3DCentroid(*signal_target, signal_target_centroid);
+        string signal_difference = "";
 
-        signal_position += "Signal " + to_string(j) + ": " + to_string(signal_target_centroid.coeff(0)) + "," +
-                to_string(signal_target_centroid.coeff(1)) + "," +
-                to_string(signal_target_centroid.coeff(2)) + "," +
-                to_string(signal_target_centroid.coeff(3));
+        if(signal_target->size() != 0)
+        {
+            compute3DCentroid(*signal_target, signal_target_centroid);
 
-        string signal_difference = "Signal Differences " +
-                to_string(previous_signal_index) + " " +
-                to_string(j) + ": " +
-                calculate_vector_difference(signal_target_centroid, previous_signal);
+            signal_position += "Signal " + to_string(j) + ": " + to_string(signal_target_centroid.coeff(0)) + "," +
+                    to_string(signal_target_centroid.coeff(1)) + "," +
+                    to_string(signal_target_centroid.coeff(2)) + "," +
+                    to_string(signal_target_centroid.coeff(3));
 
-        previous_signal = signal_target_centroid;
+            if(previous_centroid_index != 0)
+            {
+                signal_difference += "Signal Differences " +
+                        to_string(previous_signal_index) + " " +
+                        to_string(j) + ": " +
+                        calculate_vector_difference(signal_target_centroid, previous_signal);
+            }
+            else
+            {
+                signal_difference += "Signal Differences " + to_string(previous_signal_index) + " " + to_string(j) + ": Skipped";
+            }
 
-        previous_signal_index = j;
+            previous_signal = signal_target_centroid;
+
+            previous_signal_index = j;
+        }
+        else
+        {
+            signal_position += "Signal " + to_string(i) + ": Skipped";
+
+            signal_difference += "Signal Differences " + to_string(previous_signal_index) + " " + to_string(j) + ": Skipped";
+        }
 
         if(m_visualisation)
         {
