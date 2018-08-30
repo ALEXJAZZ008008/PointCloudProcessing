@@ -19,7 +19,7 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->_le_default_output->setText(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     }
 
-    if(settings.contains("defaults/output_path"))
+    if(settings.contains("defaults/input_path"))
     {
         m_ui_ptr->_le_default_input->setText(settings.value("defaults/input_path").toString());
     }
@@ -44,6 +44,465 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     else
     {
         m_ui_ptr->_chk_output_pc_bin->setChecked(false);
+    }
+
+    if(settings.contains("register/set_test"))
+    {
+        m_ui_ptr->chk_register_test->setChecked(settings.value("register/set_test").toBool());
+    }
+    else
+    {
+        m_ui_ptr->chk_register_test->setChecked(false);
+    }
+
+    if(settings.contains("register/set_vis"))
+    {
+        m_ui_ptr->_chk_register_vis->setChecked(settings.value("register/set_vis").toBool());
+    }
+    else
+    {
+        m_ui_ptr->_chk_register_vis->setChecked(false);
+    }
+
+    if(settings.contains("register/set_cloudps"))
+    {
+        m_ui_ptr->le_register_cloudps->setText(settings.value("register/set_cloudps").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloudps->setText("2");
+    }
+
+    if(settings.contains("register/set_centps"))
+    {
+        m_ui_ptr->le_register_centps->setText(settings.value("register/set_centps").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_centps->setText("8");
+    }
+
+    if(settings.contains("register/set_cloud1r"))
+    {
+        m_ui_ptr->le_register_cloud1r->setText(settings.value("register/set_cloud1r").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloud1r->setText("255");
+    }
+
+    if(settings.contains("register/set_cloud1g"))
+    {
+        m_ui_ptr->le_register_cloud1g->setText(settings.value("register/set_cloud1g").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloud1g->setText("0");
+    }
+
+    if(settings.contains("register/set_cloud1b"))
+    {
+        m_ui_ptr->le_register_cloud1b->setText(settings.value("register/set_cloud1b").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloud1b->setText("0");
+    }
+
+    if(settings.contains("register/set_cloud2r"))
+    {
+        m_ui_ptr->le_register_cloud2r->setText(settings.value("register/set_cloud2r").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloud2r->setText("0");
+    }
+
+    if(settings.contains("register/set_cloud2g"))
+    {
+        m_ui_ptr->le_register_cloud2g->setText(settings.value("register/set_cloud2g").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloud2g->setText("0");
+    }
+
+    if(settings.contains("register/set_cloud2b"))
+    {
+        m_ui_ptr->le_register_cloud2b->setText(settings.value("register/set_cloud2b").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cloud2b->setText("255");
+    }
+
+    if(settings.contains("register/set_cent1r"))
+    {
+        m_ui_ptr->le_register_cent1r->setText(settings.value("register/set_cent1r").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cent1r->setText("255");
+    }
+
+    if(settings.contains("register/set_cent1g"))
+    {
+        m_ui_ptr->le_register_cent1g->setText(settings.value("register/set_cent1g").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cent1g->setText("255");
+    }
+
+    if(settings.contains("register/set_cent1b"))
+    {
+        m_ui_ptr->le_register_cent1b->setText(settings.value("register/set_cent1b").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cent1b->setText("0");
+    }
+
+    if(settings.contains("register/set_cent2r"))
+    {
+        m_ui_ptr->le_register_cent2r->setText(settings.value("register/set_cent2r").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cent2r->setText("0");
+    }
+
+    if(settings.contains("register/set_cent2g"))
+    {
+        m_ui_ptr->le_register_cent2g->setText(settings.value("register/set_cent2g").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cent2g->setText("255");
+    }
+
+    if(settings.contains("register/set_cent2b"))
+    {
+        m_ui_ptr->le_register_cent2b->setText(settings.value("register/set_cent2b").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_cent2b->setText("255");
+    }
+
+    if(settings.contains("register/set_sr"))
+    {
+        m_ui_ptr->le_register_sr->setText(settings.value("register/set_sr").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sr->setText("0");
+    }
+
+    if(settings.contains("register/set_sg"))
+    {
+        m_ui_ptr->le_register_sg->setText(settings.value("register/set_sg").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sg->setText("255");
+    }
+
+    if(settings.contains("register/set_sb"))
+    {
+        m_ui_ptr->le_register_sb->setText(settings.value("register/set_sb").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sb->setText("0");
+    }
+
+    if(settings.contains("register/set_tr_txt"))
+    {
+        m_ui_ptr->_chk_register_tr_txt->setChecked(settings.value("register/set_tr_txt").toBool());
+    }
+    else
+    {
+        m_ui_ptr->_chk_register_tr_txt->setChecked(false);
+    }
+
+    if(settings.contains("register/set_tr_bin"))
+    {
+        m_ui_ptr->_chk_register_tr_bin->setChecked(settings.value("register/set_tr_bin").toBool());
+    }
+    else
+    {
+        m_ui_ptr->_chk_register_tr_bin->setChecked(false);
+    }
+
+    if(settings.contains("register/set_icp"))
+    {
+        m_ui_ptr->rb_register_icp->setChecked(settings.value("register/set_icp").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_icp->setChecked(true);
+    }
+
+    if(settings.contains("register/set_ndt"))
+    {
+        m_ui_ptr->rb_register_ndt->setChecked(settings.value("register/set_ndt").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_ndt->setChecked(false);
+    }
+
+    if(settings.contains("register/set_iterative"))
+    {
+        m_ui_ptr->rb_register_iterative->setChecked(settings.value("register/set_iterative").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_iterative->setChecked(true);
+    }
+
+    if(settings.contains("register/set_continuous"))
+    {
+        m_ui_ptr->rb_register_continuous->setChecked(settings.value("register/set_continuous").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_continuous->setChecked(false);
+    }
+
+    if(settings.contains("register/set_distance"))
+    {
+        m_ui_ptr->rb_register_distance->setChecked(settings.value("register/set_distance").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_distance->setChecked(true);
+    }
+
+    if(settings.contains("register/set_eigen"))
+    {
+        m_ui_ptr->rb_register_eigen->setChecked(settings.value("register/set_eigen").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_eigen->setChecked(false);
+    }
+
+    if(settings.contains("register/set_threshold"))
+    {
+        m_ui_ptr->le_register_threshold->setText(settings.value("register/set_threshold").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_threshold->setText("1000.0");
+    }
+
+    if(settings.contains("register/set_offset"))
+    {
+        m_ui_ptr->le_register_offset->setText(settings.value("register/set_offset").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_offset->setText("10");
+    }
+
+    if(settings.contains("register/set_fl"))
+    {
+        m_ui_ptr->le_register_fl->setText(settings.value("register/set_fl").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_fl->setText("0.0021");
+    }
+
+    if(settings.contains("register/set_dm"))
+    {
+        m_ui_ptr->le_register_dm->setText(settings.value("register/set_dm").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_dm->setText("1.0");
+    }
+
+    if(settings.contains("register/set_em"))
+    {
+        m_ui_ptr->le_register_em->setText(settings.value("register/set_em").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_em->setText("1.0");
+    }
+
+    if(settings.contains("register/set_ss"))
+    {
+        m_ui_ptr->le_register_ss->setText(settings.value("register/set_ss").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_ss->setText("100");
+    }
+
+    if(settings.contains("register/set_sd"))
+    {
+        m_ui_ptr->le_register_sd->setText(settings.value("register/set_sd").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sd->setText("1.0");
+    }
+
+    if(settings.contains("register/set_filter_x"))
+    {
+        m_ui_ptr->le_register_filter_x->setText(settings.value("register/set_filter_x").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_x->setText("10.0");
+    }
+
+    if(settings.contains("register/set_filter_y"))
+    {
+        m_ui_ptr->le_register_filter_y->setText(settings.value("register/set_filter_y").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_y->setText("10.0");
+    }
+
+    if(settings.contains("register/set_filter_z"))
+    {
+        m_ui_ptr->le_register_filter_z->setText(settings.value("register/set_filter_z").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_filter_z->setText("10.0");
+    }
+
+    if(settings.contains("register/set_te"))
+    {
+        m_ui_ptr->le_register_te->setText(settings.value("register/set_te").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_te->setText("0.01");
+    }
+
+    if(settings.contains("register/set_iterations"))
+    {
+        m_ui_ptr->le_register_iterations->setText(settings.value("register/set_iterations").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_iterations->setText("100");
+    }
+
+    if(settings.contains("register/set_manual"))
+    {
+        m_ui_ptr->rb_register_manual->setChecked(settings.value("register/set_manual").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_manual->setChecked(true);
+    }
+
+    if(settings.contains("register/set_auto"))
+    {
+        m_ui_ptr->rb_register_auto->setChecked(settings.value("register/set_auto").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_auto->setChecked(false);
+    }
+
+    if(settings.contains("register/set_rg"))
+    {
+        m_ui_ptr->le_register_rg->setText(settings.value("register/set_rg").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_rg->setText("0.0");
+    }
+
+    if(settings.contains("register/set_tgx"))
+    {
+        m_ui_ptr->le_register_tgx->setText(settings.value("register/set_tgx").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_tgx->setText("0.0");
+    }
+
+    if(settings.contains("register/set_tgy"))
+    {
+        m_ui_ptr->le_register_tgy->setText(settings.value("register/set_tgy").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_tgy->setText("0.0");
+    }
+
+    if(settings.contains("register/set_tgz"))
+    {
+        m_ui_ptr->le_register_tgz->setText(settings.value("register/set_tgz").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_tgz->setText("0.0");
+    }
+
+    if(settings.contains("register/set_sm"))
+    {
+        m_ui_ptr->le_register_sm->setText(settings.value("register/set_sm").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sm->setText("1.0");
+    }
+
+    if(settings.contains("register/set_sx"))
+    {
+        m_ui_ptr->le_register_sx->setText(settings.value("register/set_sx").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sx->setText("0.0");
+    }
+
+    if(settings.contains("register/set_sy"))
+    {
+        m_ui_ptr->le_register_sy->setText(settings.value("register/set_sy").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sy->setText("0.0");
+    }
+
+    if(settings.contains("register/set_sz"))
+    {
+        m_ui_ptr->le_register_sz->setText(settings.value("register/set_sz").toString());
+    }
+    else
+    {
+        m_ui_ptr->le_register_sz->setText("0.0");
+    }
+
+    if(settings.contains("register/set_naive"))
+    {
+        m_ui_ptr->rb_register_naive->setChecked(settings.value("register/set_naive").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_naive->setChecked(true);
+    }
+
+    if(settings.contains("register/set_complex"))
+    {
+        m_ui_ptr->rb_register_complex->setChecked(settings.value("register/set_complex").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_complex->setChecked(false);
     }
 }
 
@@ -116,6 +575,62 @@ void Ponnector_Settings::on_buttonBox_accepted()
 
     settings.setValue("output/set_pc_txt", m_ui_ptr->_chk_output_pc_txt->isChecked());
     settings.setValue("output/set_pc_bin", m_ui_ptr->_chk_output_pc_bin->isChecked());
+
+    settings.setValue("register/set_test", m_ui_ptr->chk_register_test->isChecked());
+    settings.setValue("register/set_vis", m_ui_ptr->_chk_register_vis->isChecked());
+    settings.setValue("register/set_cloudps", m_ui_ptr->le_register_cloudps->text());
+    settings.setValue("register/set_centps", m_ui_ptr->le_register_centps->text());
+    settings.setValue("register/set_cloud1r", m_ui_ptr->le_register_cloud1r->text());
+    settings.setValue("register/set_cloud1g", m_ui_ptr->le_register_cloud1g->text());
+    settings.setValue("register/set_cloud1b", m_ui_ptr->le_register_cloud1b->text());
+    settings.setValue("register/set_cloud2r", m_ui_ptr->le_register_cloud2r->text());
+    settings.setValue("register/set_cloud2g", m_ui_ptr->le_register_cloud2g->text());
+    settings.setValue("register/set_cloud2b", m_ui_ptr->le_register_cloud2b->text());
+    settings.setValue("register/set_cent1r", m_ui_ptr->le_register_cent1r->text());
+    settings.setValue("register/set_cent1g", m_ui_ptr->le_register_cent1g->text());
+    settings.setValue("register/set_cent1b", m_ui_ptr->le_register_cent1b->text());
+    settings.setValue("register/set_cent2r", m_ui_ptr->le_register_cent2r->text());
+    settings.setValue("register/set_cent2g", m_ui_ptr->le_register_cent2g->text());
+    settings.setValue("register/set_cent2b", m_ui_ptr->le_register_cent2b->text());
+    settings.setValue("register/set_sr", m_ui_ptr->le_register_sr->text());
+    settings.setValue("register/set_sg", m_ui_ptr->le_register_sg->text());
+    settings.setValue("register/set_sb", m_ui_ptr->le_register_sb->text());
+
+    settings.setValue("register/set_tr_txt", m_ui_ptr->_chk_register_tr_txt->isChecked());
+    settings.setValue("register/set_tr_bin", m_ui_ptr->_chk_register_tr_bin->isChecked());
+
+    settings.setValue("register/set_icp", m_ui_ptr->rb_register_icp->isChecked());
+    settings.setValue("register/set_ndt", m_ui_ptr->rb_register_ndt->isChecked());
+    settings.setValue("register/set_iterative", m_ui_ptr->rb_register_iterative->isChecked());
+    settings.setValue("register/set_continuous", m_ui_ptr->rb_register_continuous->isChecked());
+    settings.setValue("register/set_distance", m_ui_ptr->rb_register_distance->isChecked());
+    settings.setValue("register/set_eigen", m_ui_ptr->rb_register_eigen->isChecked());
+
+    settings.setValue("register/set_threshold", m_ui_ptr->le_register_threshold->text());
+    settings.setValue("register/set_offset", m_ui_ptr->le_register_offset->text());
+    settings.setValue("register/set_fl", m_ui_ptr->le_register_fl->text());
+    settings.setValue("register/set_dm", m_ui_ptr->le_register_dm->text());
+    settings.setValue("register/set_em", m_ui_ptr->le_register_em->text());
+    settings.setValue("register/set_ss", m_ui_ptr->le_register_ss->text());
+    settings.setValue("register/set_sd", m_ui_ptr->le_register_sd->text());
+    settings.setValue("register/set_filter_x", m_ui_ptr->le_register_filter_x->text());
+    settings.setValue("register/set_filter_y", m_ui_ptr->le_register_filter_y->text());
+    settings.setValue("register/set_filter_z", m_ui_ptr->le_register_filter_z->text());
+    settings.setValue("register/set_te", m_ui_ptr->le_register_te->text());
+    settings.setValue("register/set_iterations", m_ui_ptr->le_register_iterations->text());
+    settings.setValue("register/set_manual", m_ui_ptr->rb_register_manual->isChecked());
+    settings.setValue("register/set_auto", m_ui_ptr->rb_register_auto->isChecked());
+    settings.setValue("register/set_rg", m_ui_ptr->le_register_rg->text());
+    settings.setValue("register/set_tgx", m_ui_ptr->le_register_tgx->text());
+    settings.setValue("register/set_tgy", m_ui_ptr->le_register_tgy->text());
+    settings.setValue("register/set_tgz", m_ui_ptr->le_register_tgz->text());
+    settings.setValue("register/set_sm", m_ui_ptr->le_register_sm->text());
+    settings.setValue("register/set_sx", m_ui_ptr->le_register_sx->text());
+    settings.setValue("register/set_sy", m_ui_ptr->le_register_sy->text());
+    settings.setValue("register/set_sz", m_ui_ptr->le_register_sz->text());
+    settings.setValue("register/set_naive", m_ui_ptr->rb_register_naive->isChecked());
+    settings.setValue("register/set_complex", m_ui_ptr->rb_register_complex->isChecked());
+
 }
 
 void Ponnector_Settings::on_pushButton_clicked()

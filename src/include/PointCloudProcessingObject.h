@@ -4,9 +4,12 @@
 #include <chrono>
 #include <vector>
 #include <string>
+#include </usr/include/pcl-1.8/pcl/io/pcd_io.h>
+#include </usr/include/pcl-1.8/pcl/point_types.h>
 
 using namespace std;
 using namespace std::chrono;
+using namespace pcl;
 
 //!
 //! \class PointCloudProcessingObject
@@ -35,30 +38,30 @@ public:
         return this->get_real_timestamp() < point_cloud_processing_object.get_real_timestamp();
     }
 
+    //! Gets the point cloud array
+    inline PointCloud<PointXYZ> & get_point_cloud()
+    {
+        return m_point_cloud_ptr;
+    }
+
+    //! Sets the point cloud array
+    inline int set_point_cloud(PointCloud<PointXYZ> &point_cloud)
+    {
+        m_point_cloud_ptr = point_cloud;
+
+        return 1;
+    }
+
     //! Gets the data array
-    inline vector<double> & get_data()
+    inline vector<float> & get_data()
     {
         return m_data;
     }
 
     //! Sets the data array
-    inline int set_data(vector<double> &data)
+    inline int set_data(vector<float> &data)
     {
         m_data = data;
-
-        return 1;
-    }
-
-    //! Gets the point cloud array
-    inline vector<vector<double>> & get_point_cloud()
-    {
-        return m_point_cloud;
-    }
-
-    //! Sets the point cloud array
-    inline int set_point_cloud(vector<vector<double>> &point_cloud)
-    {
-        m_point_cloud = point_cloud;
 
         return 1;
     }
@@ -120,13 +123,13 @@ public:
     }
 
     //! Gets the relative timestamp value
-    inline unsigned int get_relative_timestamp()
+    inline unsigned long get_relative_timestamp()
     {
         return m_relative_timestamp;
     }
 
     //! Sets the relative timestamp value
-    inline int set_relative_timestamp(unsigned int relative_timestamp)
+    inline int set_relative_timestamp(unsigned long relative_timestamp)
     {
         m_relative_timestamp = relative_timestamp;
 
@@ -134,13 +137,13 @@ public:
     }
 
     //! Gets the data size value
-    inline unsigned int get_data_size()
+    inline unsigned char get_data_size()
     {
         return m_data_size;
     }
 
     //! Sets the data size value
-    inline int set_data_size(unsigned int data_size)
+    inline int set_data_size(unsigned char data_size)
     {
         m_data_size = data_size;
 
@@ -155,11 +158,11 @@ public:
 
 private:
 
-    //! Holds the data
-    vector<double> m_data;
-
     //! Holds the point cloud
-    vector<vector<double>> m_point_cloud;
+    PointCloud<PointXYZ> m_point_cloud_ptr;
+
+    //! Holds the data
+    vector<float> m_data;
 
     //! Holds the resolution that the kinect is set to
     vector<unsigned int> m_resolution;
@@ -174,10 +177,10 @@ private:
     milliseconds::rep m_real_timestamp;
 
     //! Holds the time on the camera when the header was written
-    unsigned int m_relative_timestamp;
+    unsigned long m_relative_timestamp;
 
     //! Holds the size in bits of the data
-    unsigned int m_data_size;
+    unsigned char m_data_size;
 
     //! Called by destructor,
     //! other methods may call to destruct the class

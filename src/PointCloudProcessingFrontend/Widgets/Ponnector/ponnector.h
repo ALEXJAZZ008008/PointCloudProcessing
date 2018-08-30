@@ -61,13 +61,13 @@ public:
     }
 
     //! Gets the logger ptr
-    inline Logger * get_logger_ptr()
+    inline PCPLLogger * get_logger_ptr()
     {
         return m_logger_ptr;
     }
 
     //! Sets the logger ptr
-    inline int set_logger_ptr(Logger *logger_ptr)
+    inline int set_logger_ptr(PCPLLogger *logger_ptr)
     {
         m_logger_ptr = logger_ptr;
 
@@ -187,7 +187,7 @@ private:
     Ui::Ponnector *m_ui_ptr;
 
     //! A window to display the log
-    Logger *m_logger_ptr;
+    PCPLLogger *m_logger_ptr;
 
     //! Pointer to the update timer
     QTimer *m_update_ptr;

@@ -1,0 +1,17 @@
+﻿cmake_minimum_required(VERSION 2.8.2)
+
+project(flann-download NONE)
+
+include(ExternalProject)
+
+ExternalProject_Add(flann
+  GIT_REPOSITORY    https://github.com/mariusmuja/flann.git
+  GIT_TAG           master
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/flann-src"
+  BINARY_DIR        "${CMAKE_BINARY_DIR}/flann-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      ""
+)
+

@@ -11,13 +11,13 @@ set(COPYRIGHT "Copyright (c) 2018. All rights reserved.")
 
 ############################  Options: Build What?  ############################
 option(PCL_DOWNLOAD "Download PCL" OFF)
-option(PCL_LOCAL "Use local PCL" ON)
+option(PCL_LOCAL "Use local PCL" OFF)
 
-option(EIGEN_DOWNLOAD "Download Eigen" OFF)
-option(EIGEN_LOCAL "Use local Eigen" ON)
+option(FLANN_DOWNLOAD "Download FLANN" OFF)
+option(FLANN_LOCAL "Use local FLANN" OFF)
 
 option(BUILD_DOC "Build documentation" ON)
-option(ENABLE_TESTING "Enable tests" ON)
+option(ENABLE_TESTING "Enable tests" OFF)
 
 ############################  Options: Build How?  #############################
 include(commons)
@@ -38,60 +38,117 @@ if((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (APPLE AND ${CMAKE_SYSTEM_
 
 endif()
 
+
+
 # We need the PCL libraries, either locally installed
 # or we will download them from git.
 
-if(NOT PCL_LOCAL)
-    if(NOT PCL_DOWNLOAD)
+#if(NOT PCL_LOCAL)
+#    if(NOT PCL_DOWNLOAD)
 
-        message(STATUS "${PROJECT_NAME} depends on PCL. You must either have it installed locally or download them.")
+#        message(STATUS "${PROJECT_NAME} depends on PCL. You must either have it installed locally or download it.")
 
-    endif()
-else()
+#    endif()
+#else()
 
-    set(PCL_ROOT "" CACHE PATH "Root path of PCL.")
-    find_package(PCL)
+#    set(PCL_ROOT "" CACHE PATH "Root path of PCL.")
+find_package(PCL 1.8 REQUIRED COMPONENTS common io visualization)
+include_directories(${PCL_INCLUDE_DIRS})
+#    link_directories(${PCL_LIBRARY_DIRS})
+#    add_definitions(${PCL_DEFINITIONS})
 
-endif()
+#endif()
+
+#if(NOT FLANN_LOCAL)
+#    if(NOT FLANN_DOWNLOAD)
+
+#        message(STATUS "${PROJECT_NAME} depends on FLANN. You must either have it installed locally or download it.")
+
+#    endif()
+#else()
+
+#    set(FLANN_ROOT "" CACHE PATH "Root path of FLANN.")
+#    set(FLANN_INCLUDE_PATH "" CACHE PATH "Include path of FLANN.")
+#    find_package(FLANN)
+
+
+#endif()
 
 # Then check if we should download.
 
-if(PCL_DOWNLOAD)
+#if(PCL_DOWNLOAD)
 
-    set(PCL_LOCAL "OFF")
+#    set(PCL_LOCAL "OFF")
 
-    configure_file(${CMAKE_MODULE_PATH}/pcl.txt.in pcl-download/CMakeLists.txt)
+#    configure_file(${CMAKE_MODULE_PATH}/pcl.txt.in pcl-download/CMakeLists.txt)
 
-    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pcl-download")
-    execute_process(COMMAND "${CMAKE_COMMAND}" --build . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pcl-download")
+#    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pcl-download")
+#    execute_process(COMMAND "${CMAKE_COMMAND}" --build . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pcl-download")
 
-    add_subdirectory("${CMAKE_BINARY_DIR}/pcl-src" "${CMAKE_BINARY_DIR}/pcl-build")
+#    add_subdirectory("${CMAKE_BINARY_DIR}/pcl-src" "${CMAKE_BINARY_DIR}/pcl-build")
 
-    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/pcl-src/include)
+#    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/pcl-src/include)
 
-    set(PCL_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
+#    set(PCL_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
 
-    if(WIN32)
+#    if(WIN32)
 
-        set(prefix "")
-        set(suffix ".lib")
+#        set(prefix "")
+#        set(suffix ".lib")
 
-    elseif(APPLE)
+#    elseif(APPLE)
 
-        set(prefix "lib")
-        set(suffix ".a")
+#        set(prefix "lib")
+#        set(suffix ".a")
 
-    else()
+#    else()
 
-        set(prefix "lib")
-        set(suffix ".a")
+#        set(prefix "lib")
+#        set(suffix ".a")
 
-    endif()
+#    endif()
 
-    set(PCL_LIBRARY "${PCL_LIB_DIR}/${prefix}pcl${suffix}")
-    set(PCL_FOUND ON)
+#    set(PCL_LIBRARY "${PCL_LIB_DIR}/${prefix}pcl${suffix}")
+#    set(PCL_FOUND ON)
 
-endif()
+#endif()
+
+#if(FLANN_DOWNLOAD)
+
+#    set(FLANN_LOCAL "OFF")
+
+#    configure_file(${CMAKE_MODULE_PATH}/flann.txt.in flann-download/CMakeLists.txt)
+
+#    execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/flann-download")
+#    execute_process(COMMAND "${CMAKE_COMMAND}" --build . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/flann-download")
+
+#    add_subdirectory("${CMAKE_BINARY_DIR}/flann-src" "${CMAKE_BINARY_DIR}/flann-build")
+
+#    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/flann-src/include)
+
+#    set(FLANN_LIB_DIR "${CMAKE_BINARY_DIR}/lib")
+
+#    if(WIN32)
+
+#        set(prefix "")
+#        set(suffix ".lib")
+
+#    elseif(APPLE)
+
+#        set(prefix "lib")
+#        set(suffix ".a")
+
+#    else()
+
+#        set(prefix "lib")
+#        set(suffix ".a")
+
+#    endif()
+
+#    set(FLANN_LIBRARY "${FLANN_LIB_DIR}/${prefix}flann${suffix}")
+#    set(FLANN_FOUND ON)
+
+#endif()
 
 if(APPLE AND EXISTS /usr/local/opt/qt5)
 
@@ -155,9 +212,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(src/include)
 
-#if(PCL_FOUND)
+#if(PCL_FOUND AND FLANN_FOUND)
 
-    include(src/CMakeLists.txt)
+include(src/CMakeLists.txt)
 
 #endif()
+
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL "A flag showing that CMake has configured at least once.")

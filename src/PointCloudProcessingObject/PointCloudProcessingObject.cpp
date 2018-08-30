@@ -1,8 +1,8 @@
 #include "src/include/PointCloudProcessingObject.h"
 
 PointCloudProcessingObject::PointCloudProcessingObject():
-    m_data(0, 0.0l),
-    m_point_cloud(0, vector<double>(0, 0.0)),
+    m_point_cloud_ptr(),
+    m_data(0, 0.0f),
     m_resolution(3, 0),
     m_data_path(""),
     m_data_type(""),
@@ -19,8 +19,8 @@ PointCloudProcessingObject::~PointCloudProcessingObject()
 }
 
 PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObject &point_cloud_processing_ref):
+    m_point_cloud_ptr(point_cloud_processing_ref.get_point_cloud()),
     m_data(point_cloud_processing_ref.get_data()),
-    m_point_cloud(point_cloud_processing_ref.get_point_cloud()),
     m_resolution(point_cloud_processing_ref.get_resolution()),
     m_data_path(point_cloud_processing_ref.get_data_path()),
     m_data_type(point_cloud_processing_ref.get_data_type()),
@@ -33,8 +33,8 @@ PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObjec
 
 PointCloudProcessingObject & PointCloudProcessingObject::operator = (PointCloudProcessingObject &point_cloud_processing_ref)
 {
+    m_point_cloud_ptr = point_cloud_processing_ref.get_point_cloud();
     m_data = point_cloud_processing_ref.get_data();
-    m_point_cloud = point_cloud_processing_ref.get_point_cloud();
     m_resolution = point_cloud_processing_ref.get_resolution();
     m_data_path = point_cloud_processing_ref.get_data_path();
     m_data_type = point_cloud_processing_ref.get_data_type();
@@ -46,8 +46,8 @@ PointCloudProcessingObject & PointCloudProcessingObject::operator = (PointCloudP
 }
 
 PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObject &&point_cloud_processing_ref_ref):
+    m_point_cloud_ptr(point_cloud_processing_ref_ref.get_point_cloud()),
     m_data(point_cloud_processing_ref_ref.get_data()),
-    m_point_cloud(point_cloud_processing_ref_ref.get_point_cloud()),
     m_resolution(point_cloud_processing_ref_ref.get_resolution()),
     m_data_path(point_cloud_processing_ref_ref.get_data_path()),
     m_data_type(point_cloud_processing_ref_ref.get_data_type()),
@@ -60,8 +60,8 @@ PointCloudProcessingObject::PointCloudProcessingObject(PointCloudProcessingObjec
 
 PointCloudProcessingObject & PointCloudProcessingObject::operator = (PointCloudProcessingObject &&point_cloud_processing_ref_ref)
 {
+    m_point_cloud_ptr = point_cloud_processing_ref_ref.get_point_cloud();
     m_data = point_cloud_processing_ref_ref.get_data();
-    m_point_cloud = point_cloud_processing_ref_ref.get_point_cloud();
     m_resolution = point_cloud_processing_ref_ref.get_resolution();
     m_data_path = point_cloud_processing_ref_ref.get_data_path();
     m_data_type = point_cloud_processing_ref_ref.get_data_type();

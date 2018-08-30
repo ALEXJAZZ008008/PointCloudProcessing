@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef PCPLLOGGER_H
+#define PCPLLOGGER_H
 
 #include <QWidget>
 
@@ -13,21 +13,21 @@ namespace Ui
 class Logger;
 }
 
-class Logger : public QWidget
+class PCPLLogger : public QWidget
 {
 public:
 
     //! Constructor
-    explicit Logger(QWidget *parent = nullptr);
+    explicit PCPLLogger(QWidget *parent = nullptr);
 
     //! Destructor
-    ~Logger();
+    ~PCPLLogger();
 
     //! Copy and move constructos and assignment opperators,
-    Logger(Logger &);
-    Logger & operator = (Logger &);
-    Logger(Logger &&);
-    Logger & operator = (Logger &&);
+    PCPLLogger(PCPLLogger &);
+    PCPLLogger & operator = (PCPLLogger &);
+    PCPLLogger(PCPLLogger &&);
+    PCPLLogger & operator = (PCPLLogger &&);
 
     //! Gets the ui ptr
     inline Ui::Logger * get_ui_ptr()
@@ -65,4 +65,4 @@ private:
     int destructor(bool);
 };
 
-#endif // LOGGER_H
+#endif // PCPLLOGGER_H
