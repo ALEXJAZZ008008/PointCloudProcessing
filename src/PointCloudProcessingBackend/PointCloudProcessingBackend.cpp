@@ -796,12 +796,6 @@ int PointCloudProcessingBackend::registration()
 
     Eigen::Matrix<float, 4, 4> initial_transformation = initial_transformation_init();
 
-    Eigen::Vector4f previous_centroid;
-    Eigen::Vector4f previous_signal;
-
-    unsigned long previous_centroid_index = 0;
-    unsigned long previous_signal_index = 0;
-
     string output_header = output_header_init();
 
     string output = "";
@@ -823,6 +817,11 @@ int PointCloudProcessingBackend::registration()
             filter(source);
 
             m_log += "-> pcl " + to_string(i) + " " + to_string(source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+        }
+
+        if(source->size())
+        {
+
         }
 
         PointCloud<PointXYZ>::Ptr target(new PointCloud<PointXYZ>(m_objects[j].get()->get_point_cloud()));
@@ -909,37 +908,37 @@ int PointCloudProcessingBackend::registration()
                 to_string(target_centroid.coeff(2)) + "," +
                 to_string(target_centroid.coeff(3));
 
+        string centroid_difference = "Centroid Differences " +
+                to_string(i) + " " +
+                to_string(j) + ": " +
+                calculate_vector_difference(target_centroid, source_centroid);
+
+        PointCloud<PointXYZ>::Ptr signal_target(new PointCloud<PointXYZ>(*target));
+
+        Eigen::Vector4f signal_target_centroid;
+
         string signal_position = "";
 
-        if(previous_centroid_index == 0)
-        {
-            previous_centroid = source_centroid;
-        }
+        string signal_difference = "";
 
-        if(previous_signal_index == 0)
+        PointCloud<PointXYZ>::Ptr signal_cloud(new PointCloud<PointXYZ>());
+
+        Eigen::Matrix<float, 4, 4> signal_transformation;
+
+        if(m_naive)
         {
             PointCloud<PointXYZ>::Ptr signal_source(new PointCloud<PointXYZ>(*source));
 
             m_log += "-> pcl signal " + to_string(signal_source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
-            if(m_naive)
-            {
-                calculate_signal_from_centroid(signal_source, source_centroid);
-            }
-            else
-            {
-                if(m_complex)
-                {
-
-                }
-            }
+            calculate_signal_from_centroid(signal_source, source_centroid);
 
             m_log += "-> pcl signal " + to_string(signal_source->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
+            Eigen::Vector4f signal_source_centroid;
+
             if(signal_source->size() != 0)
             {
-                Eigen::Vector4f signal_source_centroid;
-
                 compute3DCentroid(*signal_source, signal_source_centroid);
 
                 signal_position += "Signal " + to_string(i) + ": " + to_string(signal_source_centroid.coeff(0)) + "," +
@@ -947,86 +946,129 @@ int PointCloudProcessingBackend::registration()
                         to_string(signal_source_centroid.coeff(2)) + "," +
                         to_string(signal_source_centroid.coeff(3)) + "\n";
 
-                previous_signal = signal_source_centroid;
+                m_log += "-> pcl signal " + to_string(signal_target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+                calculate_signal_from_centroid(signal_target, target_centroid);
+
+                m_log += "-> pcl signal " + to_string(signal_target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+
+                if(signal_target->size() != 0)
+                {
+                    compute3DCentroid(*signal_target, signal_target_centroid);
+
+                    signal_position += "Signal " + to_string(j) + ": " + to_string(signal_target_centroid.coeff(0)) + "," +
+                            to_string(signal_target_centroid.coeff(1)) + "," +
+                            to_string(signal_target_centroid.coeff(2)) + "," +
+                            to_string(signal_target_centroid.coeff(3));
+
+                    signal_difference += "Signal Differences " +
+                            to_string(i) + " " +
+                            to_string(j) + ": " +
+                            calculate_vector_difference(signal_target_centroid, signal_source_centroid);
+                }
+                else
+                {
+                    signal_position += "Signal " + to_string(i) + ": Skipped";
+
+                    signal_difference += "Signal Differences " + to_string(i) + " " + to_string(j) + ": Skipped";
+                }
             }
             else
             {
                 signal_position += "Signal " + to_string(i) + ": Skipped" + "\n";
+
+                signal_difference += "Signal Differences " + to_string(i) + " " + to_string(j) + ": Skipped";
             }
-        }
-
-        string centroid_difference = "Centroid Differences " +
-                to_string(previous_centroid_index) + " " +
-                to_string(j) + ": " +
-                calculate_vector_difference(target_centroid, previous_centroid);
-
-        previous_centroid = target_centroid;
-
-        previous_centroid_index = j;
-
-        PointCloud<PointXYZ>::Ptr signal_target(new PointCloud<PointXYZ>(*target));
-
-        m_log += "-> pcl signal " + to_string(signal_target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
-
-        if(m_naive)
-        {
-            calculate_signal_from_centroid(signal_target, target_centroid);
         }
         else
         {
             if(m_complex)
             {
+                signal_cloud->width = source.get()->width;
+                signal_cloud->height = source.get()->height;
+                signal_cloud->is_dense = source.get()->is_dense;
+                signal_cloud->points.resize(source.get()->width * source.get()->height);
+                signal_cloud->points = source.get()->points;
 
-            }
-        }
+                m_log += "-> pcl signal " + to_string(signal_cloud->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
-        m_log += "-> pcl signal " + to_string(signal_target->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
+                calculate_signal_from_centroid(signal_cloud, source_centroid);
 
-        Eigen::Vector4f signal_target_centroid;
+                m_log += "-> pcl signal " + to_string(signal_cloud->size()) + ": " + to_string(system_clock::now().time_since_epoch().count()) + "\n";
 
-        string signal_difference = "";
+                shared_ptr<bool> signal_has_converged(new bool);
 
-        if(signal_target->size() != 0)
-        {
-            compute3DCentroid(*signal_target, signal_target_centroid);
+                shared_ptr<double> signal_fitness_score(new double);
 
-            signal_position += "Signal " + to_string(j) + ": " + to_string(signal_target_centroid.coeff(0)) + "," +
-                    to_string(signal_target_centroid.coeff(1)) + "," +
-                    to_string(signal_target_centroid.coeff(2)) + "," +
-                    to_string(signal_target_centroid.coeff(3));
+                if(signal_cloud->size() != 0)
+                {
+                    if(m_icp)
+                    {
+                        ricp(signal_cloud, target, initial_transformation, signal_transformation, signal_has_converged, signal_fitness_score);
+                    }
+                    else
+                    {
+                        if(m_ndt)
+                        {
+                            rndt(signal_cloud, target, initial_transformation, signal_transformation, signal_has_converged, signal_fitness_score);
+                        }
+                    }
 
-            if(previous_centroid_index != 0)
-            {
-                signal_difference += "Signal Differences " +
-                        to_string(previous_signal_index) + " " +
-                        to_string(j) + ": " +
-                        calculate_vector_difference(signal_target_centroid, previous_signal);
+                    string signal_transform = to_string(signal_transformation.coeff(0, 0)) + "," +
+                            to_string(signal_transformation.coeff(0, 1)) + "," +
+                            to_string(signal_transformation.coeff(0, 2)) + "," +
+                            to_string(signal_transformation.coeff(0, 3)) + "," +
+                            to_string(signal_transformation.coeff(1, 0)) + "," +
+                            to_string(signal_transformation.coeff(1, 1)) + "," +
+                            to_string(signal_transformation.coeff(1, 2)) + "," +
+                            to_string(signal_transformation.coeff(1, 3)) + "," +
+                            to_string(signal_transformation.coeff(2, 0)) + "," +
+                            to_string(signal_transformation.coeff(2, 1)) + "," +
+                            to_string(signal_transformation.coeff(2, 2)) + "," +
+                            to_string(signal_transformation.coeff(2, 3)) + "," +
+                            to_string(signal_transformation.coeff(3, 0)) + "," +
+                            to_string(signal_transformation.coeff(3, 1)) + "," +
+                            to_string(signal_transformation.coeff(3, 2)) + "," +
+                            to_string(signal_transformation.coeff(3, 3));
+
+                    signal_difference += "Signal " + to_string(i) + " " + to_string(j) + ":\n" +
+                            "Signal Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*signal_fitness_score) + "\n" +
+                            "Signal Transform " + to_string(i) + " " + to_string(j) + ": " + signal_transform;
+                }
             }
             else
             {
-                signal_difference += "Signal Differences " + to_string(previous_signal_index) + " " + to_string(j) + ": Skipped";
+                signal_difference += "Signal " + to_string(i) + " " + to_string(j) + ": Skipped";
             }
-
-            previous_signal = signal_target_centroid;
-
-            previous_signal_index = j;
-        }
-        else
-        {
-            signal_position += "Signal " + to_string(i) + ": Skipped";
-
-            signal_difference += "Signal Differences " + to_string(previous_signal_index) + " " + to_string(j) + ": Skipped";
         }
 
         if(m_visualisation)
         {
-            visualise(source,
-                      to_point_cloud_pointxyz_ptr(source_centroid),
-                      target,
-                      to_point_cloud_pointxyz_ptr(target_centroid),
-                      signal_target,
-                      to_point_cloud_pointxyz_ptr(signal_target_centroid),
-                      final_transformation);
+            if(m_naive)
+            {
+                visualise(source,
+                          to_point_cloud_pointxyz_ptr(source_centroid),
+                          target,
+                          to_point_cloud_pointxyz_ptr(target_centroid),
+                          signal_target,
+                          to_point_cloud_pointxyz_ptr(signal_target_centroid),
+                          final_transformation,
+                          signal_transformation);
+            }
+            else
+            {
+                if(m_complex)
+                {
+                    visualise(source,
+                              to_point_cloud_pointxyz_ptr(source_centroid),
+                              target,
+                              to_point_cloud_pointxyz_ptr(target_centroid),
+                              signal_cloud,
+                              to_point_cloud_pointxyz_ptr(signal_target_centroid),
+                              final_transformation,
+                              signal_transformation);
+                }
+            }
         }
 
         string transform = to_string(final_transformation.coeff(0, 0)) + "," +
@@ -1048,23 +1090,47 @@ int PointCloudProcessingBackend::registration()
 
         output_header += "File Paths " + to_string(i) + " " + to_string(j) + ": " + m_objects[i].get()->get_data_path() + "," + m_objects[j].get()->get_data_path() + "\n";
 
-        output += "Registration " + to_string(i) + " " + to_string(j) + ":\n" +
-                source_centroid_position + "\n" +
-                target_centroid_position + "\n" +
-                centroid_difference + "\n" +
-                signal_position + "\n" +
-                signal_difference + "\n" +
-                "Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*fitness_score) + "\n" +
-                "Transform " + to_string(i) + " " + to_string(j) + ": " + transform + "\n";
+        if(m_naive)
+        {
+            output += "Registration " + to_string(i) + " " + to_string(j) + ":\n" +
+                    source_centroid_position + "\n" +
+                    target_centroid_position + "\n" +
+                    centroid_difference + "\n" +
+                    signal_position + "\n" +
+                    signal_difference + "\n" +
+                    "Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*fitness_score) + "\n" +
+                    "Transform " + to_string(i) + " " + to_string(j) + ": " + transform + "\n";
 
-        m_log += "-> registration " + to_string(i) + " " + to_string(j) + ":\n" +
-                source_centroid_position + "\n" +
-                target_centroid_position + "\n" +
-                centroid_difference + "\n" +
-                signal_position + "\n" +
-                signal_difference + "\n" +
-                "Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*fitness_score) + "\n" +
-                "Transform " + to_string(i) + " " + to_string(j) + ": " + transform + "\n";
+            m_log += "-> registration " + to_string(i) + " " + to_string(j) + ":\n" +
+                    source_centroid_position + "\n" +
+                    target_centroid_position + "\n" +
+                    centroid_difference + "\n" +
+                    signal_position + "\n" +
+                    signal_difference + "\n" +
+                    "Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*fitness_score) + "\n" +
+                    "Transform " + to_string(i) + " " + to_string(j) + ": " + transform + "\n";
+        }
+        else
+        {
+            if(m_complex)
+            {
+                output += "Registration " + to_string(i) + " " + to_string(j) + ":\n" +
+                        source_centroid_position + "\n" +
+                        target_centroid_position + "\n" +
+                        centroid_difference + "\n" +
+                        signal_difference + "\n" +
+                        "Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*fitness_score) + "\n" +
+                        "Transform " + to_string(i) + " " + to_string(j) + ": " + transform + "\n";
+
+                m_log += "-> registration " + to_string(i) + " " + to_string(j) + ":\n" +
+                        source_centroid_position + "\n" +
+                        target_centroid_position + "\n" +
+                        centroid_difference + "\n" +
+                        signal_difference + "\n" +
+                        "Mean Square Error " + to_string(i) + " " + to_string(j) + ": " + to_string(*fitness_score) + "\n" +
+                        "Transform " + to_string(i) + " " + to_string(j) + ": " + transform + "\n";
+            }
+        }
 
         if(m_iterative)
         {
@@ -1367,9 +1433,15 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
                                            PointCloud<PointXYZ>::Ptr target_centroid,
                                            PointCloud<PointXYZ>::Ptr &signal,
                                            PointCloud<PointXYZ>::Ptr signal_centroid,
-                                           Eigen::Matrix<float, 4, 4> &transformation)
+                                           Eigen::Matrix<float, 4, 4> &final_transformation,
+                                           Eigen::Matrix<float, 4, 4> &signal_transformation)
 {
-    transformPointCloud(*source, *source, transformation);
+    transformPointCloud(*source, *source, final_transformation);
+
+    if(m_complex)
+    {
+        transformPointCloud(*signal, *signal, signal_transformation);
+    }
 
     PCLVisualizer *visualiser = new PCLVisualizer("PCL Viewer");
 
@@ -1402,10 +1474,13 @@ int PointCloudProcessingBackend::visualise(PointCloud<PointXYZ>::Ptr &source,
         visualiser->addPointCloud<PointXYZ>(signal, signal_colour, "signal cloud");
         visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_cloud_point_size, "signal cloud");
 
-        PointCloudColorHandlerCustom<PointXYZ> signal_centroid_colour(signal_centroid, m_signal_r, m_signal_g, m_signal_b);
+        if(m_naive)
+        {
+            PointCloudColorHandlerCustom<PointXYZ> signal_centroid_colour(signal_centroid, m_signal_r, m_signal_g, m_signal_b);
 
-        visualiser->addPointCloud<PointXYZ>(signal_centroid, signal_centroid_colour, "signal centroid");
-        visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_centroid_point_size, "signal centroid");
+            visualiser->addPointCloud<PointXYZ>(signal_centroid, signal_centroid_colour, "signal centroid");
+            visualiser->setPointCloudRenderingProperties(PCL_VISUALIZER_POINT_SIZE, m_centroid_point_size, "signal centroid");
+        }
     }
 
     visualiser->addCoordinateSystem(1.0, "global");
