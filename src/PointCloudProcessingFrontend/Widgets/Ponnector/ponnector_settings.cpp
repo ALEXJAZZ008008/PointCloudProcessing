@@ -46,6 +46,15 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
         m_ui_ptr->_chk_output_pc_bin->setChecked(false);
     }
 
+    if(settings.contains("register/set_test"))
+    {
+        m_ui_ptr->chk_register_test->setChecked(settings.value("register/set_test").toBool());
+    }
+    else
+    {
+        m_ui_ptr->chk_register_test->setChecked(false);
+    }
+
     if(settings.contains("register/set_vis"))
     {
         m_ui_ptr->_chk_register_vis->setChecked(settings.value("register/set_vis").toBool());
@@ -477,6 +486,24 @@ Ponnector_Settings::Ponnector_Settings(QWidget *parent):
     {
         m_ui_ptr->le_register_sz->setText("0.0");
     }
+
+    if(settings.contains("register/set_naive"))
+    {
+        m_ui_ptr->rb_register_naive->setChecked(settings.value("register/set_naive").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_naive->setChecked(true);
+    }
+
+    if(settings.contains("register/set_complex"))
+    {
+        m_ui_ptr->rb_register_complex->setChecked(settings.value("register/set_complex").toBool());
+    }
+    else
+    {
+        m_ui_ptr->rb_register_complex->setChecked(false);
+    }
 }
 
 Ponnector_Settings::~Ponnector_Settings()
@@ -549,6 +576,7 @@ void Ponnector_Settings::on_buttonBox_accepted()
     settings.setValue("output/set_pc_txt", m_ui_ptr->_chk_output_pc_txt->isChecked());
     settings.setValue("output/set_pc_bin", m_ui_ptr->_chk_output_pc_bin->isChecked());
 
+    settings.setValue("register/set_test", m_ui_ptr->chk_register_test->isChecked());
     settings.setValue("register/set_vis", m_ui_ptr->_chk_register_vis->isChecked());
     settings.setValue("register/set_cloudps", m_ui_ptr->le_register_cloudps->text());
     settings.setValue("register/set_centps", m_ui_ptr->le_register_centps->text());
@@ -600,6 +628,9 @@ void Ponnector_Settings::on_buttonBox_accepted()
     settings.setValue("register/set_sx", m_ui_ptr->le_register_sx->text());
     settings.setValue("register/set_sy", m_ui_ptr->le_register_sy->text());
     settings.setValue("register/set_sz", m_ui_ptr->le_register_sz->text());
+    settings.setValue("register/set_naive", m_ui_ptr->rb_register_naive->isChecked());
+    settings.setValue("register/set_complex", m_ui_ptr->rb_register_complex->isChecked());
+
 }
 
 void Ponnector_Settings::on_pushButton_clicked()

@@ -179,6 +179,15 @@ int Ponnector::update_settings()
         m_point_cloud_processing_backend_ptr->set_point_cloud_binary(false);
     }
 
+    if(settings.contains("register/set_test"))
+    {
+        m_point_cloud_processing_backend_ptr->set_test(settings.value("register/set_test").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_test(false);
+    }
+
     if(settings.contains("register/set_vis"))
     {
         m_point_cloud_processing_backend_ptr->set_visualisation(settings.value("register/set_vis").toBool());
@@ -1275,6 +1284,24 @@ int Ponnector::update_settings()
     else
     {
         m_point_cloud_processing_backend_ptr->set_signal_z(0.0f);
+    }
+
+    if(settings.contains("register/set_naive"))
+    {
+        m_point_cloud_processing_backend_ptr->set_naive(settings.value("register/set_naive").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_naive(true);
+    }
+
+    if(settings.contains("register/set_complex"))
+    {
+        m_point_cloud_processing_backend_ptr->set_complex(settings.value("register/set_complex").toBool());
+    }
+    else
+    {
+        m_point_cloud_processing_backend_ptr->set_complex(false);
     }
 
     return 1;
