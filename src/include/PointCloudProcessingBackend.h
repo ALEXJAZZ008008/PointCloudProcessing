@@ -1147,12 +1147,14 @@ private:
     //! Calculates the difference between two centroids
     string calculate_vector_difference(Eigen::Vector4f &, Eigen::Vector4f &);
 
+    //! Visualises the output to the user
     int visualise(PointCloud<PointXYZ>::Ptr &,
                   PointCloud<PointXYZ>::Ptr,
                   PointCloud<PointXYZ>::Ptr &,
                   PointCloud<PointXYZ>::Ptr,
                   PointCloud<PointXYZ>::Ptr &,
                   PointCloud<PointXYZ>::Ptr,
+                  Eigen::Matrix<float, 4, 4> &,
                   Eigen::Matrix<float, 4, 4> &);
 
     //! Writes the output to file
